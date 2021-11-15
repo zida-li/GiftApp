@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "929025146564",
+    "project_id": "gift-app-907d4",
+    "storage_bucket": "gift-app-907d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929025146564:android:cf1d8c4be382be4c4b5391",
+        "android_client_info": {
+          "package_name": "dev.zidali.giftapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "929025146564-6ik4fi7hf10a2mgvha4knbe8n3gtnijl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.zidali.giftapp",
+            "certificate_hash": "96a72dd1aad01c69d494a24da838cc2af41b54a4"
+          }
+        },
+        {
+          "client_id": "929025146564-kkunjek7v914nf06e8bok1cc4a90bqmn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC4nS3XQVfZurg4_hp14Np0pvO-Tji34s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "929025146564-kkunjek7v914nf06e8bok1cc4a90bqmn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
