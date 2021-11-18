@@ -9,40 +9,33 @@ import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesEnt
 import dev.zidali.giftapp.business.domain.models.AuthToken
 
 @Entity(
-    tableName = "auth_token",
+    tableName = "userData",
     foreignKeys = [
         ForeignKey(
             entity = AccountPropertiesEntity::class,
             parentColumns = ["email"],
-            childColumns = ["account_email"],
+            childColumns = ["email"],
             onDelete = CASCADE
         )
     ]
 )
-data class AuthTokenEntity(
+data class UserDataEntity(
 
     @PrimaryKey
-    @ColumnInfo(name = "account_email")
+    @ColumnInfo(name = "email")
     var email: String,
 
-    @ColumnInfo(name = "token")
-    var token: String? = null
 )
 
-fun AuthTokenEntity.toAuthToken(): AuthToken {
-    if(token == null){
-        throw Exception("Token cannot be null.")
-    }
+fun UserDataEntity.toAuthToken(): AuthToken {
     return AuthToken(
         email = email,
-        token = token!!,
     )
 }
 
-fun AuthToken.toEntity(): AuthTokenEntity{
-    return AuthTokenEntity(
+fun AuthToken.toEntity(): UserDataEntity{
+    return UserDataEntity(
         email = email,
-        token = token
     )
 }
 

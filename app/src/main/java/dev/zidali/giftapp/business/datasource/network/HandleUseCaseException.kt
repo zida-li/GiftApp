@@ -9,7 +9,6 @@ import dev.zidali.giftapp.util.Constants
 
 fun <T> handleUseCaseException(e: Throwable): DataState<T> {
     e.printStackTrace()
-    Log.d(Constants.TAG, e.message!!)
     return DataState.error<T>(
         response = Response(
             message = e.message,

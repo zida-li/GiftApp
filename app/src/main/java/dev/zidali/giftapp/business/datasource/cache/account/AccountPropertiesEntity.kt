@@ -12,21 +12,16 @@ data class AccountPropertiesEntity (
     @ColumnInfo(name = "email")
     var email: String,
 
-    @ColumnInfo(name = "username")
-    var displayName: String? = null,
-
 )
 
 fun AccountPropertiesEntity.toAccountProperties(): AccountProperties {
     return AccountProperties(
         email = email,
-        displayName = displayName!!,
     )
 }
 
 fun AccountProperties.toEntity(): AccountPropertiesEntity{
     return AccountPropertiesEntity(
         email = email,
-        displayName = displayName,
     )
 }

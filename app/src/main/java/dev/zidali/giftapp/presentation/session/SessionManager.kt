@@ -3,6 +3,7 @@ package dev.zidali.giftapp.presentation.session
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
+import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.models.AuthToken
 import dev.zidali.giftapp.business.domain.util.StateMessage
 import dev.zidali.giftapp.business.domain.util.SuccessHandling.Companion.RESPONSE_CHECK_PREVIOUS_AUTH_USER_DONE
@@ -37,22 +38,20 @@ constructor(
     init {
         // Check if a user was authenticated in a previous session
         sessionScope.launch {
-            appDataStoreManager.readValue(DataStoreKeys.PREVIOUS_AUTH_USER)?.let { email ->
-                onTriggerEvent(SessionEvents.CheckPreviousAuthUser(email))
-            }?: onFinishCheckingPrevAuthUser()
+                onTriggerEvent(SessionEvents.CheckPreviousAuthUser)
+            }
         }
-    }
 
     fun onTriggerEvent(event: SessionEvents){
         when(event){
             is SessionEvents.Login -> {
-                login(event.authToken)
+                login(event.accountProperties)
             }
             is SessionEvents.Logout -> {
                 logout()
             }
             is SessionEvents.CheckPreviousAuthUser -> {
-                checkPreviousAuthUser(email = event.email)
+                checkPreviousAuthUser()
             }
             is SessionEvents.OnRemoveHeadFromQueue ->{
                 removeHeadFromQueue()
@@ -84,13 +83,13 @@ constructor(
         }
     }
 
-    private fun checkPreviousAuthUser(email: String){
+    private fun checkPreviousAuthUser(){
         state.value?.let { state ->
-            checkPreviousAuthUser.execute(email).onEach { dataState ->
+            checkPreviousAuthUser.execute().onEach { dataState ->
                 this.state.value = state.copy(isLoading = dataState.isLoading)
-                dataState.data?.let { authToken ->
-                    this.state.value = state.copy(authToken = authToken)
-                    onTriggerEvent(SessionEvents.Login(authToken))
+                dataState.data?.let { accountProperties ->
+                    this.state.value = state.copy(accountProperties = accountProperties)
+                    onTriggerEvent(SessionEvents.Login(accountProperties))
                 }
 
                 dataState.stateMessage?.let { stateMessage ->
@@ -105,9 +104,9 @@ constructor(
         }
     }
 
-    private fun login(authToken: AuthToken){
+    private fun login(accountProperties: AccountProperties){
         state.value?.let { state ->
-            this.state.value = state.copy(authToken = authToken)
+            this.state.value = state.copy(accountProperties = accountProperties)
         }
     }
 
@@ -117,7 +116,7 @@ constructor(
                 this.state.value = state.copy(isLoading = dataState.isLoading)
                 dataState.data?.let { response ->
                     if(response.message.equals(SUCCESS_LOGOUT)){
-                        this.state.value = state.copy(authToken = null)
+                        this.state.value = state.copy(accountProperties = null)
                         clearAuthUser()
                         onFinishCheckingPrevAuthUser()
                     }

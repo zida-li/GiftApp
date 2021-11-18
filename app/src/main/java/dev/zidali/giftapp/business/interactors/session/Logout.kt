@@ -1,6 +1,6 @@
 package dev.zidali.giftapp.business.interactors.session
 
-import dev.zidali.giftapp.business.datasource.cache.auth.AuthTokenDao
+import com.google.firebase.auth.FirebaseAuth
 import dev.zidali.giftapp.business.domain.util.DataState
 import dev.zidali.giftapp.business.domain.util.MessageType
 import dev.zidali.giftapp.business.domain.util.Response
@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 class Logout(
-    private val authTokenDao: AuthTokenDao,
+    private val firebaseAuth: FirebaseAuth,
 ) {
     fun execute(): Flow<DataState<Response>> = flow {
         emit(DataState.loading<Response>())
-        authTokenDao.clearTokens()
+        firebaseAuth.signOut()
         emit(DataState.data<Response>(
             data = Response(
                 message = SUCCESS_LOGOUT,

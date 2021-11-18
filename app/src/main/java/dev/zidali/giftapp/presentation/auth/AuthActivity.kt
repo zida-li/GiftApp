@@ -1,5 +1,6 @@
 package dev.zidali.giftapp.presentation.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
@@ -7,6 +8,7 @@ import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.ActivityAuthBinding
 import dev.zidali.giftapp.presentation.BaseActivity
+import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.session.SessionEvents
 import dev.zidali.giftapp.util.processQueue
 
@@ -41,8 +43,8 @@ class AuthActivity : BaseActivity() {
                 onFinishCheckPreviousAuthUser()
             }
 
-            if(state.authToken != null) {
-
+            if(state.accountProperties != null) {
+                navMainActivity()
             }
         }
     }
@@ -52,7 +54,19 @@ class AuthActivity : BaseActivity() {
         binding.splashLogo.visibility = View.INVISIBLE
     }
 
+    private fun navMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
+
     override fun displayProgressBar(isLoading: Boolean) {
-        //nothing
+        if(isLoading){
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 }

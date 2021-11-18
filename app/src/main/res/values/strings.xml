@@ -3,6 +3,7 @@
 
     //Auth
     <string name="login">Log In</string>
+    <string name="logout">Log Out</string>
     <string name="register">Register</string>
     <string name="email">Email</string>
     <string name="password">Password</string>

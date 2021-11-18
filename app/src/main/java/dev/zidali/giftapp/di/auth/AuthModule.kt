@@ -7,8 +7,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
-import dev.zidali.giftapp.business.datasource.cache.auth.AuthTokenDao
+import dev.zidali.giftapp.business.datasource.cache.auth.UserDataDao
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
+import dev.zidali.giftapp.business.interactors.auth.LoginWithEmailAndPassword
+import dev.zidali.giftapp.business.interactors.auth.LoginWithGoogle
 import dev.zidali.giftapp.business.interactors.auth.RegisterWithEmailAndPassword
 import dev.zidali.giftapp.business.interactors.auth.shared.GetEmail
 import dev.zidali.giftapp.business.interactors.session.CheckPreviousAuthUser
@@ -26,12 +28,20 @@ object AuthModule {
     @Singleton
     @Provides
     fun provideCheckPreviousAuthUser(
-        accountPropertiesDao: AccountPropertiesDao,
-        authTokenDao: AuthTokenDao,
+        firebaseAuth: FirebaseAuth,
     ): CheckPreviousAuthUser {
         return CheckPreviousAuthUser(
-            accountPropertiesDao,
-            authTokenDao,
+            firebaseAuth,
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoginWithGoogle(
+        firebaseAuth: FirebaseAuth,
+    ): LoginWithGoogle {
+        return LoginWithGoogle(
+            firebaseAuth
         )
     }
 
@@ -40,20 +50,32 @@ object AuthModule {
     fun provideRegisterWithEmailAndPassword(
         firebaseAuth: FirebaseAuth,
         appDataStore: AppDataStore,
+        accountPropertiesDao: AccountPropertiesDao,
     ): RegisterWithEmailAndPassword {
         return RegisterWithEmailAndPassword (
             firebaseAuth,
             appDataStore,
+            accountPropertiesDao,
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoginWithEmailAndPassword(
+        firebaseAuth: FirebaseAuth,
+    ): LoginWithEmailAndPassword {
+        return LoginWithEmailAndPassword(
+            firebaseAuth
         )
     }
 
     @Singleton
     @Provides
     fun provideLogout(
-        authTokenDao: AuthTokenDao,
+        firebaseAuth: FirebaseAuth,
     ): Logout {
         return Logout(
-            authTokenDao
+            firebaseAuth
         )
     }
 
@@ -78,7 +100,7 @@ object AuthModule {
 
     @Singleton
     @Provides
-    fun provideAuthTokenDao(app:AppDatabase): AuthTokenDao {
+    fun provideAuthTokenDao(app:AppDatabase): UserDataDao {
         return app.getAuthTokenDao()
     }
 

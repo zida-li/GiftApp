@@ -8,7 +8,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import dev.zidali.giftapp.util.Constants.Companion.default_web_client_id
 
-class LoginWithGoogle : ActivityResultContract<Unit, String?>() {
+class LoginWithGoogleActivityResult : ActivityResultContract<Unit, String?>() {
 
     override fun createIntent(context: Context, input: Unit?): Intent {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

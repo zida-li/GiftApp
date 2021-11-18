@@ -1,41 +1,37 @@
 package dev.zidali.giftapp.business.interactors.session
 
-import android.util.Log
-import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
-import dev.zidali.giftapp.business.datasource.cache.auth.AuthTokenDao
-import dev.zidali.giftapp.business.datasource.cache.auth.toAuthToken
-import dev.zidali.giftapp.business.domain.models.AuthToken
+import com.google.firebase.auth.FirebaseAuth
+import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.util.*
-import dev.zidali.giftapp.business.domain.util.ErrorHandling.Companion.ERROR_NO_PREVIOUS_AUTH_USER
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import java.lang.Exception
 
 /**
  * Attempt to authenticate as soon as the user launches the app.
  * If no user was authenticated in a previous session then do nothing.
  */
 class CheckPreviousAuthUser(
-    private val accountPropertiesDao: AccountPropertiesDao,
-    private val authTokenDao: AuthTokenDao,
+    private val firebaseAuth: FirebaseAuth,
 ) {
-    fun execute(
-        email: String,
-    ): Flow<DataState<AuthToken>> = flow {
-        emit(DataState.loading<AuthToken>())
-        var authToken: AuthToken? = null
-        val entity = accountPropertiesDao.searchByEmail(email)
-        Log.d(TAG, "CheckPreviousAuthUser: Email: ${email}")
-        if(entity != null){
-            authToken = authTokenDao.searchByEmail(entity.email)?.toAuthToken()
-            if(authToken != null){
-                emit(DataState.data(response = null, data = authToken))
-            }
+    fun execute(): Flow<DataState<AccountProperties>> = flow {
+        emit(DataState.loading<AccountProperties>())
+
+        if(firebaseAuth.currentUser != null) {
+            emit(
+                DataState.data(
+                    response = null,
+                    data = AccountProperties(
+                        email = firebaseAuth.currentUser?.email!!
+                    )
+                )
+            )
+        } else {
+            throw Exception(ErrorHandling.ERROR_NO_PREVIOUS_AUTH_USER)
         }
-        if(authToken == null){
-            throw Exception(ERROR_NO_PREVIOUS_AUTH_USER)
-        }
+
+
     }.catch{ e ->
         e.printStackTrace()
         emit(returnNoPreviousAuthUser())
@@ -44,8 +40,8 @@ class CheckPreviousAuthUser(
     /**
      * If no user was previously authenticated then emit this error. The UI is waiting for it.
      */
-    private fun returnNoPreviousAuthUser(): DataState<AuthToken> {
-        return DataState.error<AuthToken>(
+    private fun returnNoPreviousAuthUser(): DataState<AccountProperties> {
+        return DataState.error<AccountProperties>(
             response = Response(
                 SuccessHandling.RESPONSE_CHECK_PREVIOUS_AUTH_USER_DONE,
                 UIComponentType.None,

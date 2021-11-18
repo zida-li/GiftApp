@@ -9,6 +9,8 @@ import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.auth.RegisterWithEmailAndPassword
 import dev.zidali.giftapp.business.interactors.auth.shared.GetEmail
+import dev.zidali.giftapp.presentation.session.SessionEvents
+import dev.zidali.giftapp.presentation.session.SessionManager
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.launchIn
@@ -23,6 +25,7 @@ constructor(
     private val appDataStore: AppDataStore,
     private val getEmail: GetEmail,
     private val registerWithEmailAndPassword: RegisterWithEmailAndPassword,
+    private val sessionManager: SessionManager,
 ): ViewModel() {
 
     val state: MutableLiveData<RegisterState> = MutableLiveData(RegisterState())
@@ -73,8 +76,8 @@ constructor(
                     state.registration_password,
                 ).onEach { dataState ->
 
-                    dataState.data?.let {
-
+                    dataState.data?.let {accountProperties->
+                        sessionManager.onTriggerEvent(SessionEvents.Login(accountProperties.accountProperties!!))
                     }
 
                     dataState.stateMessage?.let { stateMessage ->

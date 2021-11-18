@@ -67,10 +67,6 @@ class RegisterFragment: BaseAuthFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun onPause() {
         cacheState()
         viewModel.onTriggerEvent(RegisterEvents.SaveRegisterState)
