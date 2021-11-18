@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Gift App</string>
+
+    //Auth
+    <string name="login">Log In</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirmPassword">Confirm Password</string>
+
+    <string name="favorite">Favorite</string>
+    <string name="account">Account</string>
+
+    <string name="holder_text">Holder Text</string>
+    <string name="text_error">Error</string>
+    <string name="text_success">Success</string>
+    <string name="text_ok">OK</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_info">Info</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="text_yes">yes</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="exit">Exit</string>
+    <string name="grid_view">Grid View</string>
+    <string name="list_view">List View</string>
+    <string name="attention">Attention</string>
 </resources>
