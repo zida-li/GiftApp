@@ -9,8 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.datasource.network.auth.LoginWithGoogleActivityResult
+import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentLauncherBinding
 import dev.zidali.giftapp.presentation.auth.BaseAuthFragment
+import dev.zidali.giftapp.util.processQueue
 
 class LauncherFragment: BaseAuthFragment() {
 
@@ -35,6 +37,8 @@ class LauncherFragment: BaseAuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        subscribeObservers()
+
         binding.loginButton.setOnClickListener {
             navLogin()
         }
@@ -47,6 +51,23 @@ class LauncherFragment: BaseAuthFragment() {
             loginWithGoogle()
         }
 
+    }
+
+    private fun subscribeObservers() {
+
+        viewModel.state.observe(viewLifecycleOwner, { state->
+
+            processQueue(
+                context = context,
+                queue = state.queue,
+                stateMessageCallback = object: StateMessageCallback {
+                    override fun removeMessageFromStack() {
+                        viewModel.onTriggerEvent(LauncherEvents.OnRemoveHeadFromQueue)
+                    }
+                }
+            )
+
+        })
     }
 
     private fun navRegistration() {

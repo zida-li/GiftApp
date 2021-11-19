@@ -27,9 +27,6 @@ class HomeFragment : BaseMainFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.logoutButton.setOnClickListener {
-            viewModel.onTriggerEvent(HomeEvents.Logout)
-        }
 
     }
 }

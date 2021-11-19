@@ -4,7 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.ActivityMainBinding
 import dev.zidali.giftapp.presentation.BaseActivity
@@ -16,12 +26,28 @@ import dev.zidali.giftapp.util.processQueue
 class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         subscribeObservers()
+
+        setSupportActionBar(binding.appBarMain.toolbar)
+
+        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val navView: NavigationView = binding.navView
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.homeFragment
+            ), drawerLayout
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+
     }
 
     private fun subscribeObservers() {
@@ -50,10 +76,11 @@ class MainActivity : BaseActivity() {
     }
 
     override fun displayProgressBar(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        //
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
