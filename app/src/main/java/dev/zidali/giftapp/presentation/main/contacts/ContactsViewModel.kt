@@ -15,14 +15,8 @@ constructor(
 
     fun onTriggerEvent(event: ContactsEvents){
         when (event) {
-            is ContactsEvents.Logout -> {
-                logout()
-            }
-        }
-    }
 
-    private fun logout(){
-        sessionManager.onTriggerEvent(SessionEvents.Logout)
+        }
     }
 
 }

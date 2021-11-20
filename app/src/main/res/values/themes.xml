@@ -20,4 +20,5 @@
         <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
         <item name="android:textColorSecondary">@color/white</item>
     </style>
+
 </resources>

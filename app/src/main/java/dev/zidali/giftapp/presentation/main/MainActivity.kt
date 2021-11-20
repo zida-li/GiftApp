@@ -21,6 +21,7 @@ import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.ActivityMainBinding
 import dev.zidali.giftapp.presentation.BaseActivity
 import dev.zidali.giftapp.presentation.auth.AuthActivity
+import dev.zidali.giftapp.presentation.main.create_contact.CreateContactFragment
 import dev.zidali.giftapp.presentation.session.SessionEvents
 import dev.zidali.giftapp.util.processQueue
 
@@ -40,6 +41,13 @@ class MainActivity : BaseActivity() {
         subscribeObservers()
 
         initNavDrawer()
+
+        binding.appBarMain.fabMenu.setOnClickListener {
+
+            val dialog = CreateContactFragment()
+
+            dialog.show(supportFragmentManager, "createContactDialog")
+        }
     }
 
     private fun initNavDrawer() {
