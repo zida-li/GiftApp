@@ -72,4 +72,9 @@ class RegisterFragment: BaseAuthFragment() {
         viewModel.onTriggerEvent(RegisterEvents.SaveRegisterState)
         super.onPause()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

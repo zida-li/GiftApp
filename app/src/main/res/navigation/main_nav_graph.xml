@@ -10,5 +10,13 @@
         android:name="dev.zidali.giftapp.presentation.main.home.HomeFragment"
         android:label=""
         tools:layout="@layout/fragment_home"
-        />
+        >
+    </fragment>
+
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="dev.zidali.giftapp.presentation.main.contacts.ContactsFragment"
+        android:label=""
+        tools:layout="@layout/fragment_contacts"/>
+
 </navigation>

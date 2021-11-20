@@ -3,7 +3,9 @@ package dev.zidali.giftapp.presentation.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.Menu
 import android.view.View
+import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -27,6 +29,9 @@ class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navigationView: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,25 +39,34 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         subscribeObservers()
 
-        setSupportActionBar(binding.appBarMain.toolbar)
+        initNavDrawer()
+    }
 
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+    private fun initNavDrawer() {
+        setSupportActionBar(binding.appBarMain.toolbar)
+        drawerLayout = binding.drawerLayout
+        navigationView = binding.navView
+        navController = findNavController(R.id.nav_host_fragment_content_main)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment
+                R.id.homeFragment, R.id.contactsFragment,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-
+        navigationView.setupWithNavController(navController)
     }
 
     private fun subscribeObservers() {
+
+        navigationView = binding.navView
+
+        val header = navigationView.getHeaderView(0)
+
         sessionManager.state.observe(this) { state ->
+
             displayProgressBar(state.isLoading)
+
             processQueue(
                 context = this,
                 queue = state.queue,
@@ -61,9 +75,13 @@ class MainActivity : BaseActivity() {
                         sessionManager.onTriggerEvent(SessionEvents.OnRemoveHeadFromQueue)
                     }
                 })
+
             if (state.accountProperties == null) {
                 navAuthActivity()
             }
+
+            header.findViewById<TextView>(R.id.text_description).text = state.accountProperties?.email
+
         }
     }
 
@@ -77,6 +95,10 @@ class MainActivity : BaseActivity() {
 
     override fun displayProgressBar(isLoading: Boolean) {
         //
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onSupportNavigateUp(): Boolean {

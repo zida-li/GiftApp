@@ -1,40 +1,30 @@
-package dev.zidali.giftapp.presentation.main.home
+package dev.zidali.giftapp.presentation.main.contacts.contactDetail.gift
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
-import dev.zidali.giftapp.databinding.FragmentHomeBinding
+import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.contacts.contactDetail.FragmentAdapter
 
-class HomeFragment : BaseMainFragment() {
+class GiftFragment : BaseMainFragment() {
 
-    private val viewModel: HomeViewModel by viewModels()
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentGiftBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var viewPager: ViewPager2
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(layoutInflater)
+        _binding = FragmentGiftBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

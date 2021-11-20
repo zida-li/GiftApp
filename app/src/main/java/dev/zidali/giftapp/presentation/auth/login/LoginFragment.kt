@@ -71,4 +71,9 @@ class LoginFragment: BaseAuthFragment() {
         viewModel.onTriggerEvent(LoginEvents.SaveLoginState)
         super.onPause()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

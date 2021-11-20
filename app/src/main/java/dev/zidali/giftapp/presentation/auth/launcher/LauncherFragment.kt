@@ -82,4 +82,9 @@ class LauncherFragment: BaseAuthFragment() {
         googleLoginLauncher.launch()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }
