@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@string/add_event"
+        android:text="@string/create_event"
         app:layout_constraintBottom_toTopOf="@+id/fab_add_gift"
         app:layout_constraintEnd_toEndOf="@+id/fab_add_gift"
         app:icon="@drawable/ic_baseline_event_24"

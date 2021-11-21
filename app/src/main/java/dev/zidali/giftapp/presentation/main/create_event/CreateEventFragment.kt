@@ -1,16 +1,17 @@
-package dev.zidali.giftapp.presentation.main.create_contact
+package dev.zidali.giftapp.presentation.main.create_event
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import dev.zidali.giftapp.databinding.FragmentCreateContactBinding
+import dev.zidali.giftapp.databinding.FragmentCreateEventBinding
 
-class CreateContactFragment: DialogFragment() {
+class CreateEventFragment: DialogFragment() {
 
-    private var _binding: FragmentCreateContactBinding? = null
+    private var _binding: FragmentCreateEventBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -18,7 +19,7 @@ class CreateContactFragment: DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentCreateContactBinding.inflate(layoutInflater)
+        _binding = FragmentCreateEventBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -46,8 +47,31 @@ class CreateContactFragment: DialogFragment() {
                 }
             }
 
+            datePickerFragment.isCancelable = false
             datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
 
+        }
+
+        binding.reminderPicker.setOnClickListener {
+            val reminderPickerFragment = ReminderFragment()
+            val supportFragmentManager = requireActivity().supportFragmentManager
+
+            supportFragmentManager.setFragmentResultListener(
+                "REMINDER_PICKER_RESULT",
+                viewLifecycleOwner
+            ) {resultKey, bundle ->
+                if(resultKey == "REMINDER_PICKER_RESULT") {
+                    val reminder = bundle.getStringArrayList("SELECTED_REMINDERS")
+                    binding.reminderPicker.text = reminder?.joinToString(", ")
+                }
+            }
+
+            reminderPickerFragment.isCancelable = false
+            reminderPickerFragment.show(supportFragmentManager, "ReminderPickerFragment")
+        }
+
+        binding.cancelButton.setOnClickListener {
+            dismiss()
         }
     }
 

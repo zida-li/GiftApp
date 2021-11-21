@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.create_contact
+package dev.zidali.giftapp.presentation.main.create_event
 
 import android.app.DatePickerDialog
 import android.app.Dialog

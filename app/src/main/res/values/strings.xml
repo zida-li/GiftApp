@@ -13,13 +13,19 @@
 
     //Main
     <string name="home">Home</string>
-    <string name="add_contact">Add Contact</string>
+    <string name="add_contact">Create Contact</string>
     <string name="add_gift">Add Gift</string>
-    <string name="add_event">Add Event</string>
-    <string name="name">Name</string>
+    <string name="create_event">Create Event</string>
+    <string name="event">Event</string>
     <string name="gift">Gift</string>
     <string name="date">Date</string>
     <string name="reminder">Reminder</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="set_reminder">Set Reminders</string>
+    <string name="one_day">1 Day</string>
+    <string name="one_week">1 Week</string>
+    <string name="one_month">1 Month</string>
 
     <string name="favorite">Favorite</string>
     <string name="account">Account</string>
