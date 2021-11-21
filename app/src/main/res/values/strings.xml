@@ -10,8 +10,12 @@
     <string name="password">Password</string>
     <string name="confirmPassword">Confirm Password</string>
     <string name="contacts">Contacts</string>
+
+    //Main
     <string name="home">Home</string>
     <string name="add_contact">Add Contact</string>
+    <string name="add_gift">Add Gift</string>
+    <string name="add_event">Add Event</string>
     <string name="name">Name</string>
     <string name="gift">Gift</string>
     <string name="date">Date</string>

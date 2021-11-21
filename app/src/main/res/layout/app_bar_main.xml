@@ -29,32 +29,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/event"
-        android:layout_width="wrap_content"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_add_event"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:text="@string/add_event"
         app:layout_constraintBottom_toTopOf="@+id/fab_add_gift"
         app:layout_constraintEnd_toEndOf="@+id/fab_add_gift"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:icon="@drawable/ic_baseline_event_24"
+        android:visibility="invisible"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_add_gift"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:text="@string/add_gift"
         app:layout_constraintBottom_toTopOf="@+id/fab_add_contact"
         app:layout_constraintEnd_toEndOf="@+id/fab_add_contact"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:icon="@drawable/ic_gift"
+        android:visibility="invisible"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_add_contact"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:text="@string/add_contact"
         app:layout_constraintBottom_toTopOf="@+id/fab_menu"
         app:layout_constraintEnd_toEndOf="@+id/fab_menu"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:icon="@drawable/ic_baseline_person_add_24"
+        android:visibility="invisible"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_menu"
