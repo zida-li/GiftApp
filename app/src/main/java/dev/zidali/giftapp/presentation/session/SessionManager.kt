@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.models.AccountProperties
-import dev.zidali.giftapp.business.domain.models.AuthToken
 import dev.zidali.giftapp.business.domain.util.StateMessage
 import dev.zidali.giftapp.business.domain.util.SuccessHandling.Companion.RESPONSE_CHECK_PREVIOUS_AUTH_USER_DONE
 import dev.zidali.giftapp.business.domain.util.SuccessHandling.Companion.SUCCESS_LOGOUT

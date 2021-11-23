@@ -9,19 +9,19 @@ import dev.zidali.giftapp.business.domain.models.AccountProperties
 data class AccountPropertiesEntity (
 
     @PrimaryKey
-    @ColumnInfo(name = "email")
-    var email: String,
+    @ColumnInfo(name = "current_authUser_email")
+    var current_authUser_email: String,
 
-)
+    )
 
 fun AccountPropertiesEntity.toAccountProperties(): AccountProperties {
     return AccountProperties(
-        email = email,
+        current_authUser_email = current_authUser_email,
     )
 }
 
 fun AccountProperties.toEntity(): AccountPropertiesEntity{
     return AccountPropertiesEntity(
-        email = email,
+        current_authUser_email = current_authUser_email,
     )
 }

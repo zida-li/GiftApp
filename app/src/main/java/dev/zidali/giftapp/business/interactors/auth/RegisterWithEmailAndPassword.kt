@@ -31,18 +31,18 @@ class RegisterWithEmailAndPassword(
 
                 accountPropertiesDao.insertAndReplace(
                     AccountProperties(
-                        email = firebaseAuth.currentUser?.email!!
+                        current_authUser_email = firebaseAuth.currentUser?.email!!
                     ).toEntity()
                 )
 
                 val user = RegisterState(
                     accountProperties = AccountProperties(
-                        email = firebaseAuth.currentUser?.email!!,
+                        current_authUser_email = firebaseAuth.currentUser?.email!!,
                     )
                 )
 
                 appDataStore.setValue(DataStoreKeys.REGISTRATION_EMAIL, "")
-                appDataStore.setValue(DataStoreKeys.LOGIN_EMAIL, user.accountProperties!!.email)
+                appDataStore.setValue(DataStoreKeys.LOGIN_EMAIL, user.accountProperties!!.current_authUser_email)
 
                 emit(
                     DataState.data(

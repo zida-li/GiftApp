@@ -5,16 +5,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
-import dev.zidali.giftapp.business.datasource.cache.auth.UserDataDao
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.interactors.auth.LoginWithEmailAndPassword
 import dev.zidali.giftapp.business.interactors.auth.LoginWithGoogle
 import dev.zidali.giftapp.business.interactors.auth.RegisterWithEmailAndPassword
 import dev.zidali.giftapp.business.interactors.auth.shared.GetEmail
 import dev.zidali.giftapp.business.interactors.session.CheckPreviousAuthUser
-import dev.zidali.giftapp.business.interactors.session.Logout
 import javax.inject.Singleton
 
 @Module
@@ -71,37 +68,12 @@ object AuthModule {
 
     @Singleton
     @Provides
-    fun provideLogout(
-        firebaseAuth: FirebaseAuth,
-    ): Logout {
-        return Logout(
-            firebaseAuth
-        )
-    }
-
-    @Singleton
-    @Provides
     fun provideGetEmail(
         appDataStore: AppDataStore
     ): GetEmail {
         return GetEmail(
             appDataStore
         )
-    }
-
-    /**
-     * DATABASE
-     */
-    @Singleton
-    @Provides
-    fun provideAccountPropertiesDao(app: AppDatabase): AccountPropertiesDao {
-        return app.getAccountPropertiesDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideAuthTokenDao(app:AppDatabase): UserDataDao {
-        return app.getAuthTokenDao()
     }
 
 }

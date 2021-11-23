@@ -21,6 +21,7 @@ import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.ActivityMainBinding
 import dev.zidali.giftapp.presentation.BaseActivity
 import dev.zidali.giftapp.presentation.auth.AuthActivity
+import dev.zidali.giftapp.presentation.main.create_contact.CreateContactFragment
 import dev.zidali.giftapp.presentation.main.create_event.CreateEventFragment
 import dev.zidali.giftapp.presentation.session.SessionEvents
 import dev.zidali.giftapp.util.processQueue
@@ -51,10 +52,7 @@ class MainActivity : BaseActivity() {
         initNavDrawer()
 
         binding.appBarMain.fabMenu.setOnClickListener {
-
             onMenuButtonClicked()
-
-
         }
 
         binding.appBarMain.fabAddEvent.setOnClickListener {
@@ -64,6 +62,12 @@ class MainActivity : BaseActivity() {
             dialog.isCancelable = false
 
             dialog.show(supportFragmentManager, "createContactDialog")
+        }
+
+        binding.appBarMain.fabAddContact.setOnClickListener {
+            val createContactFragment = CreateContactFragment()
+            createContactFragment.isCancelable = false
+            createContactFragment.show(supportFragmentManager, "CreateContactFragment")
         }
     }
 
@@ -105,7 +109,7 @@ class MainActivity : BaseActivity() {
                 navAuthActivity()
             }
 
-            header.findViewById<TextView>(R.id.text_description).text = state.accountProperties?.email
+            header.findViewById<TextView>(R.id.text_description).text = state.accountProperties?.current_authUser_email
 
         }
     }

@@ -23,7 +23,7 @@ class CheckPreviousAuthUser(
                 DataState.data(
                     response = null,
                     data = AccountProperties(
-                        email = firebaseAuth.currentUser?.email!!
+                        current_authUser_email = firebaseAuth.currentUser?.email!!
                     )
                 )
             )

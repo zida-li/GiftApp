@@ -8,7 +8,7 @@
     android:background="@drawable/background_gradient">
 
     <TextView
-        android:id="@+id/text_view"
+        android:id="@+id/title_text"
         android:text="@string/create_event"
         android:textColor="@color/white"
         android:padding="10dp"
@@ -18,12 +18,34 @@
         app:layout_constraintLeft_toLeftOf="parent"
         />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/contact_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:endIconTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/title_text"
+        app:layout_constraintBottom_toTopOf="@id/input_name"
+        >
+
+        <AutoCompleteTextView
+            android:id="@+id/contact_drop_down_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_contact"
+            android:inputType="none"
+            android:textColor="@color/white"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <EditText
-        android:id="@+id/edit_text_name"
+        android:id="@+id/input_name"
         android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/text_view"
+        app:layout_constraintTop_toBottomOf="@id/contact_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintHorizontal_weight="1"
         android:hint="@string/event"
@@ -36,7 +58,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_name"
+        app:layout_constraintTop_toBottomOf="@+id/input_name"
         android:orientation="horizontal">
 
     <Button

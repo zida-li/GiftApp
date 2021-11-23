@@ -27,7 +27,7 @@ class LoginWithGoogle(
 
             val user = LauncherState(
                 accountProperties = AccountProperties(
-                    email = firebaseAuth.currentUser?.email!!
+                    current_authUser_email = firebaseAuth.currentUser?.email!!
                 )
             )
 

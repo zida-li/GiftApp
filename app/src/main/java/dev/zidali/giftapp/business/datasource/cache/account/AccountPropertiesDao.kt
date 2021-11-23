@@ -14,7 +14,7 @@ interface AccountPropertiesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnore(accountPropertiesEntity: AccountPropertiesEntity?): Long
 
-    @Query("SELECT * FROM account_properties WHERE email = :email")
+    @Query("SELECT * FROM account_properties WHERE current_authUser_email = :email")
     suspend fun searchByEmail(email: String): AccountPropertiesEntity?
 
 }
