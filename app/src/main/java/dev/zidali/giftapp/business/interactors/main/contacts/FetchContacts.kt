@@ -13,7 +13,7 @@ class FetchContacts(
     private val contactDao: ContactDao,
 ) {
 
-    fun execute(): Flow<DataState<MutableList<Contact>>> = flow<DataState<MutableList<Contact>>> {
+    fun execute(): Flow<DataState<MutableList<Contact>>> = flow {
 
         val contacts = contactDao.getAllContacts().map { it.toContact() }.toMutableList()
 

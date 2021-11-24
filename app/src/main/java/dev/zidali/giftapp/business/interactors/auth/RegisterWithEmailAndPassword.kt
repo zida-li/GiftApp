@@ -23,6 +23,8 @@ class RegisterWithEmailAndPassword(
         password: String,
     ): Flow<DataState<RegisterState>> = flow {
 
+            emit(DataState.loading())
+
             firebaseAuth.createUserWithEmailAndPassword(
                 email, password
             ).await()

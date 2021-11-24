@@ -36,9 +36,11 @@ object AuthModule {
     @Provides
     fun provideLoginWithGoogle(
         firebaseAuth: FirebaseAuth,
+        accountPropertiesDao: AccountPropertiesDao
     ): LoginWithGoogle {
         return LoginWithGoogle(
-            firebaseAuth
+            firebaseAuth,
+            accountPropertiesDao
         )
     }
 

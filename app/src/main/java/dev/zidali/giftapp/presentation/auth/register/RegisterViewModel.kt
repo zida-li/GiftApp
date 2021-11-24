@@ -76,6 +76,8 @@ constructor(
                     state.registration_password,
                 ).onEach { dataState ->
 
+                    this.state.value = state.copy(isLoading = dataState.isLoading)
+
                     dataState.data?.let {accountProperties->
                         sessionManager.onTriggerEvent(SessionEvents.Login(accountProperties.accountProperties!!))
                     }

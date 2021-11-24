@@ -1,8 +1,11 @@
 package dev.zidali.giftapp.business.interactors.main
 
+import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
+import dev.zidali.giftapp.business.datasource.cache.account.toEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactsEntity
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
+import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.DataState
 import dev.zidali.giftapp.business.domain.util.MessageType

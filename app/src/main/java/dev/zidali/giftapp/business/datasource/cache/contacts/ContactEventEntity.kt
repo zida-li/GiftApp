@@ -3,6 +3,7 @@ package dev.zidali.giftapp.business.datasource.cache.contacts
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 
@@ -12,19 +13,19 @@ import dev.zidali.giftapp.business.domain.models.ContactEvent
         ForeignKey(
             entity = ContactEntity::class,
             parentColumns = ["contact_name"],
-            childColumns = ["contact_name"],
-            onDelete = ForeignKey.CASCADE
+            childColumns = ["contact_event"],
+            onDelete = CASCADE
         )
     ]
 )
 data class ContactEventEntity (
 
     @PrimaryKey
-    @ColumnInfo(name = "contact_name")
-    var contact_name: String,
-
     @ColumnInfo(name = "contact_event")
     var contact_event: String,
+
+    @ColumnInfo(name = "contact_name")
+    var contact_name: String,
 
     @ColumnInfo(name = "contact_event_reminder")
     var contact_event_reminder: String,

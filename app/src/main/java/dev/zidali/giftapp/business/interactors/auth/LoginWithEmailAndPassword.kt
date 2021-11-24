@@ -19,6 +19,8 @@ class LoginWithEmailAndPassword(
         password: String,
     ): Flow<DataState<LoginState>> = flow {
 
+        emit(DataState.loading())
+
         firebaseAuth.signInWithEmailAndPassword(
             email, password
         ).await()

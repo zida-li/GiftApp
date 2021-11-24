@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
@@ -44,6 +45,10 @@ class CreateContactFragment : DialogFragment() {
         binding.createButton.setOnClickListener {
             cacheState()
             viewModel.onTriggerEvent(CreateContactEvents.CreateContact)
+            val createdContact = Bundle()
+            createdContact.putString("ADDED_CONTACT", viewModel.state.value?.name)
+            setFragmentResult("ADD_CONTACT_RESULT", createdContact)
+            dismiss()
         }
 
         binding.cancelButton.setOnClickListener {

@@ -2,6 +2,8 @@ package dev.zidali.giftapp.business.interactors.auth
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
+import dev.zidali.giftapp.business.datasource.cache.account.toEntity
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.util.DataState
@@ -13,6 +15,7 @@ import kotlinx.coroutines.tasks.await
 
 class LoginWithGoogle(
     private val firebaseAuth: FirebaseAuth,
+    private val accountPropertiesDao: AccountPropertiesDao,
 ) {
 
     fun execute(
@@ -24,6 +27,12 @@ class LoginWithGoogle(
         firebaseAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null)).await()
 
         if(firebaseAuth.currentUser != null) {
+
+            accountPropertiesDao.insertAndReplace(
+                AccountProperties(
+                    current_authUser_email = firebaseAuth.currentUser?.email!!
+                ).toEntity()
+            )
 
             val user = LauncherState(
                 accountProperties = AccountProperties(

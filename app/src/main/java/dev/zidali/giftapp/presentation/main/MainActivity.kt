@@ -3,9 +3,6 @@ package dev.zidali.giftapp.presentation.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -21,20 +18,11 @@ import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.ActivityMainBinding
 import dev.zidali.giftapp.presentation.BaseActivity
 import dev.zidali.giftapp.presentation.auth.AuthActivity
-import dev.zidali.giftapp.presentation.main.create_contact.CreateContactFragment
-import dev.zidali.giftapp.presentation.main.create_event.CreateEventFragment
 import dev.zidali.giftapp.presentation.session.SessionEvents
 import dev.zidali.giftapp.util.processQueue
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
-
-    //Animations
-    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim) }
-    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim) }
-    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim) }
-    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim) }
-    private var clicked = false
 
     //Navigation & DrawerLayout
     private lateinit var binding: ActivityMainBinding
@@ -47,28 +35,10 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        subscribeObservers()
 
+        subscribeObservers()
         initNavDrawer()
 
-        binding.appBarMain.fabMenu.setOnClickListener {
-            onMenuButtonClicked()
-        }
-
-        binding.appBarMain.fabAddEvent.setOnClickListener {
-
-            val dialog = CreateEventFragment()
-
-            dialog.isCancelable = false
-
-            dialog.show(supportFragmentManager, "createContactDialog")
-        }
-
-        binding.appBarMain.fabAddContact.setOnClickListener {
-            val createContactFragment = CreateContactFragment()
-            createContactFragment.isCancelable = false
-            createContactFragment.show(supportFragmentManager, "CreateContactFragment")
-        }
     }
 
     private fun initNavDrawer() {
@@ -135,51 +105,4 @@ class MainActivity : BaseActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    /**
-     * FAB Menu Functions & Animations
-     */
-    private fun onMenuButtonClicked() {
-        setVisibility(clicked)
-        setAnimation(clicked)
-        setClickable(clicked)
-        clicked = !clicked
-    }
-
-    private fun setVisibility(clicked: Boolean) {
-        if(!clicked) {
-            binding.appBarMain.fabAddContact.visibility = View.VISIBLE
-            binding.appBarMain.fabAddGift.visibility = View.VISIBLE
-            binding.appBarMain.fabAddEvent.visibility = View.VISIBLE
-        } else {
-            binding.appBarMain.fabAddContact.visibility = View.INVISIBLE
-            binding.appBarMain.fabAddGift.visibility = View.INVISIBLE
-            binding.appBarMain.fabAddEvent.visibility = View.INVISIBLE
-        }
-    }
-
-    private fun setAnimation(clicked:Boolean) {
-        if(!clicked) {
-            binding.appBarMain.fabAddContact.startAnimation(fromBottom)
-            binding.appBarMain.fabAddGift.startAnimation(fromBottom)
-            binding.appBarMain.fabAddEvent.startAnimation(fromBottom)
-            binding.appBarMain.fabMenu.startAnimation(rotateOpen)
-        } else {
-            binding.appBarMain.fabAddContact.startAnimation(toBottom)
-            binding.appBarMain.fabAddGift.startAnimation(toBottom)
-            binding.appBarMain.fabAddEvent.startAnimation(toBottom)
-            binding.appBarMain.fabMenu.startAnimation(rotateClose)
-        }
-    }
-
-    private fun setClickable(clicked: Boolean) {
-        if(!clicked) {
-            binding.appBarMain.fabAddContact.isClickable = true
-            binding.appBarMain.fabAddGift.isClickable = true
-            binding.appBarMain.fabAddEvent.isClickable = true
-        } else {
-            binding.appBarMain.fabAddContact.isClickable = false
-            binding.appBarMain.fabAddGift.isClickable = false
-            binding.appBarMain.fabAddEvent.isClickable = false
-        }
-    }
 }

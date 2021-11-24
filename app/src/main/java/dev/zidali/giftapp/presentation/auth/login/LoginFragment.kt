@@ -41,6 +41,8 @@ class LoginFragment: BaseAuthFragment() {
 
         viewModel.state.observe(viewLifecycleOwner, { state->
 
+            uiCommunicationListener.displayProgressBar(state.isLoading)
+
             processQueue(
                 context = context,
                 queue = state.queue,

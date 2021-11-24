@@ -16,6 +16,7 @@ class CheckPreviousAuthUser(
     private val firebaseAuth: FirebaseAuth,
 ) {
     fun execute(): Flow<DataState<AccountProperties>> = flow {
+
         emit(DataState.loading<AccountProperties>())
 
         if(firebaseAuth.currentUser != null) {

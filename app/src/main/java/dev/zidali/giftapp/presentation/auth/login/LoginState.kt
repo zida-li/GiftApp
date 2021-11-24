@@ -8,6 +8,7 @@ data class LoginState (
     var login_email: String? = null,
     var login_password: String? = null,
     var accountProperties: AccountProperties? = null,
+    val isLoading: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf())
 ) {
 

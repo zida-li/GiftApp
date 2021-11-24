@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.auth.launcher
+package dev.zidali.giftapp.presentation.main.contacts
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -8,48 +8,43 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.domain.util.StateMessage
 import dev.zidali.giftapp.business.domain.util.UIComponentType
 import dev.zidali.giftapp.business.domain.util.doesMessageAlreadyExistInQueue
-import dev.zidali.giftapp.business.interactors.auth.LoginWithGoogle
-import dev.zidali.giftapp.presentation.session.SessionEvents
-import dev.zidali.giftapp.presentation.session.SessionManager
+import dev.zidali.giftapp.business.interactors.main.contacts.FetchContacts
 import dev.zidali.giftapp.util.Constants
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class LauncherViewModel
+class ContactViewModel
 @Inject
 constructor(
-    private val loginWithGoogle: LoginWithGoogle,
-    private val sessionManager: SessionManager,
+    private val fetchContacts: FetchContacts,
 ): ViewModel() {
 
-    val state: MutableLiveData<LauncherState> = MutableLiveData(LauncherState())
+    val state: MutableLiveData<ContactState> = MutableLiveData(ContactState())
 
-    fun onTriggerEvent(event: LauncherEvents) {
-        when(event) {
-            is LauncherEvents.LoginWithGoogle -> {
-                loginWithGoogle(event.token)
+    fun onTriggerEvent(event: ContactEvents){
+        when (event) {
+            is ContactEvents.FetchContacts -> {
+                fetchContacts()
             }
-            is LauncherEvents.AppendToMessageQueue -> {
+            is ContactEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
             }
-            is LauncherEvents.OnRemoveHeadFromQueue -> {
+            is ContactEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
             }
         }
     }
 
-    private fun loginWithGoogle(token: String) {
-        state.value?.let {state->
-            loginWithGoogle.execute(
-                idToken = token
-            ).onEach { dataState ->
+    private fun fetchContacts() {
 
-                this.state.value = state.copy(isLoading = dataState.isLoading)
+        state.value?.let { state->
+            fetchContacts.execute().onEach {dataState ->
 
-                dataState.data?.let { accountProperty->
-                    sessionManager.onTriggerEvent(SessionEvents.Login(accountProperty.accountProperties!!))
+                dataState.data?.let { contactList->
+                    this.state.value = state.copy(contactList = contactList)
                 }
 
                 dataState.stateMessage?.let { stateMessage ->
@@ -57,7 +52,6 @@ constructor(
                 }
 
             }.launchIn(viewModelScope)
-
         }
     }
 

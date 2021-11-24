@@ -20,7 +20,7 @@ class CreateContactViewModel
 @Inject
 constructor(
     private val createContact: CreateContact,
-    private val firebaseAuth: FirebaseAuth,
+    private val firebaseAuth: FirebaseAuth
 ): ViewModel() {
 
     val state: MutableLiveData<CreateContactState> = MutableLiveData(CreateContactState())
@@ -48,7 +48,7 @@ constructor(
                 name = name,
                 contact = Contact(
                     name,
-                    firebaseAuth.currentUser?.email
+                    current_authUser_email = firebaseAuth.currentUser?.email
                 )
             )
 

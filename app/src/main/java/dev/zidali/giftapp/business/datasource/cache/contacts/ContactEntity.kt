@@ -14,7 +14,7 @@ import dev.zidali.giftapp.business.domain.models.Contact
         ForeignKey(
             entity = AccountPropertiesEntity::class,
             parentColumns = ["current_authUser_email"],
-            childColumns = ["contact_name"],
+            childColumns = ["current_authUser_email"],
             onDelete = CASCADE
         )
     ]

@@ -9,6 +9,7 @@ data class RegisterState (
     var registration_password: String = "",
     var registration_confirm_password: String = "",
     var accountProperties: AccountProperties? = null,
+    val isLoading: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf())
 ) {
 
