@@ -4,24 +4,23 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesEntity
-import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
-import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
-import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEntity
-import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventEntity
-import dev.zidali.giftapp.business.domain.models.ContactEvent
+import dev.zidali.giftapp.business.datasource.cache.contacts.*
 
 @Database(entities = [
     AccountPropertiesEntity::class,
     ContactEntity::class,
-    ContactEventEntity::class
-], version = 2)
+    ContactEventEntity::class,
+    GiftEntity::class,
+], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getAccountPropertiesDao(): AccountPropertiesDao
 
     abstract fun getContactDao(): ContactDao
 
-    abstract fun getContactEvent(): ContactEventDao
+    abstract fun getContactEventDao(): ContactEventDao
+
+    abstract fun getGiftDao(): GiftDao
 
     companion object {
         const val DATABASE_NAME = "app_db"

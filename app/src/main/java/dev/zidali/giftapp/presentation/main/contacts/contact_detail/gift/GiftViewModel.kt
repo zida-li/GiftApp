@@ -1,76 +1,59 @@
-package dev.zidali.giftapp.presentation.main.contacts
+package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
-import dev.zidali.giftapp.business.domain.util.StateMessage
-import dev.zidali.giftapp.business.domain.util.UIComponentType
-import dev.zidali.giftapp.business.domain.util.doesMessageAlreadyExistInQueue
-import dev.zidali.giftapp.business.interactors.main.contacts.FetchContacts
+import dev.zidali.giftapp.business.domain.util.*
+import dev.zidali.giftapp.business.interactors.main.CreateContact
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.Constants.Companion.TAG
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ContactViewModel
+class GiftViewModel
 @Inject
 constructor(
-    private val fetchContacts: FetchContacts,
+    private val createContact: CreateContact,
+    private val firebaseAuth: FirebaseAuth,
     private val appDataStore: AppDataStore,
 ): ViewModel() {
 
-    val state: MutableLiveData<ContactState> = MutableLiveData(ContactState())
+    val state: MutableLiveData<GiftState> = MutableLiveData(GiftState())
 
-    init {
-        viewModelScope.launch {
-            appDataStore.setValue(DataStoreKeys.SELECTED_CONTACT_NAME, "")
-        }
-    }
+    fun onTriggerEvent(event: GiftEvents) {
 
-    fun onTriggerEvent(event: ContactEvents){
-        when (event) {
-            is ContactEvents.FetchContacts -> {
-                fetchContacts()
+        when(event) {
+            is GiftEvents.FetchContactName -> {
+                fetchContactName()
             }
-            is ContactEvents.PassDataToViewPager -> {
-                passDataToViewPager(event.contact_name)
-            }
-            is ContactEvents.AppendToMessageQueue -> {
+            is GiftEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
             }
-            is ContactEvents.OnRemoveHeadFromQueue -> {
+            is GiftEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
             }
         }
     }
 
-    private fun fetchContacts() {
-
-        state.value?.let { state->
-            fetchContacts.execute().onEach {dataState ->
-
-                dataState.data?.let { contactList->
-                    this.state.value = state.copy(contactList = contactList)
-                }
-
-                dataState.stateMessage?.let { stateMessage ->
-                    appendToMessageQueue(stateMessage)
-                }
-
+    private fun fetchContactName() {
+        state.value?.let {state->
+            flow<GiftState> {
+                val contactName = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_NAME)
+                emit(GiftState(
+                    contact_name = contactName!!
+                ))
+            }.onEach {
+                this.state.value = state.copy(contact_name = it.contact_name)
+                Log.d(TAG, it.contact_name)
             }.launchIn(viewModelScope)
-        }
-    }
-
-    private fun passDataToViewPager(contact_name: String) {
-        viewModelScope.launch {
-            appDataStore.setValue(DataStoreKeys.SELECTED_CONTACT_NAME, contact_name)
         }
     }
 
@@ -97,5 +80,4 @@ constructor(
             }
         }
     }
-
 }

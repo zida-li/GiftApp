@@ -9,6 +9,7 @@ import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
+import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
 import dev.zidali.giftapp.business.interactors.main.CreateContact
 import dev.zidali.giftapp.business.interactors.main.contacts.FetchContacts
 import dev.zidali.giftapp.business.interactors.session.Logout
@@ -42,6 +43,16 @@ object MainModule {
         )
     }
 
+    @Singleton
+    @Provides
+    fun provideLogout(
+        firebaseAuth: FirebaseAuth,
+    ): Logout {
+        return Logout(
+            firebaseAuth
+        )
+    }
+
     /**
      * DATABASE
      */
@@ -55,17 +66,13 @@ object MainModule {
     @Singleton
     @Provides
     fun provideContactEventDao(app: AppDatabase): ContactEventDao {
-        return app.getContactEvent()
+        return app.getContactEventDao()
     }
 
     @Singleton
     @Provides
-    fun provideLogout(
-        firebaseAuth: FirebaseAuth,
-    ): Logout {
-        return Logout(
-            firebaseAuth
-        )
+    fun provideGiftDao(app: AppDatabase): GiftDao{
+        return app.getGiftDao()
     }
 
 }

@@ -49,7 +49,7 @@ class MainActivity : BaseActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment, R.id.contactsFragment,
+                R.id.homeFragment, R.id.contactFragment,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

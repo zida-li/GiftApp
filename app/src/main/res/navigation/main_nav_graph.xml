@@ -3,20 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/nav_home">
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="dev.zidali.giftapp.presentation.main.home.HomeFragment"
-        android:label=""
-        tools:layout="@layout/fragment_home"
-        >
-    </fragment>
-
-    <fragment
-        android:id="@+id/contactsFragment"
-        android:name="dev.zidali.giftapp.presentation.main.contacts.ContactFragment"
-        android:label=""
-        tools:layout="@layout/fragment_contacts"/>
+    <include app:graph="@navigation/nav_home"/>
+    <include app:graph="@navigation/nav_contact"/>
 
 </navigation>

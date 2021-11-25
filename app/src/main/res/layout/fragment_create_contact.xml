@@ -27,6 +27,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintHorizontal_weight="1"
         android:hint="@string/name"
+        android:inputType="textCapWords"
         android:textColorHint="@color/white"
         />
 

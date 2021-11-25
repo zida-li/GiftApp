@@ -3,7 +3,7 @@
     <style name="Theme.GiftApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryVariant">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/primary_color</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondary_color</item>
@@ -17,7 +17,7 @@
 
     <style name="AppTheme.Toolbar" parent="Theme.MaterialComponents">
         <!--This line changes the color of text in Toolbar-->
-        <item name="android:textColorPrimary">@color/primary_color</item>
+        <item name="android:textColorPrimary">@color/white</item>
         <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
         <item name="android:textColorSecondary">@color/white</item>
     </style>

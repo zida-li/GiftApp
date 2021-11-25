@@ -1,11 +1,12 @@
-package dev.zidali.giftapp.presentation.main.contacts.contactDetail
+package dev.zidali.giftapp.presentation.main.contacts.contact_detail
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import dev.zidali.giftapp.presentation.main.contacts.contactDetail.events.EventsFragment
-import dev.zidali.giftapp.presentation.main.contacts.contactDetail.gift.GiftFragment
+import dev.zidali.giftapp.presentation.main.contacts.contact_detail.events.EventsFragment
+import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftFragment
 
 class FragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {

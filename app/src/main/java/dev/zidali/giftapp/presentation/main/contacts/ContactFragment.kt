@@ -1,13 +1,13 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.Contact
@@ -16,7 +16,7 @@ import dev.zidali.giftapp.databinding.FragmentContactsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.create_contact.CreateContactFragment
 import dev.zidali.giftapp.presentation.main.create_event.CreateEventFragment
-import dev.zidali.giftapp.util.Constants.Companion.TAG
+import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
 class ContactFragment : BaseMainFragment(),
@@ -37,7 +37,6 @@ ContactListAdapter.Interaction
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume()")
         viewModel.onTriggerEvent(ContactEvents.FetchContacts)
     }
 
@@ -78,16 +77,38 @@ ContactListAdapter.Interaction
         })
     }
 
+    /**
+     * RecyclerView
+     */
+
     private fun initRecyclerView(){
         binding.contactRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@ContactFragment.context)
+            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            removeItemDecoration(topSpacingDecorator)
+            addItemDecoration(topSpacingDecorator)
             recyclerAdapter = ContactListAdapter(this@ContactFragment)
             adapter = recyclerAdapter
         }
     }
 
     override fun onItemSelected(position: Int, item: Contact) {
-        TODO("Not yet implemented")
+        try {
+            viewModel.state.value?.let {
+                viewModel.onTriggerEvent(ContactEvents.PassDataToViewPager(item.contact_name!!))
+                findNavController().navigate(R.id.action_contactFragment_to_contactDetailFragment)
+            } ?: throw Exception("Null Contact")
+        } catch (e: Exception) {
+            ContactEvents.AppendToMessageQueue(
+                stateMessage = StateMessage(
+                    response = Response(
+                        message = e.message,
+                        uiComponentType = UIComponentType.Dialog,
+                        messageType = MessageType.Error
+                    )
+                )
+            )
+        }
     }
 
     /**

@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.contacts.contactDetail.events
+package dev.zidali.giftapp.presentation.main.contacts.contact_detail.events
 
 import android.os.Bundle
 import android.view.LayoutInflater

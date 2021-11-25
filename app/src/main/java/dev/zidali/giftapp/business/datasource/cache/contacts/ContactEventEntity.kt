@@ -34,16 +34,16 @@ data class ContactEventEntity (
 
 fun ContactEvent.toContactEventEntity(): ContactEventEntity {
     return ContactEventEntity(
-        contact_name = contact_name,
         contact_event = contact_event,
+        contact_name = contact_name,
         contact_event_reminder = contact_event_reminder,
     )
 }
 
 fun ContactEventEntity.toContactEvent(): ContactEvent {
     return ContactEvent(
-        contact_name = contact_name,
         contact_event = contact_event,
+        contact_name = contact_name,
         contact_event_reminder = contact_event_reminder,
     )
 }

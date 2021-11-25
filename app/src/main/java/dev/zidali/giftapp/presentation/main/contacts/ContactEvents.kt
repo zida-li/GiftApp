@@ -6,6 +6,10 @@ sealed class ContactEvents {
 
     object FetchContacts: ContactEvents()
 
+    data class PassDataToViewPager(
+        val contact_name: String,
+    ): ContactEvents()
+
     data class AppendToMessageQueue(
         val stateMessage: StateMessage
     ): ContactEvents()
