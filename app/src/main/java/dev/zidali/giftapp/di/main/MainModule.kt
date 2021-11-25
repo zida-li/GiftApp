@@ -12,6 +12,7 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
 import dev.zidali.giftapp.business.interactors.main.CreateContact
 import dev.zidali.giftapp.business.interactors.main.contacts.FetchContacts
+import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchGifts
 import dev.zidali.giftapp.business.interactors.session.Logout
 import javax.inject.Singleton
 
@@ -40,6 +41,16 @@ object MainModule {
     ): FetchContacts {
         return FetchContacts(
             contactDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideFetchGifts(
+        giftDao: GiftDao
+    ): FetchGifts {
+        return FetchGifts(
+            giftDao
         )
     }
 

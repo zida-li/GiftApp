@@ -6,6 +6,8 @@ sealed class GiftEvents {
 
     object FetchContactName: GiftEvents()
 
+    object FetchGifts: GiftEvents()
+
     data class AppendToMessageQueue(
         val stateMessage: StateMessage
     ): GiftEvents()

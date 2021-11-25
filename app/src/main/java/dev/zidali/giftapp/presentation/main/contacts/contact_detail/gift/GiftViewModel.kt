@@ -31,6 +31,9 @@ constructor(
     fun onTriggerEvent(event: GiftEvents) {
 
         when(event) {
+            is GiftEvents.FetchGifts -> {
+                fetchGifts()
+            }
             is GiftEvents.FetchContactName -> {
                 fetchContactName()
             }
@@ -43,6 +46,12 @@ constructor(
         }
     }
 
+    private fun fetchGifts() {
+        state.value?.let { state->
+            
+        }
+    }
+
     private fun fetchContactName() {
         state.value?.let {state->
             flow<GiftState> {
@@ -52,7 +61,6 @@ constructor(
                 ))
             }.onEach {
                 this.state.value = state.copy(contact_name = it.contact_name)
-                Log.d(TAG, it.contact_name)
             }.launchIn(viewModelScope)
         }
     }
