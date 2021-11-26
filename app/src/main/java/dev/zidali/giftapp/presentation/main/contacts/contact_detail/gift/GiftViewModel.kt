@@ -8,10 +8,9 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.util.*
-import dev.zidali.giftapp.business.interactors.main.CreateContact
+import dev.zidali.giftapp.business.interactors.main.fab.CreateContact
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -48,7 +47,7 @@ constructor(
 
     private fun fetchGifts() {
         state.value?.let { state->
-            
+
         }
     }
 

@@ -1,7 +1,6 @@
-package dev.zidali.giftapp.presentation.main.create_contact
+package dev.zidali.giftapp.presentation.main.fab.create_contact
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentCreateContactBinding
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 
 @AndroidEntryPoint

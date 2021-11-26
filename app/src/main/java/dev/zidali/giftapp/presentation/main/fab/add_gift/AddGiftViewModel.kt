@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.create_contact
+package dev.zidali.giftapp.presentation.main.fab.add_gift
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -6,63 +6,80 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.zidali.giftapp.business.domain.models.Contact
+import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
-import dev.zidali.giftapp.business.interactors.main.CreateContact
+import dev.zidali.giftapp.business.interactors.main.fab.AddGift
+import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
 import dev.zidali.giftapp.util.Constants
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateContactViewModel
+class AddGiftViewModel
 @Inject
 constructor(
-    private val createContact: CreateContact,
-    private val firebaseAuth: FirebaseAuth
+    private val addGift: AddGift,
+    private val fetchContacts: FetchContacts,
 ): ViewModel() {
 
-    val state: MutableLiveData<CreateContactState> = MutableLiveData(CreateContactState())
+    val state: MutableLiveData<AddGiftState> = MutableLiveData(AddGiftState())
 
-    fun onTriggerEvent(event: CreateContactEvents) {
+    fun onTriggerEvent(event: AddGiftEvents) {
         when(event) {
-            is CreateContactEvents.OnUpdateName -> {
-                onUpdateName(event.name)
+            is AddGiftEvents.FetchContacts ->
+                fetchContacts()
+            is AddGiftEvents.OnUpdateGift -> {
+                onUpdateGift(event.contact, event.gift)
             }
-            is CreateContactEvents.CreateContact -> {
-                createContact()
+            is AddGiftEvents.AddGift -> {
+                addGift()
             }
-            is CreateContactEvents.AppendToMessageQueue -> {
+            is AddGiftEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
             }
-            is CreateContactEvents.OnRemoveHeadFromQueue -> {
+            is AddGiftEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
             }
         }
     }
 
-    private fun onUpdateName(name: String){
-        state.value?.let { state->
-            this.state.value = state.copy(
-                name = name,
-                contact = Contact(
-                    name,
-                    current_authUser_email = firebaseAuth.currentUser?.email
-                )
-            )
+    private fun fetchContacts(){
+        state.value?.let {state->
+            fetchContacts.execute().onEach {dataState ->
 
+                val contactNames: MutableList<String> = mutableListOf()
+
+                dataState.data?.let { contacts->
+                    for (contact in contacts) {
+                        contactNames.add(contact.contact_name!!)
+                    }
+                    this.state.value = state.copy(contacts = contactNames)
+                }
+
+            }.launchIn(viewModelScope)
         }
     }
 
-    private fun createContact() {
+    private fun onUpdateGift(contact: String, gift: String) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                gift = Gift(
+                    contact_name = contact,
+                    contact_gift = gift
+                )
+            )
+        }
+    }
+
+    private fun addGift() {
         state.value?.let {state->
-            val createContactError = CreateContactState(
-                state.name
+            val addGiftError = AddGiftState(
+                gift = state.gift
             ).isValid()
-            if(createContactError == CreateContactState.CreateContactError.none()) {
-                createContact.execute(
-                    state.contact
+            if(addGiftError == AddGiftState.CreateGiftError.none()) {
+                addGift.execute(
+                    state.gift
                 ).onEach { dataState ->
 
                     dataState.stateMessage?.let { stateMessage ->
@@ -70,11 +87,13 @@ constructor(
                     }
 
                 }.launchIn(viewModelScope)
+                setAddGiftSuccessful(true)
+                setAddGiftSuccessful(false)
             } else {
                 appendToMessageQueue(
                     stateMessage = StateMessage(
                         response = Response(
-                            message = createContactError,
+                            message = addGiftError,
                             uiComponentType = UIComponentType.Dialog,
                             messageType = MessageType.Error
                         )
@@ -107,4 +126,11 @@ constructor(
             }
         }
     }
+
+    private fun setAddGiftSuccessful(addGiftSuccessful: Boolean) {
+        state.value?.let {state->
+            this.state.value = state.copy(addGiftSuccessful = addGiftSuccessful)
+        }
+    }
+
 }

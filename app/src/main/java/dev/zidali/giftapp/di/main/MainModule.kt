@@ -6,13 +6,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase
-import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
-import dev.zidali.giftapp.business.interactors.main.CreateContact
-import dev.zidali.giftapp.business.interactors.main.contacts.FetchContacts
+import dev.zidali.giftapp.business.interactors.main.fab.CreateContact
+import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchGifts
+import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.session.Logout
 import javax.inject.Singleton
 
@@ -50,6 +50,16 @@ object MainModule {
         giftDao: GiftDao
     ): FetchGifts {
         return FetchGifts(
+            giftDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideAddGift(
+        giftDao: GiftDao
+    ): AddGift {
+        return AddGift(
             giftDao
         )
     }

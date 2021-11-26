@@ -9,10 +9,9 @@ import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.util.StateMessage
 import dev.zidali.giftapp.business.domain.util.UIComponentType
 import dev.zidali.giftapp.business.domain.util.doesMessageAlreadyExistInQueue
-import dev.zidali.giftapp.business.interactors.main.contacts.FetchContacts
+import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

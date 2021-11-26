@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.business.interactors.main
+package dev.zidali.giftapp.business.interactors.main.fab
 
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
 import dev.zidali.giftapp.business.datasource.cache.account.toEntity

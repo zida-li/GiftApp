@@ -14,8 +14,9 @@ import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentContactsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.create_contact.CreateContactFragment
-import dev.zidali.giftapp.presentation.main.create_event.CreateEventFragment
+import dev.zidali.giftapp.presentation.main.fab.add_gift.AddGiftFragment
+import dev.zidali.giftapp.presentation.main.fab.create_contact.CreateContactFragment
+import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventFragment
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
@@ -128,6 +129,14 @@ ContactListAdapter.Interaction
             dialog.isCancelable = false
 
             dialog.show(supportFragmentManager, "createContactDialog")
+        }
+
+        binding.fabAddGift.setOnClickListener{
+            val dialog = AddGiftFragment()
+            val supportFragmentManager = requireActivity().supportFragmentManager
+
+            dialog.isCancelable = false
+            dialog.show(supportFragmentManager, "addGiftDialog")
         }
 
         binding.fabAddContact.setOnClickListener {

@@ -1,6 +1,9 @@
 package dev.zidali.giftapp.business.interactors.session
 
 import com.google.firebase.auth.FirebaseAuth
+import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
+import dev.zidali.giftapp.business.datasource.cache.account.toAccountProperties
+import dev.zidali.giftapp.business.datasource.cache.account.toEntity
 import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.util.*
 import kotlinx.coroutines.flow.Flow
@@ -14,12 +17,14 @@ import java.lang.Exception
  */
 class CheckPreviousAuthUser(
     private val firebaseAuth: FirebaseAuth,
+    private val accountPropertiesDao: AccountPropertiesDao,
 ) {
     fun execute(): Flow<DataState<AccountProperties>> = flow {
 
         emit(DataState.loading<AccountProperties>())
 
         if(firebaseAuth.currentUser != null) {
+
             emit(
                 DataState.data(
                     response = null,

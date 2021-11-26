@@ -9,7 +9,7 @@ import androidx.room.Query
 interface GiftDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(contactEntity: GiftEntity): Long
+    suspend fun insert(giftEntity: GiftEntity): Long
 
     @Query("DELETE FROM gift")
     suspend fun clearContacts()

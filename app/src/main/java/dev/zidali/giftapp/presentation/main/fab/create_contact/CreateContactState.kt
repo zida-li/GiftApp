@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.create_contact
+package dev.zidali.giftapp.presentation.main.fab.create_contact
 
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.Queue

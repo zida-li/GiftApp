@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.business.interactors.main.contacts
+package dev.zidali.giftapp.business.interactors.main.shared
 
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContact

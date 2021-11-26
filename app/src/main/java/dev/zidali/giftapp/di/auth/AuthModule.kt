@@ -26,9 +26,11 @@ object AuthModule {
     @Provides
     fun provideCheckPreviousAuthUser(
         firebaseAuth: FirebaseAuth,
+        accountPropertiesDao: AccountPropertiesDao,
     ): CheckPreviousAuthUser {
         return CheckPreviousAuthUser(
             firebaseAuth,
+            accountPropertiesDao,
         )
     }
 

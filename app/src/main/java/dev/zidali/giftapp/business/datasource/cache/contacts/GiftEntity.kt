@@ -12,7 +12,7 @@ import dev.zidali.giftapp.business.domain.models.Gift
         ForeignKey(
             entity = ContactEntity::class,
             parentColumns = ["contact_name"],
-            childColumns = ["contact_gift"],
+            childColumns = ["contact_name"],
             onDelete = ForeignKey.CASCADE
         )
     ]

@@ -11,7 +11,7 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.*
     ContactEntity::class,
     ContactEventEntity::class,
     GiftEntity::class,
-], version = 1)
+], version = 2)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getAccountPropertiesDao(): AccountPropertiesDao
