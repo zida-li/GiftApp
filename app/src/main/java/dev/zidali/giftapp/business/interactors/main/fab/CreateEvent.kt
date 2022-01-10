@@ -1,28 +1,27 @@
 package dev.zidali.giftapp.business.interactors.main.fab
 
-import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
-import dev.zidali.giftapp.business.datasource.cache.contacts.toGiftEntity
+import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
+import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEventEntity
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
-import dev.zidali.giftapp.business.domain.models.Gift
+import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
-import dev.zidali.giftapp.presentation.main.fab.add_gift.AddGiftState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
-class AddGift(
-    private val giftDao: GiftDao,
+class CreateEvent(
+    private val contactEventDao: ContactEventDao,
 ) {
 
     fun execute(
-        gift: Gift
-    ): Flow<DataState<AddGiftState>> = flow <DataState<AddGiftState>>{
+        contactEvent: ContactEvent
+    ): Flow<DataState<ContactEvent>> = flow<DataState<ContactEvent>> {
 
-        giftDao.insert(gift.toGiftEntity())
+        contactEventDao.insert(contactEvent.toContactEventEntity())
 
         emit(DataState.data(
             response = Response(
-                message = "${gift.contact_gift} Added",
+                message = "${contactEvent.contact_event} Event Created",
                 uiComponentType = UIComponentType.Toast,
                 messageType = MessageType.None,
             )

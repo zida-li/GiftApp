@@ -5,16 +5,25 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.ActionBarContextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentCreateContactBinding
+import dev.zidali.giftapp.presentation.update.UpdateEvents
+import dev.zidali.giftapp.presentation.update.UpdateManager
 import dev.zidali.giftapp.util.processQueue
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateContactFragment : DialogFragment() {
+
+    @Inject
+    lateinit var updateManager: UpdateManager
 
     private val viewModel: CreateContactViewModel by viewModels()
     private var _binding: FragmentCreateContactBinding? = null
@@ -46,6 +55,7 @@ class CreateContactFragment : DialogFragment() {
             val createdContact = Bundle()
             createdContact.putString("ADDED_CONTACT", viewModel.state.value?.name)
             setFragmentResult("ADD_CONTACT_RESULT", createdContact)
+            updateManager.onTriggerEvent(UpdateEvents.RequestUpdate)
             dismiss()
         }
 

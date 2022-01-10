@@ -5,7 +5,7 @@ data class StateMessage(val response: Response)
 data class Response(
     val message: String?,
     val uiComponentType: UIComponentType,
-    val messageType: MessageType
+    val messageType: MessageType,
 )
 
 sealed class UIComponentType{

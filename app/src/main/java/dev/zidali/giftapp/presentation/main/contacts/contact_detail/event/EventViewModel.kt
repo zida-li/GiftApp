@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
+package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -7,65 +7,48 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.util.*
-import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchGifts
+import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchEvents
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class GiftViewModel
+class EventViewModel
 @Inject
 constructor(
     private val appDataStore: AppDataStore,
-    private val fetchGifts: FetchGifts,
+    private val fetchEvents: FetchEvents
 ): ViewModel() {
 
-    val state: MutableLiveData<GiftState> = MutableLiveData(GiftState())
+    val state: MutableLiveData<EventState> = MutableLiveData(EventState())
 
-    fun onTriggerEvent(event: GiftEvents) {
+    fun onTriggerEvent(event: EventEvents) {
 
         when(event) {
-            is GiftEvents.FetchGifts -> {
-                fetchGifts()
+            is EventEvents.FetchEvents -> {
+                fetchEvents()
             }
-            is GiftEvents.FetchContactName -> {
-                fetchContactName()
-            }
-            is GiftEvents.AppendToMessageQueue -> {
+            is EventEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
             }
-            is GiftEvents.OnRemoveHeadFromQueue -> {
+            is EventEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
             }
         }
     }
 
-    private fun fetchGifts() {
+    private fun fetchEvents() {
         state.value?.let { state->
-            fetchGifts.execute(
+            fetchEvents.execute(
                 state.contact_name
             ).onEach { dataState ->
 
-                dataState.data?.let { gift->
-                    this.state.value = state.copy(contact_gifts = gift.contact_gifts)
+                dataState.data?.let { event->
+                    this.state.value = state.copy(contact_events = event.contact_events)
                 }
 
-            }.launchIn(viewModelScope)
-        }
-    }
-
-    private fun fetchContactName() {
-        state.value?.let {state->
-            flow<GiftState> {
-                val contactName = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_NAME)
-                emit(GiftState(
-                    contact_name = contactName!!
-                ))
-            }.onEach {
-                this.state.value = state.copy(contact_name = it.contact_name)
             }.launchIn(viewModelScope)
         }
     }

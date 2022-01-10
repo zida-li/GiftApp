@@ -62,7 +62,7 @@ class AddGiftFragment: DialogFragment() {
             binding.contactDropDownMenu.setAdapter(arrayAdapter)
 
             if(state.addGiftSuccessful) {
-                resetState()
+                dismiss()
             }
 
             processQueue(

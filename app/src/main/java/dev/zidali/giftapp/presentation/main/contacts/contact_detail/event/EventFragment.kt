@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
+package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,21 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.zidali.giftapp.business.domain.models.Gift
+import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
-import dev.zidali.giftapp.databinding.FragmentGiftBinding
+import dev.zidali.giftapp.databinding.FragmentEventsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.MainActivity
+import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftListAdapter
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
-class GiftFragment : BaseMainFragment(),
-GiftListAdapter.Interaction
-{
+class EventFragment : BaseMainFragment(),
+EventListAdapter.Interaction {
 
-    private var recyclerAdapter: GiftListAdapter? = null
-    private val viewModel: GiftViewModel by viewModels()
-    private var _binding: FragmentGiftBinding? = null
+    private val viewModel: EventViewModel by viewModels()
+    private var recyclerAdapter: EventListAdapter? = null
+    private var _binding: FragmentEventsBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -28,29 +27,27 @@ GiftListAdapter.Interaction
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentGiftBinding.inflate(layoutInflater)
+        _binding = FragmentEventsBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.onTriggerEvent(GiftEvents.FetchGifts)
+        viewModel.onTriggerEvent(EventEvents.FetchEvents)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.onTriggerEvent(GiftEvents.FetchContactName)
-        (activity as MainActivity).supportActionBar?.title = viewModel.state.value?.contact_name
         subscribeObservers()
         initRecyclerView()
     }
 
     private fun subscribeObservers() {
+
         viewModel.state.observe(viewLifecycleOwner, {state->
 
             recyclerAdapter?.apply {
-                submitList(list = state.contact_gifts)
+                submitList(list = state.contact_events)
             }
 
             processQueue(
@@ -58,7 +55,7 @@ GiftListAdapter.Interaction
                 queue = state.queue,
                 stateMessageCallback = object: StateMessageCallback {
                     override fun removeMessageFromStack() {
-                        viewModel.onTriggerEvent(GiftEvents.OnRemoveHeadFromQueue)
+                        viewModel.onTriggerEvent(EventEvents.OnRemoveHeadFromQueue)
                     }
                 }
             )
@@ -67,12 +64,12 @@ GiftListAdapter.Interaction
     }
 
     private fun initRecyclerView() {
-        binding.giftRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@GiftFragment.context)
+        binding.eventsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@EventFragment.context)
             val topSpacingDecorator = TopSpacingItemDecoration(30)
             removeItemDecoration(topSpacingDecorator)
             addItemDecoration(topSpacingDecorator)
-            recyclerAdapter = GiftListAdapter(this@GiftFragment)
+            recyclerAdapter = EventListAdapter(this@EventFragment)
             adapter = recyclerAdapter
         }
     }
@@ -82,7 +79,7 @@ GiftListAdapter.Interaction
         _binding = null
     }
 
-    override fun onItemSelected(position: Int, item: Gift) {
+    override fun onItemSelected(position: Int, item: ContactEvent) {
         TODO("Not yet implemented")
     }
 }

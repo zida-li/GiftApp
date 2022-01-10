@@ -95,7 +95,7 @@ constructor(
                         response = Response(
                             message = addGiftError,
                             uiComponentType = UIComponentType.Dialog,
-                            messageType = MessageType.Error
+                            messageType = MessageType.Error,
                         )
                     )
                 )

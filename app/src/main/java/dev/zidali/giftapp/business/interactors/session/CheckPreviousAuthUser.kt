@@ -51,7 +51,7 @@ class CheckPreviousAuthUser(
             response = Response(
                 SuccessHandling.RESPONSE_CHECK_PREVIOUS_AUTH_USER_DONE,
                 UIComponentType.None,
-                MessageType.Error
+                MessageType.Error,
             )
         )
     }

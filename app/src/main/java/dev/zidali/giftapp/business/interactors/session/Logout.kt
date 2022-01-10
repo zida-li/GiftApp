@@ -1,11 +1,8 @@
 package dev.zidali.giftapp.business.interactors.session
 
 import com.google.firebase.auth.FirebaseAuth
-import dev.zidali.giftapp.business.domain.util.DataState
-import dev.zidali.giftapp.business.domain.util.MessageType
-import dev.zidali.giftapp.business.domain.util.Response
+import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.domain.util.SuccessHandling.Companion.SUCCESS_LOGOUT
-import dev.zidali.giftapp.business.domain.util.UIComponentType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -20,7 +17,7 @@ class Logout(
             data = Response(
                 message = SUCCESS_LOGOUT,
                 uiComponentType = UIComponentType.Dialog,
-                messageType = MessageType.Error
+                messageType = MessageType.Error,
             ),
             response = null,
         ))
@@ -30,7 +27,7 @@ class Logout(
             response = Response(
                 message = e.message,
                 uiComponentType = UIComponentType.Dialog,
-                messageType = MessageType.Error
+                messageType = MessageType.Error,
             )
         ))
     }

@@ -93,7 +93,7 @@ constructor(
                         response = Response(
                             message = registrationError,
                             uiComponentType = UIComponentType.Dialog,
-                            messageType = MessageType.Error
+                            messageType = MessageType.Error,
                         )
                     )
                 )

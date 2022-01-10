@@ -112,7 +112,7 @@ constructor(
                         response = Response(
                             message = loginError,
                             uiComponentType = UIComponentType.Dialog,
-                            messageType = MessageType.Error
+                            messageType = MessageType.Error,
                         )
                     )
                 )

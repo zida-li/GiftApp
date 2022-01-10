@@ -17,19 +17,13 @@ import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.fab.add_gift.AddGiftFragment
 import dev.zidali.giftapp.presentation.main.fab.create_contact.CreateContactFragment
 import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventFragment
+import dev.zidali.giftapp.presentation.update.UpdateEvents
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
 class ContactFragment : BaseMainFragment(),
 ContactListAdapter.Interaction
 {
-
-    //Animations
-    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim) }
-    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.rotate_close_anim) }
-    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.from_bottom_anim) }
-    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.to_bottom_anim) }
-    private var clicked = false
 
     private var recyclerAdapter: ContactListAdapter? = null
     private val viewModel: ContactViewModel by viewModels()
@@ -38,7 +32,7 @@ ContactListAdapter.Interaction
 
     override fun onResume() {
         super.onResume()
-        viewModel.onTriggerEvent(ContactEvents.FetchContacts)
+
     }
 
     override fun onCreateView(
@@ -52,12 +46,18 @@ ContactListAdapter.Interaction
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initOnClickListeners()
         subscribeObservers()
         initRecyclerView()
     }
 
     private fun subscribeObservers() {
+
+        updateManager.state.observe(viewLifecycleOwner, { state->
+            if(state.needToUpdate){
+                viewModel.onTriggerEvent(ContactEvents.FetchContacts)
+                updateManager.onTriggerEvent(UpdateEvents.UpdateComplete)
+            }
+        })
 
         viewModel.state.observe(viewLifecycleOwner, { state->
 
@@ -105,112 +105,10 @@ ContactListAdapter.Interaction
                     response = Response(
                         message = e.message,
                         uiComponentType = UIComponentType.Dialog,
-                        messageType = MessageType.Error
+                        messageType = MessageType.Error,
                     )
                 )
             )
-        }
-    }
-
-    /**
-     * OnClick Listeners
-     */
-
-    private fun initOnClickListeners() {
-        binding.fabMenu.setOnClickListener {
-            onMenuButtonClicked()
-        }
-
-        binding.fabAddEvent.setOnClickListener {
-
-            val dialog = CreateEventFragment()
-            val supportFragmentManager = requireActivity().supportFragmentManager
-
-            dialog.isCancelable = false
-
-            dialog.show(supportFragmentManager, "createContactDialog")
-        }
-
-        binding.fabAddGift.setOnClickListener{
-            val dialog = AddGiftFragment()
-            val supportFragmentManager = requireActivity().supportFragmentManager
-
-            dialog.isCancelable = false
-            dialog.show(supportFragmentManager, "addGiftDialog")
-        }
-
-        binding.fabAddContact.setOnClickListener {
-            val createContactFragment = CreateContactFragment()
-            val supportFragmentManager = requireActivity().supportFragmentManager
-
-            supportFragmentManager.setFragmentResultListener(
-                "ADD_CONTACT_RESULT",
-                this
-            ) {resultKey, bundle ->
-                if(resultKey == "ADD_CONTACT_RESULT") {
-                    val addedContact = bundle.getString("ADDED_CONTACT")
-                    viewModel.onTriggerEvent(ContactEvents.AppendToMessageQueue(
-                        stateMessage = StateMessage(
-                            response = Response(
-                                message = "$addedContact Added To Contact",
-                                uiComponentType = UIComponentType.Toast,
-                                messageType = MessageType.None
-                            )
-                        )
-                    ))
-                }
-            }
-            createContactFragment.isCancelable = false
-            createContactFragment.show(supportFragmentManager, "CreateContactFragment")
-
-        }
-    }
-
-    /**
-     * FAB Menu Functions & Animations
-     */
-    private fun onMenuButtonClicked() {
-        setVisibility(clicked)
-        setAnimation(clicked)
-        setClickable(clicked)
-        clicked = !clicked
-    }
-
-    private fun setVisibility(clicked: Boolean) {
-        if(!clicked) {
-            binding.fabAddContact.visibility = View.VISIBLE
-            binding.fabAddGift.visibility = View.VISIBLE
-            binding.fabAddEvent.visibility = View.VISIBLE
-        } else {
-            binding.fabAddContact.visibility = View.INVISIBLE
-            binding.fabAddGift.visibility = View.INVISIBLE
-            binding.fabAddEvent.visibility = View.INVISIBLE
-        }
-    }
-
-    private fun setAnimation(clicked:Boolean) {
-        if(!clicked) {
-            binding.fabAddContact.startAnimation(fromBottom)
-            binding.fabAddGift.startAnimation(fromBottom)
-            binding.fabAddEvent.startAnimation(fromBottom)
-            binding.fabMenu.startAnimation(rotateOpen)
-        } else {
-            binding.fabAddContact.startAnimation(toBottom)
-            binding.fabAddGift.startAnimation(toBottom)
-            binding.fabAddEvent.startAnimation(toBottom)
-            binding.fabMenu.startAnimation(rotateClose)
-        }
-    }
-
-    private fun setClickable(clicked: Boolean) {
-        if(!clicked) {
-            binding.fabAddContact.isClickable = true
-            binding.fabAddGift.isClickable = true
-            binding.fabAddEvent.isClickable = true
-        } else {
-            binding.fabAddContact.isClickable = false
-            binding.fabAddGift.isClickable = false
-            binding.fabAddEvent.isClickable = false
         }
     }
 

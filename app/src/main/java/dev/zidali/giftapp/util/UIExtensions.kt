@@ -2,10 +2,15 @@ package dev.zidali.giftapp.util
 
 import android.content.Context
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.ActionBarContextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.google.android.material.snackbar.Snackbar
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.*
 
@@ -69,7 +74,6 @@ private fun Context.onResponseReceived(
         }
     }
 }
-
 
 private fun Context.displayDialog(
     response: Response,
@@ -203,5 +207,6 @@ fun Context.displayToast(
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     stateMessageCallback.removeMessageFromStack()
 }
+
 
 

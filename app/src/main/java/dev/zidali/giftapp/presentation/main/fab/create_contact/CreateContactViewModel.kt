@@ -75,7 +75,7 @@ constructor(
                         response = Response(
                             message = createContactError,
                             uiComponentType = UIComponentType.Dialog,
-                            messageType = MessageType.Error
+                            messageType = MessageType.Error,
                         )
                     )
                 )

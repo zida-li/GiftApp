@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     >
 
-    <Button
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/events_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="fragment_event"/>
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
