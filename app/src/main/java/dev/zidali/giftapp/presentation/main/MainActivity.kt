@@ -6,16 +6,13 @@ import android.view.Menu
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.TextView
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.zidali.giftapp.R
@@ -25,9 +22,7 @@ import dev.zidali.giftapp.presentation.BaseActivity
 import dev.zidali.giftapp.presentation.auth.AuthActivity
 import dev.zidali.giftapp.presentation.main.fab.add_gift.AddGiftFragment
 import dev.zidali.giftapp.presentation.main.fab.create_contact.CreateContactFragment
-import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventEvents
 import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventFragment
-import dev.zidali.giftapp.presentation.notification.NotificationHelper
 import dev.zidali.giftapp.presentation.session.SessionEvents
 import dev.zidali.giftapp.util.processQueue
 
@@ -44,9 +39,8 @@ class MainActivity : BaseActivity() {
     //Navigation & DrawerLayout
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var navigationView: NavigationView
-    private lateinit var drawerLayout: DrawerLayout
     private lateinit var navController: NavController
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +48,8 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         initOnClickListeners()
         subscribeObservers()
-        initNavDrawer()
+        setupActionBar()
+        setupAppBar()
 
 //        NotificationHelper.createNotification(
 //            this,
@@ -65,26 +60,24 @@ class MainActivity : BaseActivity() {
 //        )
     }
 
-    private fun initNavDrawer() {
+    private fun setupActionBar() {
         setSupportActionBar(binding.appBarMain.toolbar)
-        drawerLayout = binding.drawerLayout
-        navigationView = binding.navView
         navController = findNavController(R.id.nav_host_fragment_content_main)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment, R.id.contactFragment,
-            ), drawerLayout
+            )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navigationView.setupWithNavController(navController)
+    }
+
+    private fun setupAppBar() {
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigationView.setupWithNavController(navController)
     }
 
     private fun subscribeObservers() {
-
-        navigationView = binding.navView
-
-        val header = navigationView.getHeaderView(0)
 
         sessionManager.state.observe(this) { state ->
 
@@ -102,8 +95,6 @@ class MainActivity : BaseActivity() {
             if (state.accountProperties == null) {
                 navAuthActivity()
             }
-
-            header.findViewById<TextView>(R.id.text_description).text = state.accountProperties?.current_authUser_email
 
         }
     }
@@ -165,7 +156,7 @@ class MainActivity : BaseActivity() {
             ) {resultKey, bundle ->
                 if(resultKey == "ADD_CONTACT_RESULT") {
                     val contact = bundle.getString("ADDED_CONTACT")
-                    Snackbar.make(binding.drawerLayout, contact!!, Snackbar.LENGTH_SHORT)
+                    Snackbar.make(binding.mainActivity, contact!!, Snackbar.LENGTH_SHORT)
                         .setAction(R.string.view_contacts) {
                             //action navigate to contacts.
                         }.show()

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:id="@+id/main_activity">
 
     <include
         android:id="@+id/app_bar_main"
@@ -19,59 +17,97 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View android:id="@+id/guidelinetop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/guidelinebottom"
+            app:layout_constraintVertical_weight="6"
+            android:layout_centerHorizontal="true"/>
+
+        <View android:id="@+id/guidelinebottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guidelinetop"
+            app:layout_constraintVertical_weight="1"
+            android:layout_centerHorizontal="true"/>
+
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab_add_event"
+            android:contentDescription="@string/create_event"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/create_event"
-            app:layout_constraintBottom_toTopOf="@+id/fab_add_gift"
-            app:layout_constraintEnd_toEndOf="@+id/fab_add_gift"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/guidelinebottom"
+            app:layout_constraintLeft_toRightOf="@id/fab_add_gift"
             app:icon="@drawable/ic_baseline_event_24"
+            app:layout_anchor="@id/fab_add_gift"
             android:visibility="invisible"/>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab_add_gift"
+            android:contentDescription="@string/add_gift"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/add_gift"
-            app:layout_constraintBottom_toTopOf="@+id/fab_add_contact"
-            app:layout_constraintEnd_toEndOf="@+id/fab_add_contact"
+            app:layout_constraintBottom_toTopOf="@id/guidelinebottom"
+            app:layout_constraintLeft_toRightOf="@id/fab_add_contact"
+            app:layout_constraintRight_toLeftOf="@id/fab_add_event"
             app:icon="@drawable/ic_gift"
+            app:layout_anchor="@id/fab_add_contact"
             android:visibility="invisible"/>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab_add_contact"
+            android:contentDescription="@string/create_contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/create_contact"
-            app:layout_constraintBottom_toTopOf="@+id/fab_menu"
-            app:layout_constraintEnd_toEndOf="@+id/fab_menu"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/fab_add_gift"
+            app:layout_constraintBottom_toTopOf="@id/guidelinebottom"
             app:icon="@drawable/ic_baseline_person_add_24"
             android:visibility="invisible"/>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bottomAppBarContainer">
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="20dp"
+        android:layout_gravity="bottom">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:background="@android:color/transparent"
+            android:outlineAmbientShadowColor="@android:color/transparent"
+            android:outlineSpotShadowColor="@android:color/transparent"
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:menu="@menu/bottom_navigation_menu"
+            />
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="16dp"
+            app:layout_anchor="@id/bottomAppBar"
             app:srcCompat="@android:drawable/ic_input_add" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:headerLayout="@layout/nav_header_main"
-            app:menu="@menu/activity_main_drawer"
-            />
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
