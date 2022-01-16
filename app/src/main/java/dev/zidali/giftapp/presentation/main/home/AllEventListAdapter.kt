@@ -1,14 +1,15 @@
-package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
+package dev.zidali.giftapp.presentation.main.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.Converters
+import dev.zidali.giftapp.databinding.AllEventViewItemBinding
 import dev.zidali.giftapp.databinding.ContactViewEventItemBinding
 import dev.zidali.giftapp.databinding.GiftListItemBinding
 
-class EventListAdapter(private val interaction: Interaction? = null) :
+class AllEventListAdapter(private val interaction: Interaction? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ContactEvent>() {
@@ -31,7 +32,7 @@ class EventListAdapter(private val interaction: Interaction? = null) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return EventViewHolder(
-            ContactViewEventItemBinding.inflate(
+            AllEventViewItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -41,7 +42,7 @@ class EventListAdapter(private val interaction: Interaction? = null) :
     }
 
     internal inner class GiftRecyclerChangeCallback(
-        private val adapter: EventListAdapter
+        private val adapter: AllEventListAdapter
     ) : ListUpdateCallback {
 
         override fun onChanged(position: Int, count: Int, payload: Any?) {
@@ -79,7 +80,7 @@ class EventListAdapter(private val interaction: Interaction? = null) :
 
     class EventViewHolder
     constructor(
-        private val binding: ContactViewEventItemBinding,
+        private val binding: AllEventViewItemBinding,
         private val interaction: Interaction?,
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -88,6 +89,7 @@ class EventListAdapter(private val interaction: Interaction? = null) :
                 interaction?.onItemSelected(adapterPosition, item)
             }
 
+            binding.contactName.text = item.contact_name
             binding.event.text = item.contact_event
             binding.year.text = item.year.toString()
             binding.month.text = Converters.convertIntMonthToTextMonth(item.month)

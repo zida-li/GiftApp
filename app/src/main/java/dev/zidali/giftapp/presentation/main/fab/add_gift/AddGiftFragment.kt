@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.fab.add_gift
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentAddGiftBinding
 import dev.zidali.giftapp.databinding.FragmentGiftBinding
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 
 @AndroidEntryPoint

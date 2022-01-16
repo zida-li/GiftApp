@@ -1,25 +1,24 @@
-package dev.zidali.giftapp.business.interactors.main.contacts.contact_detail
+package dev.zidali.giftapp.business.interactors.main.shared
 
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEvent
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.util.DataState
 import dev.zidali.giftapp.presentation.main.contacts.contact_detail.event.EventState
+import dev.zidali.giftapp.presentation.main.home.AllEventState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
-class FetchEvents(
+class FetchAllEvents(
     private val contactEventDao: ContactEventDao,
 ) {
 
-    fun execute(
-        contact_name: String,
-    ): Flow<DataState<EventState>> = flow {
+    fun execute(): Flow<DataState<AllEventState>> = flow {
 
-        val results = contactEventDao.getAllEventsOfContact(contact_name).map { it.toContactEvent() }.toMutableList()
+        val results = contactEventDao.getAllContactEvents().map { it.toContactEvent() }.toMutableList()
 
-        val events = EventState(
+        val events = AllEventState(
             contact_events = results
         )
 

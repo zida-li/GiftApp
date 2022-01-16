@@ -4,6 +4,8 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 
 sealed class EventEvents {
 
+    object FetchContactName: EventEvents()
+
     object FetchEvents: EventEvents()
 
     data class AppendToMessageQueue(

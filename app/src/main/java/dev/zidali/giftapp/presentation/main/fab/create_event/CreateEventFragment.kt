@@ -95,7 +95,7 @@ class CreateEventFragment: DialogFragment() {
             ) { resultKey, bundle->
                 if(resultKey == "DATE_PICKER_RESULT") {
                     val userSelection = bundle.getString("USER_SELECTION")
-                    binding.datePicker.text = userSelection
+                    binding.datePicker.setText(userSelection)
 
                     val selectedYear = bundle.getInt("SELECTED_YEAR")
                     val selectedMonth = bundle.getInt("SELECTED_MONTH")
@@ -122,7 +122,7 @@ class CreateEventFragment: DialogFragment() {
                 if(resultKey == "REMINDER_PICKER_RESULT") {
                     val reminder = bundle.getStringArrayList("SELECTED_REMINDERS")
                     val joinToString = reminder?.joinToString(", ")
-                    binding.reminderPicker.text = joinToString
+                    binding.reminderPicker.setText(joinToString)
                     viewModel.onTriggerEvent(CreateEventEvents.OnUpdateReminderPicker(joinToString!!))
                 }
             }

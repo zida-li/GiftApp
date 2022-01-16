@@ -11,6 +11,7 @@ import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
 import dev.zidali.giftapp.util.Constants
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -64,15 +65,15 @@ constructor(
     private fun onUpdateGift(contact: String, gift: String) {
         state.value?.let { state->
             this.state.value = state.copy(
-                gift = Gift(
-                    contact_name = contact,
-                    contact_gift = gift
-                )
+                contact_name_holder = contact,
+                contact_gift_holder = gift,
             )
         }
     }
 
     private fun addGift() {
+        setAddGiftState()
+        Log.d(Constants.TAG, state.value?.gift.toString())
         state.value?.let {state->
             val addGiftError = AddGiftState(
                 gift = state.gift
@@ -86,9 +87,9 @@ constructor(
                         appendToMessageQueue(stateMessage)
                     }
 
+                    setAddGiftSuccessful(true)
+
                 }.launchIn(viewModelScope)
-                setAddGiftSuccessful(true)
-                setAddGiftSuccessful(false)
             } else {
                 appendToMessageQueue(
                     stateMessage = StateMessage(
@@ -130,6 +131,17 @@ constructor(
     private fun setAddGiftSuccessful(addGiftSuccessful: Boolean) {
         state.value?.let {state->
             this.state.value = state.copy(addGiftSuccessful = addGiftSuccessful)
+        }
+    }
+
+    private fun setAddGiftState(){
+        state.value?.let { state->
+            this.state.value = state.copy(
+                gift = Gift(
+                    contact_gift = state.contact_gift_holder,
+                    contact_name = state.contact_name_holder,
+                )
+            )
         }
     }
 

@@ -33,6 +33,7 @@ EventListAdapter.Interaction {
 
     override fun onResume() {
         super.onResume()
+        viewModel.onTriggerEvent(EventEvents.FetchContactName)
         viewModel.onTriggerEvent(EventEvents.FetchEvents)
     }
 
@@ -59,7 +60,6 @@ EventListAdapter.Interaction {
                     }
                 }
             )
-
         })
     }
 

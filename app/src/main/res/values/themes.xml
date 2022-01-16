@@ -22,9 +22,4 @@
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
-    <style name="SpinnerThemeForDarkBackGround" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/white</item>
-    </style>
-
-
 </resources>

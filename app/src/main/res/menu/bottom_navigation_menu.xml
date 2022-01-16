@@ -4,6 +4,7 @@
 
     <item
         android:id="@+id/nav_contact"
+        android:icon="@drawable/ic_baseline_contact_page_24"
         android:enabled="true"
         android:title="@string/contacts"
         app:showAsAction="always" />
@@ -17,11 +18,19 @@
         android:checked="false"
         />
 
+    <item
+        android:enabled="false"
+        android:title=""
+        app:showAsAction="always"
+        android:checkable="false"
+        android:checked="false"
+        />
+
 
     <item
-
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_events"
+        android:icon="@drawable/ic_baseline_event_24"
         android:enabled="true"
-        android:title="@string/home"
+        android:title="@string/event"
         app:showAsAction="withText" />
 </menu>

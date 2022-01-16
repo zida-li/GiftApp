@@ -17,6 +17,9 @@ interface ContactEventDao {
     @Query("SELECT * FROM contact_events WHERE contact_event = :contact_event")
     suspend fun searchByEvent(contact_event: String): ContactEventEntity?
 
+    @Query("SELECT * FROM contact_events WHERE contact_name = :contact_name")
+    suspend fun getAllEventsOfContact (contact_name: String): MutableList<ContactEventEntity>
+
     @Query("SELECT * FROM contact_events")
     suspend fun getAllContactEvents(): MutableList<ContactEventEntity>
 

@@ -15,6 +15,7 @@ import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchGifts
 import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.fab.CreateEvent
+import dev.zidali.giftapp.business.interactors.main.shared.FetchAllEvents
 import dev.zidali.giftapp.business.interactors.session.Logout
 import javax.inject.Singleton
 
@@ -68,11 +69,21 @@ object MainModule {
 
     @Singleton
     @Provides
+    fun provideFetchAllEvents(
+        contactEventDao: ContactEventDao
+    ): FetchAllEvents {
+        return FetchAllEvents(
+            contactEventDao
+        )
+    }
+
+    @Singleton
+    @Provides
     fun provideAddGift(
-        giftDao: GiftDao
+        giftDao: GiftDao,
     ): AddGift {
         return AddGift(
-            giftDao
+            giftDao,
         )
     }
 

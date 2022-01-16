@@ -66,7 +66,7 @@ class MainActivity : BaseActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment, R.id.contactFragment,
+                R.id.eventsFragment, R.id.contactFragment,
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

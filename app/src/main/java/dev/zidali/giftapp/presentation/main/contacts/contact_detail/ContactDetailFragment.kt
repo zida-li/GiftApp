@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import dev.zidali.giftapp.databinding.FragmentContactDetailBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 
 class ContactDetailFragment : BaseMainFragment() {
 
+    private val viewModel: ContactDetailViewModel by viewModels()
     private var _binding: FragmentContactDetailBinding? = null
     private val binding get() = _binding!!
 
@@ -31,6 +33,20 @@ class ContactDetailFragment : BaseMainFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViewPager()
+        subscribeObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onTriggerEvent(ContactDetailEvents.FetchContactName)
+    }
+
+    private fun subscribeObservers(){
+
+        viewModel.state.observe(viewLifecycleOwner, {state->
+            binding.contactName.setText(state.contact_name)
+        })
+
     }
 
     private fun initViewPager() {
