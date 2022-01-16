@@ -11,8 +11,8 @@ import dev.zidali.giftapp.business.domain.models.Gift
     foreignKeys = [
         ForeignKey(
             entity = ContactEntity::class,
-            parentColumns = ["contact_name"],
-            childColumns = ["contact_name"],
+            parentColumns = ["primary_key"],
+            childColumns = ["primary_key"],
             onDelete = ForeignKey.CASCADE
         )
     ]
@@ -27,12 +27,16 @@ data class GiftEntity (
     @ColumnInfo(name = "contact_name")
     var contact_name: String,
 
+    @ColumnInfo(name = "primary_key")
+    var pk: Int,
+
 )
 
 fun Gift.toGiftEntity(): GiftEntity{
     return GiftEntity(
         contact_gift = contact_gift,
         contact_name = contact_name,
+        pk = pk,
     )
 }
 
@@ -40,5 +44,6 @@ fun GiftEntity.toGift(): Gift{
     return Gift(
         contact_gift = contact_gift,
         contact_name = contact_name,
+        pk = pk
     )
 }

@@ -81,19 +81,23 @@ object MainModule {
     @Provides
     fun provideAddGift(
         giftDao: GiftDao,
+        contactDao: ContactDao,
     ): AddGift {
         return AddGift(
             giftDao,
+            contactDao,
         )
     }
 
     @Singleton
     @Provides
     fun provideCreateEvent(
-        contactEventDao: ContactEventDao
+        contactEventDao: ContactEventDao,
+        contactDao: ContactDao,
     ): CreateEvent {
         return CreateEvent(
-            contactEventDao
+            contactEventDao,
+            contactDao
         )
     }
 

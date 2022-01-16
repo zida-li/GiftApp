@@ -15,6 +15,7 @@ data class CreateEventState(
         year = 0,
         month = 0,
         day = 0,
+        pk = 0,
     ),
     var calendarSelectionHolder: CalendarSelection = CalendarSelection(
         selectedYear = 0,

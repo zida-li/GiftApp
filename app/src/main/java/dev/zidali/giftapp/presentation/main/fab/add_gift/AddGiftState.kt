@@ -7,7 +7,7 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 
 data class AddGiftState(
     var contacts: MutableList<String> = mutableListOf(),
-    var gift: Gift = Gift(contact_name = "", contact_gift = ""),
+    var gift: Gift = Gift(contact_name = "", contact_gift = "", pk = 0),
     var contact_name_holder: String = "",
     var contact_gift_holder: String ="",
     var addGiftSuccessful: Boolean = false,

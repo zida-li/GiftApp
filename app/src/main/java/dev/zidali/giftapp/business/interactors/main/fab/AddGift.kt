@@ -1,6 +1,8 @@
 package dev.zidali.giftapp.business.interactors.main.fab
 
+import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
+import dev.zidali.giftapp.business.datasource.cache.contacts.toContact
 import dev.zidali.giftapp.business.datasource.cache.contacts.toGiftEntity
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.Gift
@@ -12,13 +14,22 @@ import kotlinx.coroutines.flow.flow
 
 class AddGift(
     private val giftDao: GiftDao,
+    private val contactDao: ContactDao
 ) {
 
     fun execute(
         gift: Gift
     ): Flow<DataState<AddGiftState>> = flow <DataState<AddGiftState>>{
 
-        giftDao.insert(gift.toGiftEntity())
+        val contactPk = contactDao.getByName(gift.contact_name)?.toContact()
+
+        val editedGift = Gift(
+            contact_name = gift.contact_name,
+            contact_gift = gift.contact_gift,
+            pk = contactPk?.pk!!
+        )
+
+        giftDao.insert(editedGift.toGiftEntity())
 
         emit(DataState.data(
             response = Response(

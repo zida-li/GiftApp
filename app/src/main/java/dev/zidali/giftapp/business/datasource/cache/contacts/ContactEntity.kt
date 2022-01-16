@@ -22,6 +22,9 @@ import dev.zidali.giftapp.business.domain.models.Contact
 data class ContactEntity(
 
     @PrimaryKey
+    @ColumnInfo(name ="primary_key")
+    var pk: Int,
+
     @ColumnInfo(name ="contact_name")
     var contact_name: String,
 
@@ -34,6 +37,7 @@ fun ContactEntity.toContact(): Contact {
     return Contact(
         contact_name = contact_name,
         current_authUser_email = current_authUser_email,
+        pk = pk,
     )
 }
 
@@ -41,6 +45,7 @@ fun Contact.toContactsEntity(): ContactEntity{
     return ContactEntity(
         contact_name = contact_name!!,
         current_authUser_email = current_authUser_email!!,
+        pk = pk!!,
     )
 }
 

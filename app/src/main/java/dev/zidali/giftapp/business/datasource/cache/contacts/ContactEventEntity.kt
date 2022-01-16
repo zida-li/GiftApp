@@ -12,8 +12,8 @@ import dev.zidali.giftapp.business.domain.models.ContactEvent
     foreignKeys = [
         ForeignKey(
             entity = ContactEntity::class,
-            parentColumns = ["contact_name"],
-            childColumns = ["contact_name"],
+            parentColumns = ["primary_key"],
+            childColumns = ["primary_key"],
             onDelete = CASCADE
         )
     ]
@@ -39,6 +39,9 @@ data class ContactEventEntity (
     @ColumnInfo(name = "day")
     var day: Int,
 
+    @ColumnInfo(name = "primary_key")
+    var pk: Int,
+
 )
 
 fun ContactEvent.toContactEventEntity(): ContactEventEntity {
@@ -49,6 +52,7 @@ fun ContactEvent.toContactEventEntity(): ContactEventEntity {
         year = year,
         month = month,
         day = day,
+        pk = pk,
     )
 }
 
@@ -60,5 +64,6 @@ fun ContactEventEntity.toContactEvent(): ContactEvent {
         year = year,
         month = month,
         day = day,
+        pk = pk,
     )
 }

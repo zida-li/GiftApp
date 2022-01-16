@@ -140,6 +140,7 @@ constructor(
                 gift = Gift(
                     contact_gift = state.contact_gift_holder,
                     contact_name = state.contact_name_holder,
+                    pk = 0,
                 )
             )
         }

@@ -8,5 +8,6 @@ data class ContactEvent(
     var year: Int,
     var month: Int,
     var day: Int,
+    var pk: Int,
 
 )
