@@ -23,4 +23,6 @@ interface ContactEventDao {
     @Query("SELECT * FROM contact_events")
     suspend fun getAllContactEvents(): MutableList<ContactEventEntity>
 
+    @Query("UPDATE contact_events SET contact_name = :new_contact_name WHERE primary_key = :primary_key")
+    suspend fun updateContactNameEvent(new_contact_name: String, primary_key: Int)
 }

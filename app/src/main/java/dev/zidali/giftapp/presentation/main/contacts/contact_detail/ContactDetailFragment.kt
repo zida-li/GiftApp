@@ -2,6 +2,7 @@ package dev.zidali.giftapp.presentation.main.contacts.contact_detail
 
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentContactDetailBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.update.UpdateEvents
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 
 class ContactDetailFragment : BaseMainFragment() {
@@ -41,16 +43,13 @@ class ContactDetailFragment : BaseMainFragment() {
         subscribeObservers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.onTriggerEvent(ContactDetailEvents.FetchContactName)
-    }
-
     private fun subscribeObservers(){
 
         viewModel.state.observe(viewLifecycleOwner, {state->
 
+
             binding.contactName.setText(state.contact_name)
+
 
             if(state.isEditing) {
                 activateEditMode()
@@ -90,16 +89,21 @@ class ContactDetailFragment : BaseMainFragment() {
     }
 
     private fun activateEditMode() {
+
+        val editText = binding.contactName
+
         binding.editButton.setImageResource(R.drawable.ic_baseline_check_24)
-        binding.contactName.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
-        binding.contactName.isFocusableInTouchMode = true
-        binding.contactName.requestFocus()
+        editText.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
+        editText.requestFocus()
+        editText.setSelection(editText.length())
+        uiCommunicationListener.showSoftKeyboard()
         binding.editButton.setOnClickListener {
             cacheState()
             viewModel.onTriggerEvent(ContactDetailEvents.UpdateContact)
             viewModel.onTriggerEvent(ContactDetailEvents.UpdateTitle)
             updateManager.onTriggerEvent(UpdateEvents.RequestUpdate)
             viewModel.onTriggerEvent(ContactDetailEvents.DeactivateEditMode)
+            uiCommunicationListener.hideSoftKeyboard()
         }
     }
 

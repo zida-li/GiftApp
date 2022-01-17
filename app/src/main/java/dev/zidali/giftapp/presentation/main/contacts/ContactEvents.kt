@@ -10,6 +10,8 @@ sealed class ContactEvents {
         val contact_name: String,
     ): ContactEvents()
 
+    object ResetContactName: ContactEvents()
+
     data class AppendToMessageQueue(
         val stateMessage: StateMessage
     ): ContactEvents()

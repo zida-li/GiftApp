@@ -2,6 +2,7 @@ package dev.zidali.giftapp.presentation.main.contacts.contact_detail
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,18 +21,23 @@ import javax.inject.Inject
 class ContactDetailViewModel
 @Inject
 constructor(
-    private val appDataStore: AppDataStore,
     private val updateContact: UpdateContact,
+    private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
     val state: MutableLiveData<ContactDetailState> = MutableLiveData(ContactDetailState())
 
+    init {
+        state.value?.let { state->
+            savedStateHandle.get<String>("selectedContact")?.let { contact_name->
+                this.state.value = state.copy(contact_name = contact_name)
+            }
+        }
+    }
+
     fun onTriggerEvent(event: ContactDetailEvents) {
 
         when(event) {
-            is ContactDetailEvents.FetchContactName -> {
-                fetchContactName()
-            }
             is ContactDetailEvents.OnUpdateContact -> {
                 onUpdateContact(event.new_name)
             }
@@ -53,19 +59,6 @@ constructor(
             is ContactDetailEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
             }
-        }
-    }
-
-    private fun fetchContactName() {
-        state.value?.let {state->
-            flow<ContactDetailState> {
-                val contactName = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_NAME)
-                emit(ContactDetailState(
-                    contact_name = contactName!!,
-                ))
-            }.onEach {
-                this.state.value = state.copy(contact_name = it.contact_name)
-            }.launchIn(viewModelScope)
         }
     }
 

@@ -28,6 +28,15 @@ abstract class BaseActivity: AppCompatActivity(),
         }
     }
 
+    override fun showSoftKeyboard() {
+        if (currentFocus != null) {
+            val inputMethodManager = getSystemService(
+                Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager
+                .showSoftInput(currentFocus, 0)
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         if(dialogInView != null){

@@ -73,7 +73,6 @@ constructor(
 
     private fun addGift() {
         setAddGiftState()
-        Log.d(Constants.TAG, state.value?.gift.toString())
         state.value?.let {state->
             val addGiftError = AddGiftState(
                 gift = state.gift

@@ -1,9 +1,11 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +15,7 @@ import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentContactsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.update.UpdateEvents
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
@@ -27,7 +30,7 @@ ContactListAdapter.Interaction
 
     override fun onResume() {
         super.onResume()
-
+        viewModel.onTriggerEvent(ContactEvents.ResetContactName)
     }
 
     override fun onCreateView(
@@ -44,6 +47,7 @@ ContactListAdapter.Interaction
         subscribeObservers()
         initRecyclerView()
     }
+
 
     private fun subscribeObservers() {
 
@@ -91,8 +95,9 @@ ContactListAdapter.Interaction
     override fun onItemSelected(position: Int, item: Contact) {
         try {
             viewModel.state.value?.let {
+                val bundle = bundleOf("selectedContact" to item.contact_name)
                 viewModel.onTriggerEvent(ContactEvents.PassDataToViewPager(item.contact_name!!))
-                findNavController().navigate(R.id.action_contactFragment_to_contactDetailFragment)
+                findNavController().navigate(R.id.action_contactFragment_to_contactDetailFragment, bundle)
             } ?: throw Exception("Null Contact")
         } catch (e: Exception) {
             ContactEvents.AppendToMessageQueue(

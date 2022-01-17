@@ -4,6 +4,8 @@ interface UICommunicationListener {
 
     fun displayProgressBar(isLoading: Boolean)
 
+    fun showSoftKeyboard()
+
     fun hideSoftKeyboard()
 
 }

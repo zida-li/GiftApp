@@ -23,4 +23,7 @@ interface GiftDao {
     @Query("SELECT * FROM gift")
     suspend fun getAllContacts(): MutableList<GiftEntity>
 
+    @Query("UPDATE gift SET contact_name = :new_contact_name WHERE primary_key = :primary_key")
+    suspend fun updateContactNameGift(new_contact_name: String, primary_key: Int)
+
 }

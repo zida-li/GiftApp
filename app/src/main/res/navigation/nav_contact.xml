@@ -20,6 +20,6 @@
     <fragment
         android:id="@+id/contactDetailFragment"
         android:name="dev.zidali.giftapp.presentation.main.contacts.contact_detail.ContactDetailFragment"
-        android:label="ContactDetailFragment" />
+        android:label="" />
 
 </navigation>

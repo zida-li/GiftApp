@@ -14,8 +14,6 @@ constructor(
 
     private val TAG: String = "AppDebug"
 
-    private val sessionScope = CoroutineScope(Main)
-
     val state: MutableLiveData<UpdateState> = MutableLiveData(UpdateState())
 
     fun onTriggerEvent(event: UpdateEvents){

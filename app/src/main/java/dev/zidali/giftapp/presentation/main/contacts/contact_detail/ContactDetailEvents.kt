@@ -4,8 +4,6 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 
 sealed class ContactDetailEvents {
 
-    object FetchContactName: ContactDetailEvents()
-
     data class OnUpdateContact(
         var new_name: String
     ): ContactDetailEvents()

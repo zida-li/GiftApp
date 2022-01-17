@@ -12,6 +12,7 @@ import dev.zidali.giftapp.business.domain.util.doesMessageAlreadyExistInQueue
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -27,12 +28,6 @@ constructor(
 
     val state: MutableLiveData<ContactState> = MutableLiveData(ContactState())
 
-    init {
-        viewModelScope.launch {
-            appDataStore.setValue(DataStoreKeys.SELECTED_CONTACT_NAME, "")
-        }
-    }
-
     fun onTriggerEvent(event: ContactEvents){
         when (event) {
             is ContactEvents.FetchContacts -> {
@@ -40,6 +35,9 @@ constructor(
             }
             is ContactEvents.PassDataToViewPager -> {
                 passDataToViewPager(event.contact_name)
+            }
+            is ContactEvents.ResetContactName -> {
+                resetContactName()
             }
             is ContactEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -70,6 +68,12 @@ constructor(
     private fun passDataToViewPager(contact_name: String) {
         viewModelScope.launch {
             appDataStore.setValue(DataStoreKeys.SELECTED_CONTACT_NAME, contact_name)
+        }
+    }
+
+    private fun resetContactName() {
+        viewModelScope.launch {
+            appDataStore.setValue(DataStoreKeys.SELECTED_CONTACT_NAME, "")
         }
     }
 

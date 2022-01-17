@@ -107,9 +107,13 @@ object MainModule {
     @Provides
     fun provideUpdateContact(
         contactDao: ContactDao,
+        giftDao: GiftDao,
+        contactEventDao: ContactEventDao,
     ): UpdateContact {
         return UpdateContact (
             contactDao,
+            giftDao,
+            contactEventDao,
         )
     }
 

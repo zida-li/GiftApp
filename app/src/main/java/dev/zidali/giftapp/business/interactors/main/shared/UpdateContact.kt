@@ -1,6 +1,8 @@
 package dev.zidali.giftapp.business.interactors.main.shared
 
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
+import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
+import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.Contact
@@ -15,6 +17,8 @@ import kotlinx.coroutines.flow.flow
 
 class UpdateContact(
     private val contactDao: ContactDao,
+    private val giftDao: GiftDao,
+    private val contactEventDao: ContactEventDao,
 ) {
 
     fun execute(
@@ -24,7 +28,9 @@ class UpdateContact(
 
         val contactPk = contactDao.getByName(old_name)
 
-        contactDao.updateContact(new_name, contactPk?.pk!!)
+        giftDao.updateContactNameGift(new_name, contactPk?.pk!!)
+        contactEventDao.updateContactNameEvent(new_name, contactPk.pk)
+        contactDao.updateContact(new_name, contactPk.pk)
 
         emit(DataState.data(
             response = Response(
