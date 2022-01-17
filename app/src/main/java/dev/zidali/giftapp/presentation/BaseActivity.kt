@@ -5,6 +5,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import dev.zidali.giftapp.presentation.session.SessionManager
+import dev.zidali.giftapp.presentation.update.GlobalManager
 import javax.inject.Inject
 
 abstract class BaseActivity: AppCompatActivity(),
@@ -16,6 +17,9 @@ abstract class BaseActivity: AppCompatActivity(),
 
     @Inject
     lateinit var sessionManager: SessionManager
+
+    @Inject
+    lateinit var globalManager: GlobalManager
 
     abstract override fun displayProgressBar(isLoading: Boolean)
 

@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.MainActivity
+import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
@@ -35,6 +38,8 @@ GiftListAdapter.Interaction
     override fun onResume() {
         super.onResume()
         viewModel.onTriggerEvent(GiftEvents.FetchGifts)
+        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentInView)
+        Log.d(Constants.TAG, "GiftFragment onResume()")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,9 +83,17 @@ GiftListAdapter.Interaction
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentOutOfView)
+        Log.d(Constants.TAG, "GiftFragment onPause()")
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentOutOfView)
+        Log.d(Constants.TAG, "GiftFragment onDestroyView()")
     }
 
     override fun onItemSelected(position: Int, item: Gift) {

@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,9 @@ import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentEventsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftListAdapter
+import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.util.Constants
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
@@ -35,6 +39,8 @@ EventListAdapter.Interaction {
         super.onResume()
         viewModel.onTriggerEvent(EventEvents.FetchContactName)
         viewModel.onTriggerEvent(EventEvents.FetchEvents)
+        globalManager.onTriggerEvent(GlobalEvents.EventFragmentInView)
+        Log.d(Constants.TAG, "EventFragment onResume()")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,9 +80,17 @@ EventListAdapter.Interaction {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        globalManager.onTriggerEvent(GlobalEvents.EventFragmentOutOfView)
+        Log.d(TAG, "EventFragment onPause()")
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        globalManager.onTriggerEvent(GlobalEvents.EventFragmentOutOfView)
+        Log.d(TAG, "EventFragment onDestroyView()")
     }
 
     override fun onItemSelected(position: Int, item: ContactEvent) {

@@ -1,7 +1,6 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,7 @@ import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentContactsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.update.UpdateEvents
-import dev.zidali.giftapp.util.Constants.Companion.TAG
+import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
@@ -51,10 +49,10 @@ ContactListAdapter.Interaction
 
     private fun subscribeObservers() {
 
-        updateManager.state.observe(viewLifecycleOwner, { state->
+        globalManager.state.observe(viewLifecycleOwner, { state->
             if(state.needToUpdateContactPage){
                 viewModel.onTriggerEvent(ContactEvents.FetchContacts)
-                updateManager.onTriggerEvent(UpdateEvents.UpdateComplete)
+                globalManager.onTriggerEvent(GlobalEvents.GlobalComplete)
             }
         })
 

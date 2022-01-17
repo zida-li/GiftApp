@@ -2,6 +2,7 @@ package dev.zidali.giftapp.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.view.animation.Animation
@@ -28,13 +29,6 @@ import dev.zidali.giftapp.util.processQueue
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
-
-    //Animations
-    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(applicationContext, R.anim.rotate_open_anim) }
-    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(applicationContext, R.anim.rotate_close_anim) }
-    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(applicationContext, R.anim.from_bottom_anim) }
-    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(applicationContext, R.anim.to_bottom_anim) }
-    private var clicked = false
 
     //Navigation & DrawerLayout
     private lateinit var binding: ActivityMainBinding
@@ -125,94 +119,58 @@ class MainActivity : BaseActivity() {
      */
 
     private fun initOnClickListeners() {
+
         binding.fabMenu.setOnClickListener {
-            onMenuButtonClicked()
-        }
 
-        binding.fabAddEvent.setOnClickListener {
+            if(navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/contactFragment") {
+                val createContactFragment = CreateContactFragment()
+                val supportFragmentManager = supportFragmentManager
 
-            val dialog = CreateEventFragment()
-            val supportFragmentManager = supportFragmentManager
-
-            dialog.isCancelable = false
-            dialog.show(supportFragmentManager, "createContactDialog")
-        }
-
-        binding.fabAddGift.setOnClickListener{
-            val dialog = AddGiftFragment()
-            val supportFragmentManager = supportFragmentManager
-
-            dialog.isCancelable = false
-            dialog.show(supportFragmentManager, "addGiftDialog")
-        }
-
-        binding.fabAddContact.setOnClickListener {
-            val createContactFragment = CreateContactFragment()
-            val supportFragmentManager = supportFragmentManager
-
-            supportFragmentManager.setFragmentResultListener(
-                "ADD_CONTACT_RESULT",
-                this
-            ) {resultKey, bundle ->
-                if(resultKey == "ADD_CONTACT_RESULT") {
-                    val contact = bundle.getString("ADDED_CONTACT")
-                    Snackbar.make(binding.mainActivity, contact!!, Snackbar.LENGTH_SHORT)
-                        .setAction(R.string.view_contacts) {
-                            //action navigate to contacts.
-                        }.show()
+                supportFragmentManager.setFragmentResultListener(
+                    "ADD_CONTACT_RESULT",
+                    this
+                ) {resultKey, bundle ->
+                    if(resultKey == "ADD_CONTACT_RESULT") {
+                        val contact = bundle.getString("ADDED_CONTACT")
+                        Snackbar.make(binding.mainActivity, contact!!, Snackbar.LENGTH_SHORT)
+                            .setAction(R.string.view_contacts) {
+                                //action navigate to contacts.
+                            }.show()
+                    }
                 }
+                createContactFragment.isCancelable = false
+                createContactFragment.show(supportFragmentManager, "CreateContactFragment")
             }
-            createContactFragment.isCancelable = false
-            createContactFragment.show(supportFragmentManager, "CreateContactFragment")
+
+            if(navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/contactDetailFragment"
+                && globalManager.state.value?.giftFragmentInView!!) {
+                val dialog = AddGiftFragment()
+                val supportFragmentManager = supportFragmentManager
+
+                dialog.isCancelable = false
+                dialog.show(supportFragmentManager, "addGiftDialog")
+            } else if (navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/contactDetailFragment"
+                && globalManager.state.value?.eventFragmentInView!!) {
+
+                val dialog = CreateEventFragment()
+                val supportFragmentManager = supportFragmentManager
+
+                dialog.isCancelable = false
+                dialog.show(supportFragmentManager, "createContactDialog")
+            }
+
+            if(navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/eventsFragment") {
+                val dialog = CreateEventFragment()
+                val supportFragmentManager = supportFragmentManager
+
+                dialog.isCancelable = false
+                dialog.show(supportFragmentManager, "createContactDialog")
+            }
+
+//            Log.d(TAG, navController.currentDestination?.displayName!!)
         }
+
     }
 
-    /**
-     * FAB Menu Functions & Animations
-     */
-    private fun onMenuButtonClicked() {
-        setVisibility(clicked)
-        setAnimation(clicked)
-        setClickable(clicked)
-        clicked = !clicked
-    }
-
-    private fun setVisibility(clicked: Boolean) {
-        if(!clicked) {
-            binding.fabAddContact.visibility = View.VISIBLE
-            binding.fabAddGift.visibility = View.VISIBLE
-            binding.fabAddEvent.visibility = View.VISIBLE
-        } else {
-            binding.fabAddContact.visibility = View.INVISIBLE
-            binding.fabAddGift.visibility = View.INVISIBLE
-            binding.fabAddEvent.visibility = View.INVISIBLE
-        }
-    }
-
-    private fun setAnimation(clicked:Boolean) {
-        if(!clicked) {
-            binding.fabAddContact.startAnimation(fromBottom)
-            binding.fabAddGift.startAnimation(fromBottom)
-            binding.fabAddEvent.startAnimation(fromBottom)
-            binding.fabMenu.startAnimation(rotateOpen)
-        } else {
-            binding.fabAddContact.startAnimation(toBottom)
-            binding.fabAddGift.startAnimation(toBottom)
-            binding.fabAddEvent.startAnimation(toBottom)
-            binding.fabMenu.startAnimation(rotateClose)
-        }
-    }
-
-    private fun setClickable(clicked: Boolean) {
-        if(!clicked) {
-            binding.fabAddContact.isClickable = true
-            binding.fabAddGift.isClickable = true
-            binding.fabAddEvent.isClickable = true
-        } else {
-            binding.fabAddContact.isClickable = false
-            binding.fabAddGift.isClickable = false
-            binding.fabAddEvent.isClickable = false
-        }
-    }
 
 }

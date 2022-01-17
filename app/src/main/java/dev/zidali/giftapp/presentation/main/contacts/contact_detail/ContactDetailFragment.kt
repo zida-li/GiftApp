@@ -2,7 +2,6 @@ package dev.zidali.giftapp.presentation.main.contacts.contact_detail
 
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,7 @@ import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentContactDetailBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.update.UpdateEvents
-import dev.zidali.giftapp.util.Constants.Companion.TAG
+import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.util.processQueue
 
 class ContactDetailFragment : BaseMainFragment() {
@@ -86,6 +84,7 @@ class ContactDetailFragment : BaseMainFragment() {
         TabLayoutMediator(tabLayout, viewPager) {tab, position ->
             tab.text = titleArray[position]
         }.attach()
+
     }
 
     private fun activateEditMode() {
@@ -101,7 +100,7 @@ class ContactDetailFragment : BaseMainFragment() {
             cacheState()
             viewModel.onTriggerEvent(ContactDetailEvents.UpdateContact)
             viewModel.onTriggerEvent(ContactDetailEvents.UpdateTitle)
-            updateManager.onTriggerEvent(UpdateEvents.RequestUpdate)
+            globalManager.onTriggerEvent(GlobalEvents.RequestGlobal)
             viewModel.onTriggerEvent(ContactDetailEvents.DeactivateEditMode)
             uiCommunicationListener.hideSoftKeyboard()
         }

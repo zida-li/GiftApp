@@ -36,43 +36,7 @@
             app:layout_constraintTop_toBottomOf="@id/guidelinetop"
             app:layout_constraintVertical_weight="1"
             android:layout_centerHorizontal="true"/>
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab_add_event"
-            android:contentDescription="@string/create_event"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/guidelinebottom"
-            app:layout_constraintLeft_toRightOf="@id/fab_add_gift"
-            app:icon="@drawable/ic_baseline_event_24"
-            app:layout_anchor="@id/fab_add_gift"
-            android:visibility="invisible"/>
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab_add_gift"
-            android:contentDescription="@string/add_gift"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/guidelinebottom"
-            app:layout_constraintLeft_toRightOf="@id/fab_add_contact"
-            app:layout_constraintRight_toLeftOf="@id/fab_add_event"
-            app:icon="@drawable/ic_gift"
-            app:layout_anchor="@id/fab_add_contact"
-            android:visibility="invisible"/>
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab_add_contact"
-            android:contentDescription="@string/create_contact"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/fab_add_gift"
-            app:layout_constraintBottom_toTopOf="@id/guidelinebottom"
-            app:icon="@drawable/ic_baseline_person_add_24"
-            android:visibility="invisible"/>
-
-
+        
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
