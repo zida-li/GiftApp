@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.util.*
+import dev.zidali.giftapp.business.interactors.main.shared.UpdateContact
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
@@ -19,6 +21,7 @@ class ContactDetailViewModel
 @Inject
 constructor(
     private val appDataStore: AppDataStore,
+    private val updateContact: UpdateContact,
 ): ViewModel() {
 
     val state: MutableLiveData<ContactDetailState> = MutableLiveData(ContactDetailState())
@@ -28,6 +31,21 @@ constructor(
         when(event) {
             is ContactDetailEvents.FetchContactName -> {
                 fetchContactName()
+            }
+            is ContactDetailEvents.OnUpdateContact -> {
+                onUpdateContact(event.new_name)
+            }
+            is ContactDetailEvents.UpdateContact -> {
+                updateContact()
+            }
+            is ContactDetailEvents.UpdateTitle -> {
+                updateTitle()
+            }
+            is ContactDetailEvents.ActivateEditMode -> {
+                activateEditMode()
+            }
+            is ContactDetailEvents.DeactivateEditMode -> {
+                deactivateEditMode()
             }
             is ContactDetailEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -43,11 +61,61 @@ constructor(
             flow<ContactDetailState> {
                 val contactName = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_NAME)
                 emit(ContactDetailState(
-                    contact_name = contactName!!
+                    contact_name = contactName!!,
                 ))
             }.onEach {
                 this.state.value = state.copy(contact_name = it.contact_name)
             }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun onUpdateContact(new_name: String) {
+        state.value?.let {state->
+            this.state.value = state.copy(
+                changed_name = new_name
+            )
+        }
+    }
+
+    private fun updateTitle(){
+        state.value?.let { state->
+            this.state.value = state.copy(
+                contact_name = state.changed_name
+            )
+        }
+    }
+
+    private fun updateContact() {
+
+        state.value?.let { state->
+
+            updateContact.execute(
+                state.changed_name,
+                state.contact_name,
+            ).onEach { dataState ->
+
+                dataState.stateMessage?.let { stateMessage ->
+                    appendToMessageQueue(stateMessage)
+                }
+
+            }.launchIn(viewModelScope)
+
+        }
+    }
+
+    private fun activateEditMode() {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                isEditing = true
+            )
+        }
+    }
+
+    private fun deactivateEditMode() {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                isEditing = false
+            )
         }
     }
 

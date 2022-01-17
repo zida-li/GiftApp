@@ -31,13 +31,13 @@ constructor(
 
     private fun resetSwitch(){
         state.value?.let { state->
-            this.state.value = state.copy(needToUpdate = false)
+            this.state.value = state.copy(needToUpdateContactPage = false)
         }
     }
 
     private fun activateSwitch() {
         state.value?.let { state->
-            this.state.value = state.copy(needToUpdate = true)
+            this.state.value = state.copy(needToUpdateContactPage = true)
         }
     }
 

@@ -9,6 +9,7 @@ import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
+import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchEvents
 import dev.zidali.giftapp.business.interactors.main.fab.CreateContact
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
@@ -16,6 +17,7 @@ import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.Fetc
 import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.fab.CreateEvent
 import dev.zidali.giftapp.business.interactors.main.shared.FetchAllEvents
+import dev.zidali.giftapp.business.interactors.main.shared.UpdateContact
 import dev.zidali.giftapp.business.interactors.session.Logout
 import javax.inject.Singleton
 
@@ -98,6 +100,16 @@ object MainModule {
         return CreateEvent(
             contactEventDao,
             contactDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideUpdateContact(
+        contactDao: ContactDao,
+    ): UpdateContact {
+        return UpdateContact (
+            contactDao,
         )
     }
 

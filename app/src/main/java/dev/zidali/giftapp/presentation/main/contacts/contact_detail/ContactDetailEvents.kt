@@ -6,6 +6,18 @@ sealed class ContactDetailEvents {
 
     object FetchContactName: ContactDetailEvents()
 
+    data class OnUpdateContact(
+        var new_name: String
+    ): ContactDetailEvents()
+
+    object UpdateContact: ContactDetailEvents()
+
+    object UpdateTitle: ContactDetailEvents()
+
+    object ActivateEditMode: ContactDetailEvents()
+
+    object DeactivateEditMode: ContactDetailEvents()
+
     data class AppendToMessageQueue(
         val stateMessage: StateMessage
     ): ContactDetailEvents()

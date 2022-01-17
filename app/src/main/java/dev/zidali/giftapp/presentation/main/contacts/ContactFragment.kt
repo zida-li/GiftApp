@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,9 +12,6 @@ import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentContactsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.fab.add_gift.AddGiftFragment
-import dev.zidali.giftapp.presentation.main.fab.create_contact.CreateContactFragment
-import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventFragment
 import dev.zidali.giftapp.presentation.update.UpdateEvents
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
@@ -53,7 +48,7 @@ ContactListAdapter.Interaction
     private fun subscribeObservers() {
 
         updateManager.state.observe(viewLifecycleOwner, { state->
-            if(state.needToUpdate){
+            if(state.needToUpdateContactPage){
                 viewModel.onTriggerEvent(ContactEvents.FetchContacts)
                 updateManager.onTriggerEvent(UpdateEvents.UpdateComplete)
             }

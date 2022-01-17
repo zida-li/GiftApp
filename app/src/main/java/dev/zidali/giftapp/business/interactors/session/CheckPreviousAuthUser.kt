@@ -25,13 +25,18 @@ class CheckPreviousAuthUser(
 
         if(firebaseAuth.currentUser != null) {
 
-            accountPropertiesDao.insertAndReplace(
-                AccountProperties(
+            //uncomment when working constantly changing version of database to avoid reauthenticating each time.
+//            accountPropertiesDao.insertAndReplace(
+//                AccountProperties(
+//                current_authUser_email = firebaseAuth.currentUser?.email!!
+//                ).toEntity()
+//            )
+//            val currentUser = accountPropertiesDao.searchByEmail(firebaseAuth.currentUser?.email!!)?.toAccountProperties()
+
+            val currentUser = AccountProperties(
                 current_authUser_email = firebaseAuth.currentUser?.email!!
-                ).toEntity()
             )
 
-            val currentUser = accountPropertiesDao.searchByEmail(firebaseAuth.currentUser?.email!!)?.toAccountProperties()
 
             emit(
                 DataState.data(

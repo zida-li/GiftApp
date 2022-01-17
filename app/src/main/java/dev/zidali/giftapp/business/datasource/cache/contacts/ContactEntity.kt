@@ -21,7 +21,7 @@ import dev.zidali.giftapp.business.domain.models.Contact
 )
 data class ContactEntity(
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name ="primary_key")
     var pk: Int,
 

@@ -5,5 +5,5 @@ import dev.zidali.giftapp.business.domain.util.Queue
 import dev.zidali.giftapp.business.domain.util.StateMessage
 
 data class UpdateState(
-    val needToUpdate: Boolean = true,
+    val needToUpdateContactPage: Boolean = true,
 )
