@@ -6,12 +6,18 @@ sealed class AddGiftEvents {
 
     object FetchContacts: AddGiftEvents()
 
+    object FetchCurrentContact: AddGiftEvents()
+
     data class OnUpdateGift(
         var contact: String,
         var gift: String,
     ): AddGiftEvents()
 
     object AddGift: AddGiftEvents()
+
+    data class SetDataLoaded(
+        var boolean: Boolean
+    ): AddGiftEvents()
 
     data class AppendToMessageQueue(
         val stateMessage: StateMessage

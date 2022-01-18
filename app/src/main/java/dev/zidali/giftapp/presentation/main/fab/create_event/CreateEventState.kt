@@ -24,8 +24,10 @@ data class CreateEventState(
     ),
     var reminderSelectionHolder: String = "",
     var selectedContact: String = "",
+    var current_contact_name: String = "",
     var addEventSuccessful: Boolean = false,
     val isLoading: Boolean = false,
+    var dataLoaded: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf())
 ) {
 

@@ -9,9 +9,11 @@ data class AddGiftState(
     var contacts: MutableList<String> = mutableListOf(),
     var gift: Gift = Gift(contact_name = "", contact_gift = "", pk = 0),
     var contact_name_holder: String = "",
-    var contact_gift_holder: String ="",
+    var contact_gift_holder: String = "",
+    var current_contact_name: String = "",
     var addGiftSuccessful: Boolean = false,
     val isLoading: Boolean = false,
+    var dataLoaded: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf())
 ) {
 

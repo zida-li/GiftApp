@@ -6,6 +6,8 @@ sealed class CreateEventEvents {
 
     object FetchContacts: CreateEventEvents()
 
+    object FetchCurrentContact: CreateEventEvents()
+
     data class OnUpdateEvent(
         var event: String,
     ): CreateEventEvents()
@@ -25,6 +27,10 @@ sealed class CreateEventEvents {
     ): CreateEventEvents()
 
     object CreateEvent: CreateEventEvents()
+
+    data class SetDataLoaded(
+        var boolean: Boolean
+    ): CreateEventEvents()
 
     data class AppendToMessageQueue(
         val stateMessage: StateMessage

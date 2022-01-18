@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.fab.create_event
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentCreateEventBinding
+import dev.zidali.giftapp.presentation.update.GlobalManager
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateEventFragment: DialogFragment() {
@@ -21,6 +25,9 @@ class CreateEventFragment: DialogFragment() {
     private var _binding: FragmentCreateEventBinding? = null
     private val binding get() = _binding!!
 
+    @Inject
+    lateinit var globalManager: GlobalManager
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,6 +35,11 @@ class CreateEventFragment: DialogFragment() {
     ): View {
         _binding = FragmentCreateEventBinding.inflate(layoutInflater)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onTriggerEvent(CreateEventEvents.FetchCurrentContact)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,10 +59,19 @@ class CreateEventFragment: DialogFragment() {
             val arrayAdapter = ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contacts)
             binding.contactDropDownMenu.setAdapter(arrayAdapter)
 
-            binding.contactDropDownMenu.setOnItemClickListener { _, _, position, _ ->
-                val selectedContact = arrayAdapter.getItem(position)
-                viewModel.onTriggerEvent(CreateEventEvents.OnUpdateContactSelection(selectedContact!!))
+            if(globalManager.state.value?.eventFragmentInView!! && !state.dataLoaded) {
+                if(state.current_contact_name != "") {
+                    state.contacts.add(0, state.current_contact_name)
+                    binding.contactDropDownMenu.setText(state.current_contact_name)
+                    viewModel.onTriggerEvent(CreateEventEvents.SetDataLoaded(true))
+                }
             }
+
+            //cacheState() does the same thing, will leave this commented out for now.
+//            binding.contactDropDownMenu.setOnItemClickListener { _, _, position, _ ->
+//                val selectedContact = arrayAdapter.getItem(position)
+//
+//            }
 
             if(state.addEventSuccessful) {
                 dismiss()
@@ -71,6 +92,7 @@ class CreateEventFragment: DialogFragment() {
     }
 
     private fun cacheState() {
+        viewModel.onTriggerEvent(CreateEventEvents.OnUpdateContactSelection(binding.contactDropDownMenu.text.toString()))
         viewModel.onTriggerEvent(CreateEventEvents.OnUpdateEvent(binding.inputName.text.toString()))
         viewModel.onTriggerEvent(CreateEventEvents.CreateEvent)
     }

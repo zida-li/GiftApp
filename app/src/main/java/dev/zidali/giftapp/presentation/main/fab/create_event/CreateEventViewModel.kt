@@ -5,12 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.models.CalendarSelection
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.fab.CreateEvent
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
+import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftState
+import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -21,6 +25,7 @@ class CreateEventViewModel
 constructor(
     private val fetchContacts: FetchContacts,
     private val createEvent: CreateEvent,
+    private val appDataStore: AppDataStore,
 ): ViewModel() {
 
     val state: MutableLiveData<CreateEventState> = MutableLiveData(CreateEventState())
@@ -29,6 +34,9 @@ constructor(
         when(event) {
             is CreateEventEvents.FetchContacts ->
                 fetchContacts()
+            is CreateEventEvents.FetchCurrentContact -> {
+                fetchCurrentContact()
+            }
             is CreateEventEvents.OnUpdateEvent -> {
                 onUpdateEvent(event.event)
             }
@@ -43,6 +51,9 @@ constructor(
             }
             is CreateEventEvents.CreateEvent -> {
                 createEvent()
+            }
+            is CreateEventEvents.SetDataLoaded -> {
+                setDataLoaded(event.boolean)
             }
             is CreateEventEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -70,6 +81,21 @@ constructor(
         }
     }
 
+    private fun fetchCurrentContact() {
+        state.value?.let {state->
+            flow<CreateEventState> {
+                val contactName = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_NAME)
+                emit(CreateEventState(
+                    current_contact_name = contactName!!
+                ))
+            }.onEach {
+                this.state.value = state.copy(
+                    current_contact_name = it.current_contact_name,
+                )
+            }.launchIn(viewModelScope)
+        }
+    }
+
     private fun onUpdateEvent(event: String) {
         state.value?.let { state->
             this.state.value = state.copy(
@@ -83,6 +109,7 @@ constructor(
             this.state.value = state.copy(
                 selectedContact = contact
             )
+            Log.d(Constants.TAG, "selectedContact: ${contact}")
         }
     }
 
@@ -178,6 +205,14 @@ constructor(
                     day = state.calendarSelectionHolder.selectedDay,
                     pk = 0,
                 )
+            )
+        }
+    }
+
+    private fun setDataLoaded(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                dataLoaded = boolean
             )
         }
     }

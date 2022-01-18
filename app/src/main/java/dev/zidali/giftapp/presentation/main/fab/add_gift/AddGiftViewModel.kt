@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
+import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftState
+import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
@@ -22,6 +25,7 @@ class AddGiftViewModel
 constructor(
     private val addGift: AddGift,
     private val fetchContacts: FetchContacts,
+    private val appDataStore: AppDataStore,
 ): ViewModel() {
 
     val state: MutableLiveData<AddGiftState> = MutableLiveData(AddGiftState())
@@ -30,11 +34,17 @@ constructor(
         when(event) {
             is AddGiftEvents.FetchContacts ->
                 fetchContacts()
+            is AddGiftEvents.FetchCurrentContact -> {
+                fetchCurrentContact()
+            }
             is AddGiftEvents.OnUpdateGift -> {
                 onUpdateGift(event.contact, event.gift)
             }
             is AddGiftEvents.AddGift -> {
                 addGift()
+            }
+            is AddGiftEvents.SetDataLoaded -> {
+                setDataLoaded(event.boolean)
             }
             is AddGiftEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -58,6 +68,19 @@ constructor(
                     this.state.value = state.copy(contacts = contactNames)
                 }
 
+            }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun fetchCurrentContact() {
+        state.value?.let {state->
+            flow<AddGiftState> {
+                val contactName = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_NAME)
+                emit(AddGiftState(
+                    current_contact_name = contactName!!
+                ))
+            }.onEach {
+                this.state.value = state.copy(current_contact_name = it.current_contact_name)
             }.launchIn(viewModelScope)
         }
     }
@@ -100,6 +123,14 @@ constructor(
                     )
                 )
             }
+        }
+    }
+
+    private fun setDataLoaded(boolean: Boolean){
+        state.value?.let { state->
+            this.state.value = state.copy(
+                dataLoaded = boolean
+            )
         }
     }
 
