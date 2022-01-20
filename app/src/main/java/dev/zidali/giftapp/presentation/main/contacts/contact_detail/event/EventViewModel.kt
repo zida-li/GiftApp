@@ -9,6 +9,8 @@ import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchEvents
 import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftState
+import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.presentation.update.GlobalManager
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
@@ -21,7 +23,7 @@ class EventViewModel
 @Inject
 constructor(
     private val appDataStore: AppDataStore,
-    private val fetchEvents: FetchEvents
+    private val fetchEvents: FetchEvents,
 ): ViewModel() {
 
     val state: MutableLiveData<EventState> = MutableLiveData(EventState())
@@ -34,6 +36,9 @@ constructor(
             }
             is EventEvents.FetchEvents -> {
                 fetchEvents()
+            }
+            is EventEvents.SetFirstLoad -> {
+                setFirstLoad(event.boolean)
             }
             is EventEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -68,6 +73,14 @@ constructor(
             }.onEach {
                 this.state.value = state.copy(contact_name = it.contact_name)
             }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun setFirstLoad(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                firstLoad = boolean
+            )
         }
     }
 

@@ -20,7 +20,7 @@ import javax.inject.Inject
 class CreateContactFragment : DialogFragment() {
 
     @Inject
-    lateinit var mGlobalManager: GlobalManager
+    lateinit var globalManager: GlobalManager
 
     private val viewModel: CreateContactViewModel by viewModels()
     private var _binding: FragmentCreateContactBinding? = null
@@ -52,8 +52,6 @@ class CreateContactFragment : DialogFragment() {
             val createdContact = Bundle()
             createdContact.putString("ADDED_CONTACT", viewModel.state.value?.name)
             setFragmentResult("ADD_CONTACT_RESULT", createdContact)
-            mGlobalManager.onTriggerEvent(GlobalEvents.RequestGlobal)
-            dismiss()
         }
 
         binding.cancelButton.setOnClickListener {
@@ -64,6 +62,11 @@ class CreateContactFragment : DialogFragment() {
     private fun subscribeObservers() {
 
         viewModel.state.observe(viewLifecycleOwner, { state->
+
+            if(state.createContactSuccessful) {
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+                dismiss()
+            }
 
             processQueue(
                 context = context,

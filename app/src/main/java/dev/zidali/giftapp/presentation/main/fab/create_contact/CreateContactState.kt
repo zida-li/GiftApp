@@ -8,6 +8,7 @@ data class CreateContactState(
     var name: String = "",
     var contact: Contact = Contact(),
     val isLoading: Boolean = false,
+    val createContactSuccessful: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf())
 ) {
 

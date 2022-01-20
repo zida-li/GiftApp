@@ -100,7 +100,7 @@ class ContactDetailFragment : BaseMainFragment() {
             cacheState()
             viewModel.onTriggerEvent(ContactDetailEvents.UpdateContact)
             viewModel.onTriggerEvent(ContactDetailEvents.UpdateTitle)
-            globalManager.onTriggerEvent(GlobalEvents.RequestGlobal)
+            globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
             viewModel.onTriggerEvent(ContactDetailEvents.DeactivateEditMode)
             uiCommunicationListener.hideSoftKeyboard()
         }

@@ -1,7 +1,6 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,7 @@ import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
@@ -37,15 +34,13 @@ GiftListAdapter.Interaction
 
     override fun onResume() {
         super.onResume()
-        viewModel.onTriggerEvent(GiftEvents.FetchGifts)
-        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentInView)
-        Log.d(Constants.TAG, "GiftFragment onResume()")
+        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentInView(true))
+//        Log.d(Constants.TAG, "GiftFragment onResume()")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.onTriggerEvent(GiftEvents.FetchContactName)
         //removing contact name from appbar because it's already in the title box.
 //        (activity as MainActivity).supportActionBar?.title = viewModel.state.value?.contact_name
         subscribeObservers()
@@ -53,7 +48,22 @@ GiftListAdapter.Interaction
     }
 
     private fun subscribeObservers() {
+
+        globalManager.state.observe(viewLifecycleOwner, { state->
+
+            if(state.needToUpdate){
+                viewModel.onTriggerEvent(GiftEvents.FetchContactName)
+                viewModel.onTriggerEvent(GiftEvents.FetchGifts)
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(false))
+            }
+        })
+
         viewModel.state.observe(viewLifecycleOwner, {state->
+
+            if(state.firstLoad) {
+                viewModel.onTriggerEvent(GiftEvents.SetFirstLoad(false))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+            }
 
             recyclerAdapter?.apply {
                 submitList(list = state.contact_gifts)
@@ -85,15 +95,15 @@ GiftListAdapter.Interaction
 
     override fun onPause() {
         super.onPause()
-        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentOutOfView)
-        Log.d(Constants.TAG, "GiftFragment onPause()")
+        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentInView(false))
+//        Log.d(Constants.TAG, "GiftFragment onPause()")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentOutOfView)
-        Log.d(Constants.TAG, "GiftFragment onDestroyView()")
+        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentInView(false))
+//        Log.d(Constants.TAG, "GiftFragment onDestroyView()")
     }
 
     override fun onItemSelected(position: Int, item: Gift) {

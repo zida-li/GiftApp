@@ -8,6 +8,10 @@ sealed class EventEvents {
 
     object FetchEvents: EventEvents()
 
+    data class SetFirstLoad(
+        var boolean: Boolean
+    ): EventEvents()
+
     data class AppendToMessageQueue(
         val stateMessage: StateMessage
     ): EventEvents()

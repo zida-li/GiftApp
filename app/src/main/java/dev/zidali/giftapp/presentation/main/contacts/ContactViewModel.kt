@@ -10,6 +10,8 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 import dev.zidali.giftapp.business.domain.util.UIComponentType
 import dev.zidali.giftapp.business.domain.util.doesMessageAlreadyExistInQueue
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
+import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.presentation.update.GlobalManager
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.Constants.Companion.TAG
@@ -38,6 +40,9 @@ constructor(
             }
             is ContactEvents.ResetContactName -> {
                 resetContactName()
+            }
+            is ContactEvents.SetFirstLoad -> {
+                setFirstLoad(event.boolean)
             }
             is ContactEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -74,6 +79,14 @@ constructor(
     private fun resetContactName() {
         viewModelScope.launch {
             appDataStore.setValue(DataStoreKeys.SELECTED_CONTACT_NAME, "")
+        }
+    }
+
+    private fun setFirstLoad(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                firstLoad = boolean
+            )
         }
     }
 

@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentContactsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
@@ -50,9 +53,10 @@ ContactListAdapter.Interaction
     private fun subscribeObservers() {
 
         globalManager.state.observe(viewLifecycleOwner, { state->
-            if(state.needToUpdateContactPage){
+            if(state.needToUpdate){
+                Log.d(TAG, "needtoupdate contact()")
                 viewModel.onTriggerEvent(ContactEvents.FetchContacts)
-                globalManager.onTriggerEvent(GlobalEvents.GlobalComplete)
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(false))
             }
         })
 
@@ -60,6 +64,11 @@ ContactListAdapter.Interaction
 
             recyclerAdapter?.apply {
                 submitList(list = state.contactList)
+            }
+
+            if(state.firstLoad) {
+                viewModel.onTriggerEvent(ContactEvents.SetFirstLoad(false))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
             }
 
             processQueue(

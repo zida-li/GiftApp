@@ -69,6 +69,8 @@ constructor(
                         appendToMessageQueue(stateMessage)
                     }
 
+                    setCreateContactSuccessful(true)
+
                 }.launchIn(viewModelScope)
             } else {
                 appendToMessageQueue(
@@ -81,6 +83,14 @@ constructor(
                     )
                 )
             }
+        }
+    }
+
+    private fun setCreateContactSuccessful(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                createContactSuccessful = boolean
+            )
         }
     }
 

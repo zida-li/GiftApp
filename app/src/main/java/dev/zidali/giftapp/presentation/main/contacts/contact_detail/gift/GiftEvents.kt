@@ -8,6 +8,10 @@ sealed class GiftEvents {
 
     object FetchGifts: GiftEvents()
 
+    data class SetFirstLoad(
+        var boolean: Boolean,
+    ): GiftEvents()
+
     data class AppendToMessageQueue(
         val stateMessage: StateMessage
     ): GiftEvents()

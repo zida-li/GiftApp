@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchGifts
+import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.presentation.update.GlobalManager
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
@@ -33,6 +35,9 @@ constructor(
             }
             is GiftEvents.FetchContactName -> {
                 fetchContactName()
+            }
+            is GiftEvents.SetFirstLoad -> {
+                setFirstLoad(event.boolean)
             }
             is GiftEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -67,6 +72,14 @@ constructor(
             }.onEach {
                 this.state.value = state.copy(contact_name = it.contact_name)
             }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun setFirstLoad(boolean: Boolean) {
+        state.value?.let {state->
+            this.state.value = state.copy(
+                firstLoad = boolean
+            )
         }
     }
 

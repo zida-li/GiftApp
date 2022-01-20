@@ -16,30 +16,32 @@ constructor(
 
     fun onTriggerEvent(event: GlobalEvents){
         when(event){
-            GlobalEvents.GlobalComplete -> {
-                setNeedToUpdateContactPage(false)
+            is GlobalEvents.SetNeedToUpdate -> {
+                setNeedToUpdate(event.boolean)
             }
-            GlobalEvents.RequestGlobal -> {
-                setNeedToUpdateContactPage(true)
+            is GlobalEvents.SetNeedToUpdateEventFragment -> {
+                setNeedToUpdateEventFragment(event.boolean)
             }
-            GlobalEvents.GiftFragmentInView -> {
-                setGiftFragmentView(true)
+            is GlobalEvents.GiftFragmentInView -> {
+                setGiftFragmentView(event.boolean)
             }
-            GlobalEvents.GiftFragmentOutOfView -> {
-                setGiftFragmentView(false)
-            }
-            GlobalEvents.EventFragmentInView -> {
-                setEventFragmentView(true)
-            }
-            GlobalEvents.EventFragmentOutOfView -> {
-                setEventFragmentView(false)
+            is GlobalEvents.EventFragmentInView -> {
+                setEventFragmentView(event.boolean)
             }
         }
     }
 
-    private fun setNeedToUpdateContactPage(boolean: Boolean) {
+    private fun setNeedToUpdate(boolean: Boolean) {
         state.value?.let { state->
-            this.state.value = state.copy(needToUpdateContactPage = boolean)
+            this.state.value = state.copy(needToUpdate = boolean)
+        }
+    }
+
+    private fun setNeedToUpdateEventFragment(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                needToUpdateEventFragment = boolean
+            )
         }
     }
 

@@ -11,9 +11,7 @@ import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentEventsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftListAdapter
 import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
@@ -37,10 +35,8 @@ EventListAdapter.Interaction {
 
     override fun onResume() {
         super.onResume()
-        viewModel.onTriggerEvent(EventEvents.FetchContactName)
-        viewModel.onTriggerEvent(EventEvents.FetchEvents)
-        globalManager.onTriggerEvent(GlobalEvents.EventFragmentInView)
-        Log.d(Constants.TAG, "EventFragment onResume()")
+        globalManager.onTriggerEvent(GlobalEvents.EventFragmentInView(true))
+//        Log.d(Constants.TAG, "EventFragment onResume()")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,10 +47,24 @@ EventListAdapter.Interaction {
 
     private fun subscribeObservers() {
 
+        globalManager.state.observe(viewLifecycleOwner, { state->
+
+            if(state.needToUpdateEventFragment){
+                viewModel.onTriggerEvent(EventEvents.FetchContactName)
+                viewModel.onTriggerEvent(EventEvents.FetchEvents)
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateEventFragment(false))
+            }
+        })
+
         viewModel.state.observe(viewLifecycleOwner, {state->
 
             recyclerAdapter?.apply {
                 submitList(list = state.contact_events)
+            }
+
+            if(state.firstLoad) {
+                viewModel.onTriggerEvent(EventEvents.SetFirstLoad(false))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateEventFragment(true))
             }
 
             processQueue(
@@ -82,15 +92,15 @@ EventListAdapter.Interaction {
 
     override fun onPause() {
         super.onPause()
-        globalManager.onTriggerEvent(GlobalEvents.EventFragmentOutOfView)
-        Log.d(TAG, "EventFragment onPause()")
+        globalManager.onTriggerEvent(GlobalEvents.EventFragmentInView(false))
+//        Log.d(TAG, "EventFragment onPause()")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        globalManager.onTriggerEvent(GlobalEvents.EventFragmentOutOfView)
-        Log.d(TAG, "EventFragment onDestroyView()")
+        globalManager.onTriggerEvent(GlobalEvents.EventFragmentInView(false))
+//        Log.d(TAG, "EventFragment onDestroyView()")
     }
 
     override fun onItemSelected(position: Int, item: ContactEvent) {

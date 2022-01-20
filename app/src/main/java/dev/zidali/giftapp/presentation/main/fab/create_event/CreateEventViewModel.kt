@@ -109,7 +109,6 @@ constructor(
             this.state.value = state.copy(
                 selectedContact = contact
             )
-            Log.d(Constants.TAG, "selectedContact: ${contact}")
         }
     }
 
@@ -135,7 +134,7 @@ constructor(
 
     private fun createEvent() {
         setCreateEventState()
-        Log.d(Constants.TAG, state.value?.createEvent.toString())
+//        Log.d(Constants.TAG, state.value?.createEvent.toString())
         state.value?.let {state->
             val createEventError = CreateEventState(
                 createEvent = state.createEvent,
@@ -147,8 +146,9 @@ constructor(
                         appendToMessageQueue(stateMessage)
                     }
 
+                    setEventSuccessful(true)
+
                 }.launchIn(viewModelScope)
-                setEventSuccessful(true)
             } else {
                 appendToMessageQueue(
                     stateMessage = StateMessage(

@@ -8,5 +8,6 @@ data class EventState(
     val contact_name: String = "",
     var contact_events: MutableList<ContactEvent> = mutableListOf(),
     val isLoading: Boolean = false,
+    val firstLoad: Boolean = true,
     val queue: Queue<StateMessage> = Queue(mutableListOf())
 )
