@@ -1,5 +1,6 @@
 package dev.zidali.giftapp.presentation.main.fab.create_event
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +47,7 @@ class CreateEventFragment: DialogFragment() {
         viewModel.onTriggerEvent(CreateEventEvents.FetchCurrentContact)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,6 +58,7 @@ class CreateEventFragment: DialogFragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun subscribeObservers() {
 
         viewModel.state.observe(viewLifecycleOwner, { state->

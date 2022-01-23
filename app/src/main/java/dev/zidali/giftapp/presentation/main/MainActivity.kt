@@ -1,12 +1,11 @@
 package dev.zidali.giftapp.presentation.main
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,6 +25,8 @@ import dev.zidali.giftapp.presentation.main.fab.create_contact.CreateContactFrag
 import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventFragment
 import dev.zidali.giftapp.presentation.session.SessionEvents
 import dev.zidali.giftapp.util.processQueue
+import java.time.LocalDate
+import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {

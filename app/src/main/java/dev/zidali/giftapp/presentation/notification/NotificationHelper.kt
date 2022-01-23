@@ -59,7 +59,7 @@ object NotificationHelper {
 
     fun createNotificationForContact(context: Context, reminderData: ContactEvent) {
 
-        Log.d(Constants.TAG, "createNotificationForContact()")
+//        Log.d(Constants.TAG, "createNotificationForContact()")
 
         // create the contact notification
         val notificationBuilder = buildNotificationForContact(context, reminderData)

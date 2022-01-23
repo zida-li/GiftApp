@@ -22,7 +22,7 @@ class AlarmReceiver: BroadcastReceiver() {
     lateinit var contactEventDao: ContactEventDao
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(Constants.TAG, "AlarmReceiver()")
+//        Log.d(Constants.TAG, "AlarmReceiver()")
         if (context != null && intent != null && intent.action != null) {
             if (intent.action!!.equals(context.getString(R.string.action_notify_gift_event), ignoreCase = true)) {
                 if (intent.extras != null) {
