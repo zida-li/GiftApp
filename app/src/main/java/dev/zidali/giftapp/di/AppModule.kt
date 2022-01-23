@@ -1,5 +1,6 @@
 package dev.zidali.giftapp.di
 
+import android.app.AlarmManager
 import android.app.Application
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth

@@ -54,7 +54,6 @@ ContactListAdapter.Interaction
 
         globalManager.state.observe(viewLifecycleOwner, { state->
             if(state.needToUpdate){
-                Log.d(TAG, "needtoupdate contact()")
                 viewModel.onTriggerEvent(ContactEvents.FetchContacts)
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(false))
             }

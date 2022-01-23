@@ -1,10 +1,14 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Context.ALARM_SERVICE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.zidali.giftapp.business.domain.models.ContactEvent

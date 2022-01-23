@@ -13,6 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentCreateEventBinding
+import dev.zidali.giftapp.presentation.notification.AlarmScheduler
+import dev.zidali.giftapp.presentation.notification.NotificationHelper
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.presentation.update.GlobalManager
 import dev.zidali.giftapp.util.Constants.Companion.TAG
@@ -76,6 +78,7 @@ class CreateEventFragment: DialogFragment() {
 
             if(state.addEventSuccessful) {
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateEventFragment(true))
+                AlarmScheduler.scheduleAlarmsForReminder(context!!, state.createEvent)
                 dismiss()
             }
 

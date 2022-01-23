@@ -45,17 +45,10 @@ class MainActivity : BaseActivity() {
         setupActionBar()
         setupAppBar()
 
-//        NotificationHelper.createNotification(
-//            this,
-//            "Test",
-//            "whatdoesthisdo",
-//            "",
-//            false
-//        )
     }
 
     private fun setupActionBar() {
-        setSupportActionBar(binding.appBarMain.toolbar)
+        setSupportActionBar(binding.toolbar)
         navController = findNavController(R.id.nav_host_fragment_content_main)
 
         appBarConfiguration = AppBarConfiguration(

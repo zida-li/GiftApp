@@ -6,6 +6,7 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEventEntit
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
+import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
