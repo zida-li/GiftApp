@@ -33,6 +33,7 @@
     <string name="name">Name</string>
     <string name="action_notify_gift_event">dev.zidali.giftapp.action.GIFT_EVENT</string>
     <string name="view_contacts">Contacts</string>
+    <string name="none">None</string>
 
     <string name="favorite">Favorite</string>
     <string name="account">Account</string>

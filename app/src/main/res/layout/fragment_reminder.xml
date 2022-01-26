@@ -11,6 +11,13 @@
         android:text="@string/set_reminder"
         android:layout_margin="10dp"/>
 
+    <RadioButton
+        android:id="@+id/none_radioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/none"
+        />
+
     <CheckBox
         android:id="@+id/one_day_checkbox"
         android:layout_width="wrap_content"

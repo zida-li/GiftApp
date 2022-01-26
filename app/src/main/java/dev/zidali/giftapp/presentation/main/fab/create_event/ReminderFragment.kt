@@ -28,6 +28,9 @@ class ReminderFragment: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.noneRadioButton.isChecked = true
+        selectedReminders.add("None")
+
         dialog?.window?.apply {
 
             setGravity(Gravity.BOTTOM)
@@ -36,12 +39,19 @@ class ReminderFragment: DialogFragment() {
         }
 
         binding.cancelButton.setOnClickListener {
+            selectedReminders.clear()
+            selectedReminders.add("None")
+            val selectedRemindersBundle = Bundle()
+            selectedRemindersBundle.putStringArrayList("SELECTED_REMINDERS", selectedReminders)
+            setFragmentResult("REMINDER_PICKER_RESULT", selectedRemindersBundle)
             dismiss()
         }
 
         binding.oneDayCheckbox.setOnCheckedChangeListener{_, isChecked->
             if(isChecked) {
                 selectedReminders.add("day")
+                binding.noneRadioButton.isChecked = false
+                selectedReminders.remove("None")
             } else {
                 selectedReminders.remove("day")
             }
@@ -50,6 +60,8 @@ class ReminderFragment: DialogFragment() {
         binding.oneWeekCheckbox.setOnCheckedChangeListener{_, isChecked->
             if(isChecked) {
                 selectedReminders.add("week")
+                binding.noneRadioButton.isChecked = false
+                selectedReminders.remove("None")
             } else {
                 selectedReminders.remove("week")
             }
@@ -58,8 +70,20 @@ class ReminderFragment: DialogFragment() {
         binding.oneMonthCheckbox.setOnCheckedChangeListener{_, isChecked->
             if(isChecked) {
                 selectedReminders.add("month")
+                binding.noneRadioButton.isChecked = false
+                selectedReminders.remove("None")
             } else {
                 selectedReminders.remove("month")
+            }
+        }
+
+        binding.noneRadioButton.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked) {
+                binding.oneDayCheckbox.isChecked = false
+                binding.oneWeekCheckbox.isChecked = false
+                binding.oneMonthCheckbox.isChecked = false
+                selectedReminders.clear()
+                selectedReminders.add("None")
             }
         }
 

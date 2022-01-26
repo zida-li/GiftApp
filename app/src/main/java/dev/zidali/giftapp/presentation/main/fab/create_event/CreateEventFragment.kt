@@ -2,7 +2,6 @@ package dev.zidali.giftapp.presentation.main.fab.create_event
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +15,8 @@ import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentCreateEventBinding
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
-import dev.zidali.giftapp.presentation.notification.NotificationHelper
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.presentation.update.GlobalManager
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 import javax.inject.Inject
 
@@ -61,13 +58,14 @@ class CreateEventFragment: DialogFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun subscribeObservers() {
 
-        viewModel.state.observe(viewLifecycleOwner, { state->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
 
-            val arrayAdapter = ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contacts)
+            val arrayAdapter =
+                ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contacts)
             binding.contactDropDownMenu.setAdapter(arrayAdapter)
 
-            if(globalManager.state.value?.eventFragmentInView!! && !state.dataLoaded) {
-                if(state.current_contact_name != "") {
+            if (globalManager.state.value?.eventFragmentInView!! && !state.dataLoaded) {
+                if (state.current_contact_name != "") {
                     state.contacts.add(0, state.current_contact_name)
                     binding.contactDropDownMenu.setText(state.current_contact_name)
                     viewModel.onTriggerEvent(CreateEventEvents.SetDataLoaded(true))
@@ -80,23 +78,23 @@ class CreateEventFragment: DialogFragment() {
 //
 //            }
 
-            if(state.addEventSuccessful) {
+            if (state.addEventSuccessful) {
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateEventFragment(true))
-                AlarmScheduler.scheduleAlarmsForReminder(context!!, state.createEvent)
+                AlarmScheduler.scheduleInitialAlarmsForReminder(requireContext(), state.createEvent)
                 dismiss()
             }
 
             processQueue(
                 context = context,
                 queue = state.queue,
-                stateMessageCallback = object: StateMessageCallback {
+                stateMessageCallback = object : StateMessageCallback {
                     override fun removeMessageFromStack() {
                         viewModel.onTriggerEvent(CreateEventEvents.OnRemoveHeadFromQueue)
                     }
                 }
             )
 
-        })
+        }
 
     }
 

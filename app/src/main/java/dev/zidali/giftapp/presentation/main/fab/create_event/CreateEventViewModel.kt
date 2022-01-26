@@ -31,6 +31,10 @@ constructor(
 
     val state: MutableLiveData<CreateEventState> = MutableLiveData(CreateEventState())
 
+    init {
+        onUpdateReminderPicker("None")
+    }
+
     fun onTriggerEvent(event: CreateEventEvents) {
         when(event) {
             is CreateEventEvents.FetchContacts ->
