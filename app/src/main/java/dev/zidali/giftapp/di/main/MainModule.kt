@@ -10,14 +10,14 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
+import dev.zidali.giftapp.business.interactors.main.contacts.DeleteContacts
+import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.DeleteGifts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchEvents
 import dev.zidali.giftapp.business.interactors.main.fab.CreateContact
-import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchGifts
 import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.fab.CreateEvent
-import dev.zidali.giftapp.business.interactors.main.shared.FetchAllEvents
-import dev.zidali.giftapp.business.interactors.main.shared.UpdateContact
+import dev.zidali.giftapp.business.interactors.main.shared.*
 import dev.zidali.giftapp.business.interactors.session.Logout
 import javax.inject.Singleton
 
@@ -124,6 +124,66 @@ object MainModule {
     ): Logout {
         return Logout(
             firebaseAuth
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteContacts(
+        contactDao: ContactDao
+    ): DeleteContacts {
+        return DeleteContacts(
+            contactDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteEvents(
+        contactEventDao: ContactEventDao
+    ): DeleteEvents {
+        return DeleteEvents(
+            contactEventDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteGifts(
+        giftDao: GiftDao
+    ): DeleteGifts {
+        return DeleteGifts(
+            giftDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideUpdateContactEventReminder(
+        contactEventDao: ContactEventDao
+    ): UpdateContactEventReminder {
+        return UpdateContactEventReminder(
+            contactEventDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideFetchEvent(
+        contactEventDao: ContactEventDao
+    ): FetchEvent {
+        return FetchEvent (
+            contactEventDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideUpdateEvent(
+        contactEventDao: ContactEventDao
+    ): UpdateEvent {
+        return UpdateEvent (
+            contactEventDao
         )
     }
 

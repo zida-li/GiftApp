@@ -9,8 +9,10 @@
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/custom_button.xml" value="0.24322916666666666" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/custom_button_color.xml" value="0.23948717948717949" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_17mp_24.xml" value="0.275" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.1475" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_contact_page_24.xml" value="0.337037037037037" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_event_24.xml" value="0.271875" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_notifications_24_inactive.xml" value="0.1475" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_person_add_24.xml" value="0.337037037037037" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_gift.xml" value="0.275" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.275" />
@@ -21,14 +23,17 @@
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/contact_drop_down_item.xml" value="0.25885416666666666" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/contact_event_item.xml" value="0.2644927536231884" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/contact_list_item.xml" value="0.1" />
-        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/contact_view_event_item.xml" value="0.18" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/contact_view_event_item.xml" value="0.25" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/content_main.xml" value="0.30117753623188404" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/event_view_item.xml" value="0.2644927536231884" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_add_gift.xml" value="0.21603260869565216" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_all_events.xml" value="0.27898550724637683" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_contact_detail.xml" value="0.23608316566063045" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_contacts.xml" value="0.25885416666666666" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_create_contact.xml" value="0.2884963768115942" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_create_event.xml" value="0.25885416666666666" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_edit_event.xml" value="0.27898550724637683" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_event_detail.xml" value="0.27898550724637683" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_events.xml" value="0.25885416666666666" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_gift.xml" value="0.25885416666666666" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/layout/fragment_home.xml" value="0.25885416666666666" />
@@ -42,6 +47,8 @@
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/menu/bottom_app_bar.xml" value="0.20885416666666667" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/menu/bottom_navigation_main.xml" value="0.21614583333333334" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/menu/edit_event_menu.xml" value="0.240625" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/menu/multiselection_menu.xml" value="0.1921875" />
       </map>
     </option>
   </component>

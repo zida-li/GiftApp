@@ -1,9 +1,6 @@
 package dev.zidali.giftapp.business.datasource.cache.contacts
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface GiftDao {
@@ -13,6 +10,9 @@ interface GiftDao {
 
     @Query("DELETE FROM gift")
     suspend fun clearContacts()
+
+    @Delete
+    suspend fun deleteGift(gift: GiftEntity)
 
     @Query("SELECT * FROM gift WHERE contact_gift = :contact_gift")
     suspend fun searchByGift(contact_gift: String): GiftEntity?

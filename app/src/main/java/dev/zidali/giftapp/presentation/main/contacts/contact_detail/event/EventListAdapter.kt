@@ -1,14 +1,23 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.*
+import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.Converters
 import dev.zidali.giftapp.databinding.ContactViewEventItemBinding
-import dev.zidali.giftapp.databinding.GiftListItemBinding
+import java.lang.StringBuilder
 
-class EventListAdapter(private val interaction: Interaction? = null) :
+class EventListAdapter(
+    private val interaction: Interaction? = null,
+    private val lifecycleOwner: LifecycleOwner,
+    private val selectedContactEvents: LiveData<ArrayList<ContactEvent>>
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ContactEvent>() {
@@ -36,7 +45,9 @@ class EventListAdapter(private val interaction: Interaction? = null) :
                 parent,
                 false
             ),
-            interaction
+            interaction,
+            lifecycleOwner,
+            selectedContactEvents
         )
     }
 
@@ -81,22 +92,58 @@ class EventListAdapter(private val interaction: Interaction? = null) :
     constructor(
         private val binding: ContactViewEventItemBinding,
         private val interaction: Interaction?,
+        private val lifecycleOwner: LifecycleOwner,
+        private val selectedContactEvents: LiveData<ArrayList<ContactEvent>>,
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        private lateinit var mContactEvent: ContactEvent
 
         fun bind(item: ContactEvent) = with(itemView) {
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
+            setOnLongClickListener {
+                interaction?.activateMultiSelectionMode()
+                interaction?.onItemSelected(adapterPosition, mContactEvent)
+                true
+            }
+            mContactEvent = item
 
             binding.event.text = item.contact_event
             binding.year.text = item.year.toString()
             binding.month.text = Converters.convertIntMonthToTextMonth(item.month)
-            binding.date.text = item.day.toString()
+
+            val date = item.day.toString()
+            val dateWithComma = StringBuilder()
+            dateWithComma.append("$date,")
+
+            binding.date.text = dateWithComma
+
+            selectedContactEvents.observe(lifecycleOwner) {contactEvent->
+
+                if(contactEvent != null) {
+                    if (contactEvent.contains(mContactEvent)) {
+                        binding.eventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
+                    }
+                    else {
+                        binding.eventCardView.setCardBackgroundColor(Color.WHITE)
+                    }
+                } else {
+                    binding.eventCardView.setCardBackgroundColor(Color.WHITE)
+                }
+
+            }
 
         }
     }
 
     interface Interaction {
+
         fun onItemSelected(position: Int, item: ContactEvent)
+
+        fun activateMultiSelectionMode()
+
+        fun isMultiSelectionModeEnabled(): Boolean
+
     }
 }

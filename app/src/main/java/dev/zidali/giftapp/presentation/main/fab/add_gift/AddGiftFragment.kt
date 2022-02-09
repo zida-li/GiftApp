@@ -69,20 +69,21 @@ class AddGiftFragment: DialogFragment() {
 
     private fun subscribeObservers() {
 
-        viewModel.state.observe(viewLifecycleOwner, { state->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
 
-            val arrayAdapter = ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contacts)
+            val arrayAdapter =
+                ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contacts)
             binding.contactDropDownMenu.setAdapter(arrayAdapter)
 
-            if(globalManager.state.value?.giftFragmentInView!! && !state.dataLoaded) {
-                if(state.current_contact_name != "") {
+            if (globalManager.state.value?.giftFragmentInView!! && !state.dataLoaded) {
+                if (state.current_contact_name != "") {
                     state.contacts.add(0, state.current_contact_name)
                     binding.contactDropDownMenu.setText(state.current_contact_name)
                     viewModel.onTriggerEvent(AddGiftEvents.SetDataLoaded(true))
                 }
             }
 
-            if(state.addGiftSuccessful) {
+            if (state.addGiftSuccessful) {
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
                 dismiss()
             }
@@ -90,14 +91,14 @@ class AddGiftFragment: DialogFragment() {
             processQueue(
                 context = context,
                 queue = state.queue,
-                stateMessageCallback = object: StateMessageCallback {
+                stateMessageCallback = object : StateMessageCallback {
                     override fun removeMessageFromStack() {
                         viewModel.onTriggerEvent(AddGiftEvents.OnRemoveHeadFromQueue)
                     }
                 }
             )
 
-        })
+        }
     }
 
     private fun cacheState(){

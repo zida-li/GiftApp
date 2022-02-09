@@ -1,12 +1,22 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.*
+import dev.zidali.giftapp.R
+import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.databinding.GiftListItemBinding
 
-class GiftListAdapter(private val interaction: Interaction? = null) :
+class GiftListAdapter(
+    private val interaction: Interaction? = null,
+    private val lifecycleOwner: LifecycleOwner,
+    private val selectedGifts: LiveData<ArrayList<Gift>>
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Gift>() {
@@ -34,7 +44,9 @@ class GiftListAdapter(private val interaction: Interaction? = null) :
                 parent,
                 false
             ),
-            interaction
+            interaction,
+            lifecycleOwner,
+            selectedGifts,
         )
     }
 
@@ -79,19 +91,50 @@ class GiftListAdapter(private val interaction: Interaction? = null) :
     constructor(
         private val binding: GiftListItemBinding,
         private val interaction: Interaction?,
+        private val lifecycleOwner: LifecycleOwner,
+        private val selectedGifts: LiveData<ArrayList<Gift>>,
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        lateinit var mGift: Gift
 
         fun bind(item: Gift) = with(itemView) {
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
+            setOnLongClickListener {
+                interaction?.activateMultiSelectionMode()
+                interaction?.onItemSelected(adapterPosition, mGift)
+                true
+            }
+            mGift = item
 
             binding.giftName.text = item.contact_gift
+
+            selectedGifts.observe(lifecycleOwner) {gift->
+
+                if(gift != null) {
+                    if (gift.contains(mGift)) {
+                        binding.giftCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
+                    }
+                    else {
+                        binding.giftCardView.setBackgroundColor(Color.WHITE)
+                    }
+                } else {
+                    binding.giftCardView.setBackgroundColor(Color.WHITE)
+                }
+
+            }
 
         }
     }
 
     interface Interaction {
+
         fun onItemSelected(position: Int, item: Gift)
+
+        fun activateMultiSelectionMode()
+
+        fun isMultiSelectionModeEnabled(): Boolean
+
     }
 }

@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import dev.zidali.giftapp.R
@@ -104,7 +105,7 @@ object AlarmScheduler {
             Log.d(Constants.TAG, "schedule 1 month out: $datetimeToAlarm")
         }
 
-        Log.d(Constants.TAG, "scheduleAlarmForReminder: ${reminderData.contact_event_reminder}")
+        Log.d(Constants.TAG, "scheduleAlarmForReminder: ${reminderData.contact_name}")
 
         }
 
@@ -136,7 +137,10 @@ object AlarmScheduler {
         val intent = Intent(context.applicationContext, AlarmReceiver::class.java).apply {
             action = context.getString(R.string.action_notify_gift_event)
             type = "${reminder}-${reminderData.contact_event}"
-            putExtra(Constants.KEY_ID, reminderData.contact_event)
+            val intentBundle = Bundle()
+            intentBundle.putString("CONTACT_NAME", reminderData.contact_name)
+            intentBundle.putString("CONTACT_EVENT", reminderData.contact_event)
+            putExtras(intentBundle)
         }
 
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)

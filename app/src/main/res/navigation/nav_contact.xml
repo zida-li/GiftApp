@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/contactFragment"
         android:name="dev.zidali.giftapp.presentation.main.contacts.ContactFragment"
-        android:label="Contacts" >
+        android:label="" >
         <action
             android:id="@+id/action_contactFragment_to_contactDetailFragment"
             app:destination="@id/contactDetailFragment"

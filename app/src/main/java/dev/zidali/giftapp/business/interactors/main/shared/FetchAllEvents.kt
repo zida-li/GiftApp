@@ -4,8 +4,7 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEvent
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.util.DataState
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.event.EventState
-import dev.zidali.giftapp.presentation.main.home.AllEventState
+import dev.zidali.giftapp.presentation.main.all_events.AllEventState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

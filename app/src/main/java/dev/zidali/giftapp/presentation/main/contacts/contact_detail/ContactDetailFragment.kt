@@ -43,30 +43,30 @@ class ContactDetailFragment : BaseMainFragment() {
 
     private fun subscribeObservers(){
 
-        viewModel.state.observe(viewLifecycleOwner, {state->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
 
 
             binding.contactName.setText(state.contact_name)
 
 
-            if(state.isEditing) {
+            if (state.isEditing) {
                 activateEditMode()
             }
 
-            if(!state.isEditing) {
+            if (!state.isEditing) {
                 deactivateEditMode()
             }
 
             processQueue(
                 context = context,
                 queue = state.queue,
-                stateMessageCallback = object: StateMessageCallback {
+                stateMessageCallback = object : StateMessageCallback {
                     override fun removeMessageFromStack() {
                         viewModel.onTriggerEvent(ContactDetailEvents.OnRemoveHeadFromQueue)
                     }
                 }
             )
-        })
+        }
 
     }
 

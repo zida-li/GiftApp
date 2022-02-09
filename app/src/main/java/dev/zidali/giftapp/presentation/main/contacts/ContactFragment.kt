@@ -2,9 +2,7 @@ package dev.zidali.giftapp.presentation.main.contacts
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -45,42 +43,77 @@ ContactListAdapter.Interaction
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         subscribeObservers()
         initRecyclerView()
+
     }
 
 
     private fun subscribeObservers() {
 
-        globalManager.state.observe(viewLifecycleOwner, { state->
-            if(state.needToUpdate){
+        globalManager.state.observe(viewLifecycleOwner) { state ->
+            if (state.needToUpdate) {
                 viewModel.onTriggerEvent(ContactEvents.FetchContacts)
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(false))
             }
-        })
+        }
 
-        viewModel.state.observe(viewLifecycleOwner, { state->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
 
             recyclerAdapter?.apply {
                 submitList(list = state.contactList)
             }
 
-            if(state.firstLoad) {
+            if (state.firstLoad) {
                 viewModel.onTriggerEvent(ContactEvents.SetFirstLoad(false))
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+            }
+
+            viewModel.toolbarState.observe(viewLifecycleOwner) {toolbarState->
+
+                when(toolbarState) {
+
+                    is ContactToolbarState.MultiSelectionState -> {
+                        activity?.invalidateOptionsMenu()
+                    }
+                    is ContactToolbarState.RegularState -> {
+                        viewModel.onTriggerEvent(ContactEvents.ClearSelectedContacts)
+                        activity?.invalidateOptionsMenu()
+                    }
+                }
+
             }
 
             processQueue(
                 context = context,
                 queue = state.queue,
-                stateMessageCallback = object: StateMessageCallback {
+                stateMessageCallback = object : StateMessageCallback {
                     override fun removeMessageFromStack() {
                         viewModel.onTriggerEvent(ContactEvents.OnRemoveHeadFromQueue)
                     }
                 }
             )
+        }
+    }
 
-        })
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        if(isMultiSelectionModeEnabled()) {
+            inflater.inflate(R.menu.multiselection_menu, menu)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_delete -> {
+                confirmDeleteRequest()
+            }
+            R.id.action_exit_multiSelection -> {
+                viewModel.onTriggerEvent(ContactEvents.SetToolBarState(ContactToolbarState.RegularState))
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     /**
@@ -93,30 +126,76 @@ ContactListAdapter.Interaction
             val topSpacingDecorator = TopSpacingItemDecoration(30)
             removeItemDecoration(topSpacingDecorator)
             addItemDecoration(topSpacingDecorator)
-            recyclerAdapter = ContactListAdapter(this@ContactFragment)
+            recyclerAdapter = ContactListAdapter(
+                this@ContactFragment,
+                viewLifecycleOwner,
+                viewModel.contactListInteractionManager.selectedContacts
+            )
             adapter = recyclerAdapter
         }
     }
 
-    override fun onItemSelected(position: Int, item: Contact) {
-        try {
-            viewModel.state.value?.let {
-                val bundle = bundleOf("selectedContact" to item.contact_name)
-                viewModel.onTriggerEvent(ContactEvents.PassDataToViewPager(item.contact_name!!))
-                findNavController().navigate(R.id.action_contactFragment_to_contactDetailFragment, bundle)
-            } ?: throw Exception("Null Contact")
-        } catch (e: Exception) {
-            ContactEvents.AppendToMessageQueue(
-                stateMessage = StateMessage(
-                    response = Response(
-                        message = e.message,
-                        uiComponentType = UIComponentType.Dialog,
-                        messageType = MessageType.Error,
-                    )
+    /**
+     * Contact Functions
+     */
+
+    private fun confirmDeleteRequest() {
+        val callback: AreYouSureCallback = object: AreYouSureCallback {
+
+            override fun proceed() {
+                viewModel.onTriggerEvent(ContactEvents.DeleteSelectedContacts)
+                recyclerAdapter?.notifyDataSetChanged()
+            }
+
+            override fun cancel() {
+                //do nothing
+            }
+        }
+        viewModel.onTriggerEvent(ContactEvents.AppendToMessageQueue(
+            stateMessage = StateMessage(
+                response = Response(
+                    message = "Are You Sure? This cannot be undone",
+                    uiComponentType = UIComponentType.AreYouSureDialog(callback),
+                    messageType = MessageType.Info
                 )
             )
+        ))
+
+    }
+
+    override fun onItemSelected(position: Int, item: Contact) {
+        if (isMultiSelectionModeEnabled()) {
+            viewModel.onTriggerEvent(ContactEvents.AddOrRemoveContactFromSelectedList(item))
+        } else {
+            try {
+                viewModel.state.value?.let {
+                    val bundle = bundleOf("selectedContact" to item.contact_name)
+                    viewModel.onTriggerEvent(ContactEvents.PassDataToViewPager(item.contact_name!!))
+                    findNavController().navigate(R.id.action_contactFragment_to_contactDetailFragment,
+                        bundle)
+                } ?: throw Exception("Null Contact")
+            } catch (e: Exception) {
+                ContactEvents.AppendToMessageQueue(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = e.message,
+                            uiComponentType = UIComponentType.Dialog,
+                            messageType = MessageType.Error,
+                        )
+                    )
+                )
+            }
         }
     }
+
+    override fun activateMultiSelectionMode() {
+        viewModel.onTriggerEvent(ContactEvents.SetToolBarState(ContactToolbarState.MultiSelectionState))
+    }
+
+    override fun isMultiSelectionModeEnabled(): Boolean {
+        return viewModel.contactListInteractionManager.isMultiSelectionStateActive()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

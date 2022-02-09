@@ -1,16 +1,16 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
+import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchEvents
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftState
-import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.presentation.update.GlobalManager
+import dev.zidali.giftapp.business.interactors.main.shared.DeleteEvents
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
@@ -24,9 +24,15 @@ class EventViewModel
 constructor(
     private val appDataStore: AppDataStore,
     private val fetchEvents: FetchEvents,
+    private val deleteEvents: DeleteEvents,
 ): ViewModel() {
 
     val state: MutableLiveData<EventState> = MutableLiveData(EventState())
+
+    val eventListInteractionManager = EventListInteractionManager()
+
+    val toolbarState: LiveData<EventToolbarState>
+        get() = eventListInteractionManager.toolbarState
 
     fun onTriggerEvent(event: EventEvents) {
 
@@ -39,6 +45,18 @@ constructor(
             }
             is EventEvents.SetFirstLoad -> {
                 setFirstLoad(event.boolean)
+            }
+            is EventEvents.SetToolBarState -> {
+                setToolBarState(event.state)
+            }
+            is EventEvents.ClearSelectedContactEvents -> {
+                clearSelectedContactEvents()
+            }
+            is EventEvents.DeleteSelectedContactEvents -> {
+                deleteSelectedContactEvents()
+            }
+            is EventEvents.AddOrRemoveContactEventFromSelectedList -> {
+                addOrRemoveContactEventFromSelectedList(event.contactEvent)
             }
             is EventEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -84,6 +102,33 @@ constructor(
         }
     }
 
+    /**
+     * MultiSelectionMode
+     */
+
+    private fun setToolBarState(state: EventToolbarState) {
+        eventListInteractionManager.setToolBarState(state)
+    }
+
+    private fun addOrRemoveContactEventFromSelectedList(contactEvents: ContactEvent) {
+        eventListInteractionManager.addOrRemoveContactEventFromSelectedList(contactEvents)
+    }
+
+    private fun clearSelectedContactEvents() {
+        eventListInteractionManager.clearSelectedContactEvents()
+    }
+
+    private fun deleteSelectedContactEvents() {
+        if(getSelectedContactEvents().size > 0) {
+            deleteEvents.execute(getSelectedContactEvents()).launchIn(viewModelScope)
+            removeSelectedContactEventsFromList()
+        }
+    }
+
+    /**
+     * Alert Dialogs
+     */
+
     private fun appendToMessageQueue(stateMessage: StateMessage){
         state.value?.let { state ->
             val queue = state.queue
@@ -106,5 +151,18 @@ constructor(
                 Log.d(Constants.TAG, "removeHeadFromQueue: Nothing to remove from DialogQueue")
             }
         }
+    }
+
+    /**
+     * Supporting Functions
+     */
+
+    private fun getSelectedContactEvents(): ArrayList<ContactEvent> {
+        return eventListInteractionManager.getSelectedContactEvents()
+    }
+
+    private fun removeSelectedContactEventsFromList() {
+        state.value?.contact_events?.removeAll(getSelectedContactEvents())
+        clearSelectedContactEvents()
     }
 }

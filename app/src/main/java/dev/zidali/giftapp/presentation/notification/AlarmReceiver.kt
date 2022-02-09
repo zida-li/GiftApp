@@ -26,10 +26,11 @@ class AlarmReceiver: BroadcastReceiver() {
         if (context != null && intent != null && intent.action != null) {
             if (intent.action!!.equals(context.getString(R.string.action_notify_gift_event), ignoreCase = true)) {
                 if (intent.extras != null) {
-                    val reminderData = intent.extras!!.getString(Constants.KEY_ID)
-                    if (reminderData != null) {
+                    val contactName = intent.extras!!.getString("CONTACT_NAME")
+                    val contactEvent = intent.extras!!.getString("CONTACT_EVENT")
+                    if (contactName != null && contactEvent != null) {
                         CoroutineScope(IO).launch {
-                            val event = contactEventDao.searchByEvent(reminderData)?.toContactEvent()
+                            val event = contactEventDao.searchByEvent(contactName, contactEvent)?.toContactEvent()
                             NotificationHelper.createNotificationForContact(context, event!!)
                         }
                     }

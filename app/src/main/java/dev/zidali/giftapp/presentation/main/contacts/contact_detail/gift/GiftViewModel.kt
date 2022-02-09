@@ -1,13 +1,18 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
+import dev.zidali.giftapp.business.domain.models.Contact
+import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
+import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.DeleteGifts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchGifts
+import dev.zidali.giftapp.presentation.main.contacts.ContactToolbarState
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.presentation.update.GlobalManager
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
@@ -23,9 +28,15 @@ class GiftViewModel
 constructor(
     private val appDataStore: AppDataStore,
     private val fetchGifts: FetchGifts,
+    private val deleteGifts: DeleteGifts,
 ): ViewModel() {
 
     val state: MutableLiveData<GiftState> = MutableLiveData(GiftState())
+
+    val giftListInteractionManager = GiftListInteractionManager()
+
+    val toolbarState: LiveData<GiftToolbarState>
+        get() = giftListInteractionManager.toolbarState
 
     fun onTriggerEvent(event: GiftEvents) {
 
@@ -38,6 +49,18 @@ constructor(
             }
             is GiftEvents.SetFirstLoad -> {
                 setFirstLoad(event.boolean)
+            }
+            is GiftEvents.SetToolBarState -> {
+                setToolBarState(event.state)
+            }
+            is GiftEvents.AddOrRemoveGiftFromSelectedList -> {
+                addOrRemoveGiftFromSelectedList(event.gift)
+            }
+            is GiftEvents.ClearSelectedGifts -> {
+                clearSelectedGifts()
+            }
+            is GiftEvents.DeleteSelectedGifts -> {
+                deleteSelectedGifts()
             }
             is GiftEvents.AppendToMessageQueue -> {
                 appendToMessageQueue(event.stateMessage)
@@ -83,6 +106,33 @@ constructor(
         }
     }
 
+    /**
+     * MultiSelectionMode
+     */
+
+    private fun setToolBarState(state: GiftToolbarState) {
+        giftListInteractionManager.setToolBarState(state)
+    }
+
+    private fun addOrRemoveGiftFromSelectedList(gift: Gift) {
+        giftListInteractionManager.addOrRemoveGiftFromSelectedList(gift)
+    }
+
+    private fun clearSelectedGifts() {
+        giftListInteractionManager.clearSelectedGifts()
+    }
+
+    private fun deleteSelectedGifts() {
+        if(getSelectedGifts().size > 0) {
+            deleteGifts.execute(getSelectedGifts()).launchIn(viewModelScope)
+            removeSelectedContactsFromList()
+        }
+    }
+
+    /**
+     * Alert Dialogs
+     */
+
     private fun appendToMessageQueue(stateMessage: StateMessage){
         state.value?.let { state ->
             val queue = state.queue
@@ -106,4 +156,18 @@ constructor(
             }
         }
     }
+
+    /**
+     * Supporting Functions
+     */
+
+    private fun getSelectedGifts(): ArrayList<Gift> {
+        return giftListInteractionManager.getSelectedGifts()
+    }
+
+    private fun removeSelectedContactsFromList() {
+        state.value?.contact_gifts?.removeAll(getSelectedGifts())
+        clearSelectedGifts()
+    }
+
 }

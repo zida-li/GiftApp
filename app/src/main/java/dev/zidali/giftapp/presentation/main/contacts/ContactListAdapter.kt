@@ -1,12 +1,21 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.*
+import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.databinding.ContactListItemBinding
 
-class ContactListAdapter(private val interaction: Interaction? = null) :
+class ContactListAdapter(
+    private val interaction: Interaction? = null,
+    private val lifecycleOwner: LifecycleOwner,
+    private val selectedContacts: LiveData<ArrayList<Contact>>
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Contact>() {
@@ -34,7 +43,9 @@ class ContactListAdapter(private val interaction: Interaction? = null) :
                 parent,
                 false
             ),
-            interaction
+            interaction,
+            lifecycleOwner,
+            selectedContacts,
         )
     }
 
@@ -79,19 +90,50 @@ class ContactListAdapter(private val interaction: Interaction? = null) :
     constructor(
         private val binding: ContactListItemBinding,
         private val interaction: Interaction?,
+        private val lifecycleOwner: LifecycleOwner,
+        private val selectedContacts: LiveData<ArrayList<Contact>>,
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        private lateinit var mContact: Contact
+
         fun bind(item: Contact) = with(itemView) {
+
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
+            setOnLongClickListener {
+                interaction?.activateMultiSelectionMode()
+                interaction?.onItemSelected(adapterPosition, mContact)
+                true
+            }
+            mContact = item
 
             binding.contactName.text = item.contact_name
+
+            selectedContacts.observe(lifecycleOwner) { contact->
+
+                if(contact != null) {
+                    if (contact.contains(mContact)) {
+                        binding.contactCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
+                    }
+                    else {
+                        binding.contactCardView.setBackgroundColor(Color.WHITE)
+                    }
+                } else {
+                    binding.contactCardView.setBackgroundColor(Color.WHITE)
+                }
+            }
 
         }
     }
 
     interface Interaction {
+
         fun onItemSelected(position: Int, item: Contact)
+
+        fun activateMultiSelectionMode()
+
+        fun isMultiSelectionModeEnabled(): Boolean
+
     }
 }
