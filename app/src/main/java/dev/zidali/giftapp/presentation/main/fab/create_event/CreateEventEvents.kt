@@ -26,6 +26,10 @@ sealed class CreateEventEvents {
         var reminder: String,
     ): CreateEventEvents()
 
+    data class OnUpdateYmdFormat(
+        var ymdFormat: String,
+    ): CreateEventEvents()
+
     object CreateEvent: CreateEventEvents()
 
     data class SetDataLoaded(

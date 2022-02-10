@@ -17,6 +17,7 @@ data class EditEventState(
     val initial_contact_event_holder: ContactEvent? = null,
     val update_contact_event: ContactEvent? = null,
     val initialLoadComplete: Boolean = false,
+    val ymd_formatHolder: String = "",
     val isLoading: Boolean = false,
     var editEventSuccessful: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf())

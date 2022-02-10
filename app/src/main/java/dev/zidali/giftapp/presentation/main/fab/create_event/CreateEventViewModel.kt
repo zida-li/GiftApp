@@ -54,6 +54,9 @@ constructor(
             is CreateEventEvents.OnUpdateReminderPicker -> {
                 onUpdateReminderPicker(event.reminder)
             }
+            is CreateEventEvents.OnUpdateYmdFormat -> {
+                onUpdateYmdFormat(event.ymdFormat)
+            }
             is CreateEventEvents.CreateEvent -> {
                 createEvent()
             }
@@ -137,6 +140,14 @@ constructor(
         }
     }
 
+    private fun onUpdateYmdFormat(ymd_format: String) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                ymd_formatHolder = ymd_format
+            )
+        }
+    }
+
     private fun createEvent() {
         setCreateEventState()
 //        Log.d(Constants.TAG, state.value?.createEvent.toString())
@@ -209,6 +220,7 @@ constructor(
                     month = state.calendarSelectionHolder.selectedMonth,
                     day = state.calendarSelectionHolder.selectedDay,
                     pk = 0,
+                    ymd_format = state.ymd_formatHolder,
                 )
             )
         }

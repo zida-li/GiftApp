@@ -53,6 +53,7 @@ class EditEventFragment : BaseMainFragment() {
 
     override fun onResume() {
         super.onResume()
+        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(true))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -135,12 +136,14 @@ class EditEventFragment : BaseMainFragment() {
             ) { resultKey, bundle->
                 if(resultKey == "DATE_PICKER_RESULT") {
                     val userSelection = bundle.getString("USER_SELECTION")
+                    val dataBaseFormat = bundle.getString("SELECTED_YMD")
                     binding.datePicker.setText(userSelection)
 
                     val selectedYear = bundle.getInt("SELECTED_YEAR")
                     val selectedMonth = bundle.getInt("SELECTED_MONTH")
                     val selectedDate = bundle.getInt("SELECTED_DATE")
 
+                    viewModel.onTriggerEvent(EditEventEvents.OnUpdateYmdFormat(dataBaseFormat!!))
                     viewModel.onTriggerEvent(EditEventEvents.OnUpdateDatePicker(selectedDate, selectedMonth, selectedYear))
                 }
             }
@@ -172,8 +175,14 @@ class EditEventFragment : BaseMainFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(false))
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(false))
     }
 }

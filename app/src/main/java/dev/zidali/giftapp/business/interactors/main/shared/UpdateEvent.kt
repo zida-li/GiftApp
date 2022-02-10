@@ -26,6 +26,7 @@ class UpdateEvent(
             updatedEvent.year,
             updatedEvent.month,
             updatedEvent.day,
+            updatedEvent.ymd_format,
             initialEvent.contact_event,
             initialEvent.contact_name,
         )

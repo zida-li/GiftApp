@@ -9,4 +9,5 @@ data class GlobalState(
     val needToUpdateEventFragment: Boolean = false,
     val giftFragmentInView: Boolean = false,
     val eventFragmentInView: Boolean = false,
+    val editFragmentInView: Boolean = false,
 )

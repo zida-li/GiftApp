@@ -135,6 +135,7 @@ constructor(
                     month = contactEvent.month,
                     day = contactEvent.day,
                     pk = contactEvent.pk,
+                    ymd_format = contactEvent.ymd_format,
                 )
             )
         }

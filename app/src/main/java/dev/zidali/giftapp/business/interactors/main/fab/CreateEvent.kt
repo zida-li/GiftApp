@@ -30,6 +30,7 @@ class CreateEvent(
             month = contactEvent.month,
             day = contactEvent.day,
             pk = contactPk?.pk!!,
+            ymd_format = contactEvent.ymd_format,
         )
 
         contactEventDao.insert(finalContactEvent.toContactEventEntity())

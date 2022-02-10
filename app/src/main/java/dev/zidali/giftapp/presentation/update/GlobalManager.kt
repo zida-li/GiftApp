@@ -28,6 +28,9 @@ constructor(
             is GlobalEvents.EventFragmentInView -> {
                 setEventFragmentView(event.boolean)
             }
+            is GlobalEvents.EditFragmentInView -> {
+                setEditFragmentView(event.boolean)
+            }
         }
     }
 
@@ -54,6 +57,12 @@ constructor(
     private fun setEventFragmentView(boolean: Boolean) {
         state.value?.let { state->
             this.state.value = state.copy(eventFragmentInView = boolean)
+        }
+    }
+
+    private fun setEditFragmentView(boolean: Boolean) {
+        state.value?.let {state->
+            this.state.value = state.copy(editFragmentInView = boolean)
         }
     }
 

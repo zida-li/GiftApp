@@ -9,5 +9,6 @@ data class ContactEvent(
     var month: Int,
     var day: Int,
     var pk: Int,
+    var ymd_format: String,
 
 )

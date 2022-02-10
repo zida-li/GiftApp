@@ -42,6 +42,9 @@ data class ContactEventEntity (
     @ColumnInfo(name = "primary_key")
     var pk: Int,
 
+    @ColumnInfo(name = "ymd_format")
+    var ymd_format: String,
+
 )
 
 fun ContactEvent.toContactEventEntity(): ContactEventEntity {
@@ -53,6 +56,7 @@ fun ContactEvent.toContactEventEntity(): ContactEventEntity {
         month = month,
         day = day,
         pk = pk,
+        ymd_format = ymd_format,
     )
 }
 
@@ -65,5 +69,6 @@ fun ContactEventEntity.toContactEvent(): ContactEvent {
         month = month,
         day = day,
         pk = pk,
+        ymd_format = ymd_format,
     )
 }

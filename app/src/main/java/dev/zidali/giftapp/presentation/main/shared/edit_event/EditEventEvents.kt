@@ -27,6 +27,10 @@ sealed class EditEventEvents {
         var reminder: String,
     ): EditEventEvents()
 
+    data class OnUpdateYmdFormat(
+        var ymdFormat: String,
+    ): EditEventEvents()
+
     data class TurnOnNotifications(
         val contactEvent: ContactEvent,
         val reminderPickerResult: String,

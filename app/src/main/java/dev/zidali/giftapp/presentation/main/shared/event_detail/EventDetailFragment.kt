@@ -58,6 +58,7 @@ class EventDetailFragment : BaseMainFragment() {
 
     override fun onResume() {
         super.onResume()
+        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(true))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -107,8 +108,14 @@ class EventDetailFragment : BaseMainFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(false))
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(false))
     }
 }

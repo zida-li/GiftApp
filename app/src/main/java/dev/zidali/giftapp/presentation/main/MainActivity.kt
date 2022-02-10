@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import androidx.annotation.RequiresApi
+import androidx.core.view.isInvisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -67,6 +68,13 @@ class MainActivity : BaseActivity() {
 
     private fun subscribeObservers() {
 
+        globalManager.state.observe(this) {state->
+
+            binding.fabMenu.isInvisible = state.editFragmentInView
+            binding.bottomAppBar.isInvisible = state.editFragmentInView
+
+        }
+
         sessionManager.state.observe(this) { state ->
 
             displayProgressBar(state.isLoading)
@@ -108,6 +116,8 @@ class MainActivity : BaseActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+
+
     /**
      * OnClick Listeners
      */
@@ -126,10 +136,7 @@ class MainActivity : BaseActivity() {
                 ) {resultKey, bundle ->
                     if(resultKey == "ADD_CONTACT_RESULT") {
                         val contact = bundle.getString("ADDED_CONTACT")
-                        Snackbar.make(binding.mainActivity, contact!!, Snackbar.LENGTH_SHORT)
-                            .setAction(R.string.view_contacts) {
-                                //action navigate to contacts.
-                            }.show()
+                        Snackbar.make(binding.mainActivity, contact!! + " Added to Contacts", Snackbar.LENGTH_SHORT).show()
                     }
                 }
                 createContactFragment.isCancelable = false
@@ -159,6 +166,10 @@ class MainActivity : BaseActivity() {
 
                 dialog.isCancelable = false
                 dialog.show(supportFragmentManager, "createContactDialog")
+            }
+
+            if(navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/eventDetailFragment") {
+
             }
 
 //            Log.d(TAG, navController.currentDestination?.displayName!!)

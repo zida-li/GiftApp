@@ -124,6 +124,7 @@ class CreateEventFragment: DialogFragment() {
             ) { resultKey, bundle->
                 if(resultKey == "DATE_PICKER_RESULT") {
                     val userSelection = bundle.getString("USER_SELECTION")
+                    val dataBaseFormat = bundle.getString("SELECTED_YMD")
                     binding.datePicker.setText(userSelection)
 
                     val selectedYear = bundle.getInt("SELECTED_YEAR")
@@ -132,6 +133,7 @@ class CreateEventFragment: DialogFragment() {
                     viewModel.onTriggerEvent(CreateEventEvents.OnUpdateDatePicker(
                         selectedYear, selectedMonth, selectedDate
                     ))
+                    viewModel.onTriggerEvent(CreateEventEvents.OnUpdateYmdFormat(dataBaseFormat!!))
                 }
             }
 

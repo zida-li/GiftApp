@@ -60,6 +60,9 @@ constructor(
                     event.reminder
                 )
             }
+            is EditEventEvents.OnUpdateYmdFormat -> {
+                onUpdateYmdFormat(event.ymdFormat)
+            }
             is EditEventEvents.TurnOnNotifications -> {
                 turnOnNotifications(event.contactEvent, event.reminderPickerResult)
             }
@@ -91,7 +94,8 @@ constructor(
                             selectedYear = event.year,
                             selectedMonth = event.month,
                             selectedDay = event.day,
-                         )
+                         ),
+                        ymd_formatHolder = event.ymd_format,
                     )
                 }
 
@@ -126,6 +130,14 @@ constructor(
         state.value?.let { state->
             this.state.value = state.copy(
                 reminderSelectionHolder = reminder
+            )
+        }
+    }
+
+    private fun onUpdateYmdFormat(ymd_format: String) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                ymd_formatHolder = ymd_format
             )
         }
     }
@@ -180,6 +192,7 @@ constructor(
                     month = state.calendarSelectionHolder.selectedMonth,
                     day = state.calendarSelectionHolder.selectedDay,
                     pk = 0,
+                    ymd_format = state.ymd_formatHolder,
                 )
             )
         }
