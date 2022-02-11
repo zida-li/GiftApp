@@ -192,10 +192,18 @@ class AllEventListAdapter(
                         binding.allEventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
                     }
                     else {
-                        binding.allEventCardView.setCardBackgroundColor(Color.WHITE)
+                        if(today > alarmDate) {
+                            binding.allEventCardView.setCardBackgroundColor(Color.GRAY)
+                        } else {
+                            binding.allEventCardView.setCardBackgroundColor(Color.WHITE)
+                        }
                     }
                 } else {
-                    binding.allEventCardView.setCardBackgroundColor(Color.WHITE)
+                    if(today > alarmDate) {
+                        binding.allEventCardView.setCardBackgroundColor(Color.GRAY)
+                    } else {
+                        binding.allEventCardView.setCardBackgroundColor(Color.WHITE)
+                    }
                 }
             }
 

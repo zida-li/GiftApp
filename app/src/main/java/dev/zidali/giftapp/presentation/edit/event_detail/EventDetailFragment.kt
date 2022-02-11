@@ -15,6 +15,7 @@ import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentEventDetailBinding
 import dev.zidali.giftapp.presentation.edit.BaseEditFragment
+import dev.zidali.giftapp.presentation.edit.EditEventActivity
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.util.processQueue
 import java.text.SimpleDateFormat
@@ -45,14 +46,6 @@ class EventDetailFragment : BaseEditFragment() {
         val contactEvent = activity?.intent?.extras?.get("CONTACT_EVENT").toString()
         viewModel.onTriggerEvent(EventDetailEvents.FetchEvent(contactName, contactEvent))
 
-        binding.contactName.apply {
-            inputType = InputType.TYPE_NULL
-        }
-
-        binding.inputEvent.apply {
-            inputType = InputType.TYPE_NULL
-        }
-
         binding.fabEditEvent.setOnClickListener {
             val bundle = bundleOf()
             bundle.putString("CONTACT_NAME", viewModel.state.value?.contact_event?.contact_name)
@@ -81,6 +74,8 @@ class EventDetailFragment : BaseEditFragment() {
 
             state.contact_event?.let { setEventProperties(it) }
 
+            (activity as EditEventActivity).supportActionBar?.title = state.contact_event?.contact_name
+
             processQueue(
                 context = context,
                 queue = state.queue,
@@ -103,11 +98,10 @@ class EventDetailFragment : BaseEditFragment() {
 
         val userSelection = SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH).format(calendar.time)
 
-        binding.contactName.setText(contactEvent.contact_name)
-        binding.inputEvent.setText(contactEvent.contact_event)
-        binding.datePicker.setText(userSelection)
+        binding.inputEvent.text = contactEvent.contact_event
+        binding.datePicker.text = userSelection
         if(contactEvent.contact_event_reminder != "") {
-            binding.reminderPicker.setText(contactEvent.contact_event_reminder)
+            binding.reminderPicker.text = contactEvent.contact_event_reminder
         } else {
             binding.reminderPicker.setText(R.string.none)
         }

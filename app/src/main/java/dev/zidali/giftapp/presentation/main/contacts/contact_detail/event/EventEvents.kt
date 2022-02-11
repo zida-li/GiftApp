@@ -1,6 +1,5 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 
-import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.StateMessage
 
@@ -12,6 +11,20 @@ sealed class EventEvents {
 
     data class SetFirstLoad(
         var boolean: Boolean
+    ): EventEvents()
+
+    data class TurnOnNotifications(
+        val contactEvent: ContactEvent,
+        val reminderPickerResult: String,
+    ): EventEvents()
+
+    data class TurnOffNotifications(
+        val contactEvent: ContactEvent,
+    ): EventEvents()
+
+    data class SetContactHolder(
+        val contactEvent: ContactEvent,
+        val reminder: String,
     ): EventEvents()
 
     data class SetToolBarState(

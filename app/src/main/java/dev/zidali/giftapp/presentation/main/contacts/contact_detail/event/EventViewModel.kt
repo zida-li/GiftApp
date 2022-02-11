@@ -11,6 +11,7 @@ import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchEvents
 import dev.zidali.giftapp.business.interactors.main.shared.DeleteEvents
+import dev.zidali.giftapp.business.interactors.main.shared.UpdateContactEventReminder
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
@@ -25,6 +26,7 @@ constructor(
     private val appDataStore: AppDataStore,
     private val fetchEvents: FetchEvents,
     private val deleteEvents: DeleteEvents,
+    private val updateContactEventReminder: UpdateContactEventReminder,
 ): ViewModel() {
 
     val state: MutableLiveData<EventState> = MutableLiveData(EventState())
@@ -45,6 +47,15 @@ constructor(
             }
             is EventEvents.SetFirstLoad -> {
                 setFirstLoad(event.boolean)
+            }
+            is EventEvents.TurnOnNotifications -> {
+                turnOnNotifications(event.contactEvent, event.reminderPickerResult)
+            }
+            is EventEvents.TurnOffNotifications -> {
+                turnOffNotifications(event.contactEvent)
+            }
+            is EventEvents.SetContactHolder -> {
+                setContactHolder(event.contactEvent, event.reminder)
             }
             is EventEvents.SetToolBarState -> {
                 setToolBarState(event.state)
@@ -98,6 +109,65 @@ constructor(
         state.value?.let { state->
             this.state.value = state.copy(
                 firstLoad = boolean
+            )
+        }
+    }
+
+    private fun turnOnNotifications(contactEvent: ContactEvent, reminderPickerResult: String) {
+        state.value?.let { state->
+
+            for(event in state.contact_events) {
+                if(event.contact_event == contactEvent.contact_event
+                    && event.contact_name == contactEvent.contact_name) {
+
+                    contactEvent.contact_event_reminder = reminderPickerResult
+
+                    updateContactEventReminder.execute(contactEvent).onEach { dataState ->
+
+                        dataState.stateMessage?.let { stateMessage ->
+                            appendToMessageQueue(stateMessage)
+                        }
+
+                    }.launchIn(viewModelScope)
+                }
+            }
+        }
+    }
+
+    private fun turnOffNotifications(contactEvent: ContactEvent) {
+        state.value?.let { state->
+
+            for(event in state.contact_events) {
+                if(event.contact_event == contactEvent.contact_event
+                    && event.contact_name == contactEvent.contact_name) {
+
+                    contactEvent.contact_event_reminder = ""
+
+                    updateContactEventReminder.execute(contactEvent).onEach { dataState ->
+
+                        dataState.stateMessage?.let { stateMessage ->
+                            appendToMessageQueue(stateMessage)
+                        }
+
+                    }.launchIn(viewModelScope)
+                }
+            }
+        }
+    }
+
+    private fun setContactHolder(contactEvent: ContactEvent, reminder: String) {
+        this.state.value?.let { state->
+            this.state.value = state.copy(
+                contact_event_holder = ContactEvent(
+                    contact_name = contactEvent.contact_name,
+                    contact_event = contactEvent.contact_event,
+                    contact_event_reminder = reminder,
+                    year = contactEvent.year,
+                    month = contactEvent.month,
+                    day = contactEvent.day,
+                    pk = contactEvent.pk,
+                    ymd_format = contactEvent.ymd_format,
+                )
             )
         }
     }

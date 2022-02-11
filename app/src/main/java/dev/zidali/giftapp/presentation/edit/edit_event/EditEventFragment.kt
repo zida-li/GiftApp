@@ -15,6 +15,7 @@ import dev.zidali.giftapp.databinding.FragmentAllEventsBinding
 import dev.zidali.giftapp.databinding.FragmentEditEventBinding
 import dev.zidali.giftapp.databinding.FragmentEventDetailBinding
 import dev.zidali.giftapp.presentation.edit.BaseEditFragment
+import dev.zidali.giftapp.presentation.edit.EditEventActivity
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.all_events.AllEventEvents
 import dev.zidali.giftapp.presentation.main.all_events.AllEventToolbarState
@@ -61,8 +62,18 @@ class EditEventFragment : BaseEditFragment() {
                 state.contact_event?.let { setEventProperties(it) }
             }
 
+            (activity as EditEventActivity).supportActionBar?.title = state.contact_event?.contact_name
+
             if(state.editEventSuccessful) {
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+                if(state.update_contact_event?.contact_event_reminder == "None") {
+                    AlarmScheduler.cancelScheduledAlarmForReminder(requireContext(), state.update_contact_event, "day")
+                    AlarmScheduler.cancelScheduledAlarmForReminder(requireContext(), state.update_contact_event, "week")
+                    AlarmScheduler.cancelScheduledAlarmForReminder(requireContext(), state.update_contact_event, "month")
+                } else {
+                    AlarmScheduler.scheduleInitialAlarmsForReminder(requireContext(),
+                        state.update_contact_event!!)
+                }
                 findNavController().popBackStack()
             }
 

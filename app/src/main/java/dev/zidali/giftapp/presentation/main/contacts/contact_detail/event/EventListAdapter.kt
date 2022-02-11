@@ -1,9 +1,11 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.*
@@ -12,6 +14,8 @@ import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.Converters
 import dev.zidali.giftapp.databinding.ContactViewEventItemBinding
 import java.lang.StringBuilder
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EventListAdapter(
     private val interaction: Interaction? = null,
@@ -99,6 +103,50 @@ class EventListAdapter(
         private lateinit var mContactEvent: ContactEvent
 
         fun bind(item: ContactEvent) = with(itemView) {
+
+            val today = Calendar.getInstance()
+
+            val alarmDate = Calendar.getInstance(Locale.getDefault())
+            alarmDate.set(Calendar.MONTH, item.month)
+            alarmDate.set(Calendar.DAY_OF_MONTH, item.day)
+            alarmDate.set(Calendar.YEAR, item.year)
+
+            if(today > alarmDate) {
+//                Log.d(Constants.TAG, "today > alarmDate")
+                binding.event.apply {
+                    text = item.contact_event
+                    typeface.isBold
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+                binding.year.apply {
+                    text = item.year.toString()
+                    typeface.isBold
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+                binding.month.apply {
+                    text = Converters.convertIntMonthToTextMonth(item.month)
+                    typeface.isBold
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+                binding.date.apply {
+                    val date = item.day.toString()
+                    val dateWithComma = StringBuilder()
+                    dateWithComma.append("$date,")
+                    text = dateWithComma
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+                binding.notificationIcon.isInvisible = true
+            } else {
+                binding.event.text = item.contact_event
+                binding.year.text = item.year.toString()
+                binding.month.text = Converters.convertIntMonthToTextMonth(item.month)
+                val date = item.day.toString()
+                val dateWithComma = StringBuilder()
+                dateWithComma.append("$date,")
+                binding.date.text = dateWithComma
+            }
+
+
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
@@ -109,15 +157,29 @@ class EventListAdapter(
             }
             mContactEvent = item
 
-            binding.event.text = item.contact_event
-            binding.year.text = item.year.toString()
-            binding.month.text = Converters.convertIntMonthToTextMonth(item.month)
+            binding.notificationIcon.setOnClickListener {
 
-            val date = item.day.toString()
-            val dateWithComma = StringBuilder()
-            dateWithComma.append("$date,")
+                if(item.contact_event_reminder.contains("day", true) ||
+                    item.contact_event_reminder.contains("week", true) ||
+                    item.contact_event_reminder.contains("month",true)) {
 
-            binding.date.text = dateWithComma
+                    interaction?.turnOffNotifications(item)
+                    binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_24_inactive)
+
+                } else {
+
+                    interaction?.turnOnNotifications(item, adapterPosition)
+
+                }
+            }
+
+            if(item.contact_event_reminder.contains("day", true) ||
+                item.contact_event_reminder.contains("week", true) ||
+                item.contact_event_reminder.contains("month",true)) {
+                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_active_24)
+            } else {
+                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_24_inactive)
+            }
 
             selectedContactEvents.observe(lifecycleOwner) {contactEvent->
 
@@ -126,10 +188,18 @@ class EventListAdapter(
                         binding.eventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
                     }
                     else {
-                        binding.eventCardView.setCardBackgroundColor(Color.WHITE)
+                        if(today > alarmDate) {
+                            binding.eventCardView.setCardBackgroundColor(Color.GRAY)
+                        } else {
+                            binding.eventCardView.setCardBackgroundColor(Color.WHITE)
+                        }
                     }
                 } else {
-                    binding.eventCardView.setCardBackgroundColor(Color.WHITE)
+                    if(today > alarmDate) {
+                        binding.eventCardView.setCardBackgroundColor(Color.GRAY)
+                    } else {
+                        binding.eventCardView.setCardBackgroundColor(Color.WHITE)
+                    }
                 }
 
             }
@@ -144,6 +214,10 @@ class EventListAdapter(
         fun activateMultiSelectionMode()
 
         fun isMultiSelectionModeEnabled(): Boolean
+
+        fun turnOffNotifications(item: ContactEvent)
+
+        fun turnOnNotifications(item: ContactEvent, position: Int)
 
     }
 }

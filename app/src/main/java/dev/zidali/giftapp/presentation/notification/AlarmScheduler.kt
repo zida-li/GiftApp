@@ -121,6 +121,8 @@ object AlarmScheduler {
 
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+        Log.d(Constants.TAG, "cancelScheduledAlarmForReminder: ${reminderData.contact_name} + $reminder")
+
         if (pendingIntent != null) {
             alarmMgr.cancel(pendingIntent)
         }

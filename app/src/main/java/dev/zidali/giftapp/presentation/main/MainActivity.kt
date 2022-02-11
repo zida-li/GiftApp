@@ -68,13 +68,6 @@ class MainActivity : BaseActivity() {
 
     private fun subscribeObservers() {
 
-        globalManager.state.observe(this) {state->
-
-            binding.fabMenu.isInvisible = state.editFragmentInView
-            binding.bottomNavigation.isInvisible = state.editFragmentInView
-
-        }
-
         sessionManager.state.observe(this) { state ->
 
             displayProgressBar(state.isLoading)

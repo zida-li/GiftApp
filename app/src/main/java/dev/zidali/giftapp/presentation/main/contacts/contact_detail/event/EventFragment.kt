@@ -3,9 +3,12 @@ package dev.zidali.giftapp.presentation.main.contacts.contact_detail.event
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Context.ALARM_SERVICE
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,9 +16,13 @@ import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentEventsBinding
+import dev.zidali.giftapp.presentation.edit.EditEventActivity
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
+import dev.zidali.giftapp.presentation.main.all_events.AllEventEvents
 import dev.zidali.giftapp.presentation.main.contacts.ContactEvents
 import dev.zidali.giftapp.presentation.main.contacts.ContactToolbarState
+import dev.zidali.giftapp.presentation.main.fab.create_event.ReminderFragment
+import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
@@ -171,6 +178,15 @@ EventListAdapter.Interaction {
     override fun onItemSelected(position: Int, item: ContactEvent) {
         if(isMultiSelectionModeEnabled()) {
             viewModel.onTriggerEvent(EventEvents.AddOrRemoveContactEventFromSelectedList(item))
+        } else {
+            viewModel.state.value?.let { state->
+                val intent = Intent(requireContext(), EditEventActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra("CONTACT_NAME", item.contact_name)
+                intent.putExtra("CONTACT_EVENT", item.contact_event)
+                startActivity(intent)
+            }
         }
     }
 
@@ -180,6 +196,38 @@ EventListAdapter.Interaction {
 
     override fun isMultiSelectionModeEnabled(): Boolean {
         return viewModel.eventListInteractionManager.isMultiSelectionStateActive()
+    }
+
+    override fun turnOffNotifications(item: ContactEvent) {
+        viewModel.onTriggerEvent(EventEvents.TurnOffNotifications(item))
+        AlarmScheduler.cancelScheduledAlarmForReminder(requireContext(), item, "day")
+        AlarmScheduler.cancelScheduledAlarmForReminder(requireContext(), item, "week")
+        AlarmScheduler.cancelScheduledAlarmForReminder(requireContext(), item, "month")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun turnOnNotifications(item: ContactEvent, position: Int) {
+
+        val reminderPickerFragment = ReminderFragment()
+        val supportFragmentManager = requireActivity().supportFragmentManager
+
+        supportFragmentManager.setFragmentResultListener(
+            "REMINDER_PICKER_RESULT",
+            viewLifecycleOwner
+        ) {resultKey, bundle ->
+            if(resultKey == "REMINDER_PICKER_RESULT") {
+                val reminder = bundle.getStringArrayList("SELECTED_REMINDERS")
+                val joinToString = reminder?.joinToString(", ")
+
+                viewModel.onTriggerEvent(EventEvents.TurnOnNotifications(item, joinToString!!))
+                viewModel.onTriggerEvent(EventEvents.SetContactHolder(item, joinToString))
+                AlarmScheduler.scheduleInitialAlarmsForReminder(requireContext(), viewModel.state.value?.contact_event_holder!!)
+                recyclerAdapter?.notifyItemChanged(position)
+            }
+        }
+
+        reminderPickerFragment.isCancelable = false
+        reminderPickerFragment.show(supportFragmentManager, "ReminderPickerFragment")
     }
 
     /**
