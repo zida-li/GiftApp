@@ -18,7 +18,7 @@ sealed class GlobalEvents {
         val boolean: Boolean
     ): GlobalEvents()
 
-    data class EditFragmentInView(
+    data class setEventDetailFragmentView(
         val boolean: Boolean
     ): GlobalEvents()
 

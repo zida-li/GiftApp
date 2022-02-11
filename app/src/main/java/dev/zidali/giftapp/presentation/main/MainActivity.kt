@@ -55,7 +55,7 @@ class MainActivity : BaseActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.eventsFragment, R.id.contactFragment,
+                R.id.eventDetailFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -71,7 +71,7 @@ class MainActivity : BaseActivity() {
         globalManager.state.observe(this) {state->
 
             binding.fabMenu.isInvisible = state.editFragmentInView
-            binding.bottomAppBar.isInvisible = state.editFragmentInView
+            binding.bottomNavigation.isInvisible = state.editFragmentInView
 
         }
 
@@ -166,10 +166,6 @@ class MainActivity : BaseActivity() {
 
                 dialog.isCancelable = false
                 dialog.show(supportFragmentManager, "createContactDialog")
-            }
-
-            if(navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/eventDetailFragment") {
-
             }
 
 //            Log.d(TAG, navController.currentDestination?.displayName!!)

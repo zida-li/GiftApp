@@ -1,5 +1,6 @@
 package dev.zidali.giftapp.presentation.main.all_events
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -12,7 +13,9 @@ import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentAllEventsBinding
+import dev.zidali.giftapp.presentation.edit.EditEventActivity
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
+import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.main.fab.create_event.ReminderFragment
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
@@ -157,10 +160,12 @@ AllEventListAdapter.Interaction {
             viewModel.onTriggerEvent(AllEventEvents.AddOrRemoveContactEventFromSelectedList(item))
         } else {
             viewModel.state.value?.let { state->
-                val bundle = bundleOf()
-                bundle.putString("CONTACT_NAME", item.contact_name)
-                bundle.putString("CONTACT_EVENT", item.contact_event)
-                findNavController().navigate(R.id.action_eventsFragment_to_eventDetailFragment, bundle)
+                val intent = Intent(requireContext(), EditEventActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra("CONTACT_NAME", item.contact_name)
+                intent.putExtra("CONTACT_EVENT", item.contact_event)
+                startActivity(intent)
             }
         }
     }

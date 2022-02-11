@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.shared.event_detail
+package dev.zidali.giftapp.presentation.edit.event_detail
 
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.Queue

@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.shared.edit_event
+package dev.zidali.giftapp.presentation.edit.edit_event
 
 import android.util.Log
 import androidx.lifecycle.*

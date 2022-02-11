@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.shared.edit_event
+package dev.zidali.giftapp.presentation.edit.edit_event
 
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +14,7 @@ import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentAllEventsBinding
 import dev.zidali.giftapp.databinding.FragmentEditEventBinding
 import dev.zidali.giftapp.databinding.FragmentEventDetailBinding
+import dev.zidali.giftapp.presentation.edit.BaseEditFragment
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.all_events.AllEventEvents
 import dev.zidali.giftapp.presentation.main.all_events.AllEventToolbarState
@@ -28,7 +29,7 @@ import kotlinx.coroutines.selects.select
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditEventFragment : BaseMainFragment() {
+class EditEventFragment : BaseEditFragment() {
 
     private val viewModel: EditEventViewModel by viewModels()
     private var _binding: FragmentEditEventBinding? = null
@@ -49,11 +50,6 @@ class EditEventFragment : BaseMainFragment() {
         setHasOptionsMenu(true)
         subscribeObservers()
         setOnClickListeners()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(true))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -144,7 +140,9 @@ class EditEventFragment : BaseMainFragment() {
                     val selectedDate = bundle.getInt("SELECTED_DATE")
 
                     viewModel.onTriggerEvent(EditEventEvents.OnUpdateYmdFormat(dataBaseFormat!!))
-                    viewModel.onTriggerEvent(EditEventEvents.OnUpdateDatePicker(selectedDate, selectedMonth, selectedYear))
+                    viewModel.onTriggerEvent(EditEventEvents.OnUpdateDatePicker(selectedDate,
+                        selectedMonth,
+                        selectedYear))
                 }
             }
 
@@ -175,14 +173,8 @@ class EditEventFragment : BaseMainFragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(false))
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(false))
     }
 }

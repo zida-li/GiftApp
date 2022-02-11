@@ -115,18 +115,22 @@ class AllEventListAdapter(
 //                Log.d(Constants.TAG, "today > alarmDate")
                 binding.contactName.apply {
                     text = item.contact_name
+                    typeface.isBold
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }
                 binding.event.apply {
                     text = item.contact_event
+                    typeface.isBold
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }
                 binding.year.apply {
                     text = item.year.toString()
+                    typeface.isBold
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }
                 binding.month.apply {
                     text = Converters.convertIntMonthToTextMonth(item.month)
+                    typeface.isBold
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }
                 binding.date.apply {

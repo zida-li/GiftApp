@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.shared.edit_event
+package dev.zidali.giftapp.presentation.edit.edit_event
 
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.StateMessage

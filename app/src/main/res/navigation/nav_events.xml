@@ -9,22 +9,6 @@
         android:id="@+id/eventsFragment"
         android:name="dev.zidali.giftapp.presentation.main.all_events.AllEventFragment"
         android:label="All Events"
-        tools:layout="@layout/fragment_all_events" >
-        <action
-            android:id="@+id/action_eventsFragment_to_eventDetailFragment"
-            app:destination="@id/eventDetailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/eventDetailFragment"
-        android:name="dev.zidali.giftapp.presentation.main.shared.event_detail.EventDetailFragment"
-        android:label="" >
-        <action
-            android:id="@+id/action_eventDetailFragment_to_editEventFragment"
-            app:destination="@id/editEventFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/editEventFragment"
-        android:name="dev.zidali.giftapp.presentation.main.shared.edit_event.EditEventFragment"
-        android:label="Edit Event" />
+        tools:layout="@layout/fragment_all_events" />
 
 </navigation>

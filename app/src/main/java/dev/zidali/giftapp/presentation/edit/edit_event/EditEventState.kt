@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.shared.edit_event
+package dev.zidali.giftapp.presentation.edit.edit_event
 
 import dev.zidali.giftapp.business.domain.models.CalendarSelection
 import dev.zidali.giftapp.business.domain.models.ContactEvent
@@ -39,9 +39,9 @@ data class EditEventState(
 
     fun isValid(): String{
         if(update_contact_event?.contact_event == "") {
-            return EditEventState.UpdateEventError.mustFillAllFields()
+            return UpdateEventError.mustFillAllFields()
         }
-        return EditEventState.UpdateEventError.none()
+        return UpdateEventError.none()
     }
 
 }

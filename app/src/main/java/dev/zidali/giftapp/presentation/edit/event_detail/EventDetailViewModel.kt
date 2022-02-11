@@ -1,4 +1,4 @@
-package dev.zidali.giftapp.presentation.main.shared.event_detail
+package dev.zidali.giftapp.presentation.edit.event_detail
 
 import android.util.Log
 import androidx.lifecycle.*
@@ -10,7 +10,6 @@ import dev.zidali.giftapp.business.domain.util.UIComponentType
 import dev.zidali.giftapp.business.domain.util.doesMessageAlreadyExistInQueue
 import dev.zidali.giftapp.business.interactors.main.shared.FetchEvent
 import dev.zidali.giftapp.business.interactors.main.shared.UpdateContactEventReminder
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftState
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
@@ -29,12 +28,6 @@ constructor(
 ): ViewModel() {
 
     val state: MutableLiveData<EventDetailState> = MutableLiveData(EventDetailState())
-
-    init {
-        val contactName = savedStateHandle.get<String>("CONTACT_NAME")
-        val contactEvent = savedStateHandle.get<String>("CONTACT_EVENT")
-        onTriggerEvent(EventDetailEvents.FetchEvent(contactName!!, contactEvent!!))
-    }
 
     fun onTriggerEvent(event: EventDetailEvents) {
 

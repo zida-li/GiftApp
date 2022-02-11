@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_edit_event"
+    app:startDestination="@id/eventDetailFragment">
+
+    <fragment
+        android:id="@+id/eventDetailFragment"
+        android:name="dev.zidali.giftapp.presentation.edit.event_detail.EventDetailFragment"
+        android:label="EventDetailFragment" >
+        <action
+            android:id="@+id/action_eventDetailFragment_to_editEventFragment"
+            app:destination="@id/editEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editEventFragment"
+        android:name="dev.zidali.giftapp.presentation.edit.edit_event.EditEventFragment"
+        android:label="EditEventFragment" />
+
+</navigation>

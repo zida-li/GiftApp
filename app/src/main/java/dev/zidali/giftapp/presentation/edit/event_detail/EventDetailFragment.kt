@@ -1,30 +1,26 @@
-package dev.zidali.giftapp.presentation.main.shared.event_detail
+package dev.zidali.giftapp.presentation.edit.event_detail
 
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.ContactEvent
-import dev.zidali.giftapp.business.domain.util.*
-import dev.zidali.giftapp.databinding.FragmentAllEventsBinding
+import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentEventDetailBinding
-import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftEvents
-import dev.zidali.giftapp.presentation.main.fab.create_event.ReminderFragment
-import dev.zidali.giftapp.presentation.notification.AlarmScheduler
+import dev.zidali.giftapp.presentation.edit.BaseEditFragment
 import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventDetailFragment : BaseMainFragment() {
+class EventDetailFragment : BaseEditFragment() {
 
     private val viewModel: EventDetailViewModel by viewModels()
     private var _binding: FragmentEventDetailBinding? = null
@@ -33,7 +29,7 @@ class EventDetailFragment : BaseMainFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEventDetailBinding.inflate(layoutInflater)
         return binding.root
@@ -45,10 +41,19 @@ class EventDetailFragment : BaseMainFragment() {
         setHasOptionsMenu(true)
         subscribeObservers()
 
-        binding.contactName.inputType = InputType.TYPE_NULL
-        binding.inputEvent.inputType = InputType.TYPE_NULL
+        val contactName = activity?.intent?.extras?.get("CONTACT_NAME").toString()
+        val contactEvent = activity?.intent?.extras?.get("CONTACT_EVENT").toString()
+        viewModel.onTriggerEvent(EventDetailEvents.FetchEvent(contactName, contactEvent))
 
-        binding.editButton.setOnClickListener {
+        binding.contactName.apply {
+            inputType = InputType.TYPE_NULL
+        }
+
+        binding.inputEvent.apply {
+            inputType = InputType.TYPE_NULL
+        }
+
+        binding.fabEditEvent.setOnClickListener {
             val bundle = bundleOf()
             bundle.putString("CONTACT_NAME", viewModel.state.value?.contact_event?.contact_name)
             bundle.putString("CONTACT_EVENT", viewModel.state.value?.contact_event?.contact_event)
@@ -58,7 +63,7 @@ class EventDetailFragment : BaseMainFragment() {
 
     override fun onResume() {
         super.onResume()
-        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(true))
+        globalManager.onTriggerEvent(GlobalEvents.setEventDetailFragmentView(true))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -110,12 +115,12 @@ class EventDetailFragment : BaseMainFragment() {
 
     override fun onPause() {
         super.onPause()
-        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(false))
+        globalManager.onTriggerEvent(GlobalEvents.setEventDetailFragmentView(false))
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        globalManager.onTriggerEvent(GlobalEvents.EditFragmentInView(false))
+        globalManager.onTriggerEvent(GlobalEvents.setEventDetailFragmentView(false))
     }
 }
