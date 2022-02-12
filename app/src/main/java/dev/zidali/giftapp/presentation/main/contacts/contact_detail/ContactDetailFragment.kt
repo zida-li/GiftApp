@@ -72,10 +72,12 @@ class ContactDetailFragment : BaseMainFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if(isEditModeEnabled()) {
+        if(isEditModeEnabled() && !globalManager.state.value?.multiSelectionActive!!) {
             inflater.inflate(R.menu.contact_menu_edit, menu)
         } else {
-            inflater.inflate(R.menu.contact_menu, menu)
+            if (!globalManager.state.value?.multiSelectionActive!!) {
+                inflater.inflate(R.menu.contact_menu, menu)
+            }
         }
     }
 

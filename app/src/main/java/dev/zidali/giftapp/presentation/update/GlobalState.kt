@@ -12,4 +12,5 @@ data class GlobalState(
     val eventFragmentInView: Boolean = false,
     val editFragmentInView: Boolean = false,
     val contactFragmentInView: Boolean = false,
+    val multiSelectionActive: Boolean = false,
 )

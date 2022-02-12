@@ -30,4 +30,8 @@ sealed class GlobalEvents {
         val boolean: Boolean
     ): GlobalEvents()
 
+    data class SetMultiSelection(
+        val boolean: Boolean
+    ): GlobalEvents()
+
 }

@@ -26,7 +26,9 @@ class AddGift(
         val editedGift = Gift(
             contact_name = gift.contact_name,
             contact_gift = gift.contact_gift,
-            pk = contactPk?.pk!!
+            pk = contactPk?.pk!!,
+            isChecked = gift.isChecked,
+            isMultiSelectionModeEnabled = gift.isMultiSelectionModeEnabled,
         )
 
         giftDao.insert(editedGift.toGiftEntity())

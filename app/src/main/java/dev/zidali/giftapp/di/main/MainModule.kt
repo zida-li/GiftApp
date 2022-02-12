@@ -9,7 +9,6 @@ import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
-import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.interactors.main.contacts.DeleteContacts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.DeleteGifts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchEvents
@@ -184,6 +183,16 @@ object MainModule {
     ): UpdateEvent {
         return UpdateEvent (
             contactEventDao
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideUpdateGift(
+        giftDao: GiftDao
+    ): SetIsCheckedGift {
+        return SetIsCheckedGift(
+            giftDao
         )
     }
 

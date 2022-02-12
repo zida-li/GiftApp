@@ -1,6 +1,8 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
 import android.graphics.Color
+import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -11,6 +13,7 @@ import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.databinding.GiftListItemBinding
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 
 class GiftListAdapter(
     private val interaction: Interaction? = null,
@@ -98,7 +101,14 @@ class GiftListAdapter(
         lateinit var mGift: Gift
 
         fun bind(item: Gift) = with(itemView) {
+
+            checkCheckedOnInit(item)
+
             itemView.setOnClickListener {
+                if(!item.isMultiSelectionModeEnabled) {
+                    checkItemClicked(item)
+                    interaction?.onIsCheckedClicked(item, adapterPosition)
+                }
                 interaction?.onItemSelected(adapterPosition, item)
             }
             setOnLongClickListener {
@@ -117,14 +127,61 @@ class GiftListAdapter(
                         binding.giftCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
                     }
                     else {
-                        binding.giftCardView.setBackgroundColor(Color.WHITE)
+                        if(item.isChecked) {
+                            binding.giftCardView.setBackgroundColor(Color.GRAY)
+                        } else {
+                            binding.giftCardView.setBackgroundColor(Color.WHITE)
+                        }
                     }
                 } else {
-                    binding.giftCardView.setBackgroundColor(Color.WHITE)
+                    if(item.isChecked) {
+                        binding.giftCardView.setBackgroundColor(Color.GRAY)
+                    } else {
+                        binding.giftCardView.setBackgroundColor(Color.WHITE)
+                    }
                 }
 
             }
 
+        }
+
+        private fun checkCheckedOnInit(
+            item: Gift,
+        ) {
+            if (item.isChecked) {
+                binding.giftName.apply {
+                    text = item.contact_gift
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+                binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_24)
+                binding.giftCardView.setCardBackgroundColor(Color.GRAY)
+            } else if (!item.isChecked) {
+                binding.giftName.apply {
+                    text = item.contact_gift
+                    paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                }
+                binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
+                binding.giftCardView.setCardBackgroundColor(Color.WHITE)
+            }
+        }
+
+        private fun checkItemClicked(item: Gift) {
+
+            binding.giftName.apply {
+                if (!paint.isStrikeThruText) {
+                    text = item.contact_gift
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_24)
+                    binding.giftCardView.setCardBackgroundColor(Color.GRAY)
+                } else {
+                    binding.giftName.apply {
+                        text = item.contact_gift
+                        paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    }
+                    binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
+                    binding.giftCardView.setCardBackgroundColor(Color.WHITE)
+                }
+            }
         }
     }
 
@@ -135,6 +192,8 @@ class GiftListAdapter(
         fun activateMultiSelectionMode()
 
         fun isMultiSelectionModeEnabled(): Boolean
+
+        fun onIsCheckedClicked(item: Gift, position: Int)
 
     }
 }

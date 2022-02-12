@@ -3,12 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable-v24/ic_baseline_check_box_24.xml" value="0.1505" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable-v24/ic_baseline_check_box_outline_blank_24.xml" value="0.1505" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.275" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/background_gradient.xml" value="0.275" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/button_border.xml" value="0.271875" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/custom_button.xml" value="0.24322916666666666" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/custom_button_color.xml" value="0.23948717948717949" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_17mp_24.xml" value="0.275" />
+        <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.1505" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.1475" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_contact_page_24.xml" value="0.337037037037037" />
         <entry key="..\:/Projects/My Attempts at Coding/GiftApp/app/src/main/res/drawable/ic_baseline_event_24.xml" value="0.271875" />

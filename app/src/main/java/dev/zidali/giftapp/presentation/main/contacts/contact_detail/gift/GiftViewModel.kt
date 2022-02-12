@@ -7,14 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
-import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.DeleteGifts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchGifts
-import dev.zidali.giftapp.presentation.main.contacts.ContactToolbarState
-import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.presentation.update.GlobalManager
+import dev.zidali.giftapp.business.interactors.main.shared.SetIsCheckedGift
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
@@ -29,6 +26,7 @@ constructor(
     private val appDataStore: AppDataStore,
     private val fetchGifts: FetchGifts,
     private val deleteGifts: DeleteGifts,
+    private val setIsCheckedGift: SetIsCheckedGift,
 ): ViewModel() {
 
     val state: MutableLiveData<GiftState> = MutableLiveData(GiftState())
@@ -67,6 +65,12 @@ constructor(
             }
             is GiftEvents.OnRemoveHeadFromQueue -> {
                 onRemoveHeadFromQueue()
+            }
+            is GiftEvents.SetMultiSelectionMode -> {
+                setMultiSelectionMode(event.boolean)
+            }
+            is GiftEvents.SetIsCheckedGift -> {
+                setIsChecked(event.gift)
             }
         }
     }
@@ -168,6 +172,29 @@ constructor(
     private fun removeSelectedContactsFromList() {
         state.value?.contact_gifts?.removeAll(getSelectedGifts())
         clearSelectedGifts()
+    }
+
+    private fun setMultiSelectionMode(boolean: Boolean) {
+        state.value?.let { state->
+            for(gift in state.contact_gifts) {
+                gift.isMultiSelectionModeEnabled = boolean
+            }
+        }
+    }
+
+    private fun setIsChecked(item: Gift) {
+        state.value?.let { state->
+            for(gift in state.contact_gifts) {
+                if(gift.contact_gift == item.contact_gift) {
+                    item.isChecked = !item.isChecked
+                    setIsCheckedGift.execute(item).launchIn(viewModelScope)
+                }
+            }
+            if(item.isChecked) {
+                state.contact_gifts.remove(item)
+                state.contact_gifts.add(item)
+            }
+        }
     }
 
 }

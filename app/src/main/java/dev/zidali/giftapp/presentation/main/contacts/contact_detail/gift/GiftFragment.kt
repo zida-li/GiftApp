@@ -73,10 +73,12 @@ GiftListAdapter.Interaction
                 when(toolbarState) {
 
                     is GiftToolbarState.MultiSelectionState -> {
+                        globalManager.onTriggerEvent(GlobalEvents.SetMultiSelection(true))
                         activity?.invalidateOptionsMenu()
                     }
                     is GiftToolbarState.RegularState -> {
                         viewModel.onTriggerEvent(GiftEvents.ClearSelectedGifts)
+                        globalManager.onTriggerEvent(GlobalEvents.SetMultiSelection(false))
                         activity?.invalidateOptionsMenu()
                     }
                 }
@@ -110,6 +112,7 @@ GiftListAdapter.Interaction
             }
             R.id.action_exit_multiSelection -> {
                 viewModel.onTriggerEvent(GiftEvents.SetToolBarState(GiftToolbarState.RegularState))
+                viewModel.onTriggerEvent(GiftEvents.SetMultiSelectionMode(false))
             }
         }
         return super.onOptionsItemSelected(item)
@@ -170,10 +173,16 @@ GiftListAdapter.Interaction
 
     override fun activateMultiSelectionMode() {
         viewModel.onTriggerEvent(GiftEvents.SetToolBarState(GiftToolbarState.MultiSelectionState))
+        viewModel.onTriggerEvent(GiftEvents.SetMultiSelectionMode(true))
     }
 
     override fun isMultiSelectionModeEnabled(): Boolean {
         return viewModel.giftListInteractionManager.isMultiSelectionStateActive()
+    }
+
+    override fun onIsCheckedClicked(item: Gift, position: Int) {
+        viewModel.onTriggerEvent(GiftEvents.SetIsCheckedGift(item))
+        recyclerAdapter?.notifyDataSetChanged()
     }
 
     /**

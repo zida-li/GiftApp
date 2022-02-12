@@ -61,24 +61,24 @@ class CreateContactFragment : DialogFragment() {
 
     private fun subscribeObservers() {
 
-        viewModel.state.observe(viewLifecycleOwner, { state->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
 
-            if(state.createContactSuccessful) {
-                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+            if (state.createContactSuccessful) {
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateContact(true))
                 dismiss()
             }
 
             processQueue(
                 context = context,
                 queue = state.queue,
-                stateMessageCallback = object: StateMessageCallback {
+                stateMessageCallback = object : StateMessageCallback {
                     override fun removeMessageFromStack() {
                         viewModel.onTriggerEvent(CreateContactEvents.OnRemoveHeadFromQueue)
                     }
                 }
             )
 
-        })
+        }
     }
 
     private fun cacheState() {

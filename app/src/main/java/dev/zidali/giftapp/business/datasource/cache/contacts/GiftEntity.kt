@@ -30,6 +30,12 @@ data class GiftEntity (
     @ColumnInfo(name = "primary_key")
     var pk: Int,
 
+    @ColumnInfo(name ="isChecked")
+    var isChecked: Boolean,
+
+    @ColumnInfo(name = "isMultiSelectionModeEnabled")
+    var isMultiSelectionModeEnabled: Boolean,
+
 )
 
 fun Gift.toGiftEntity(): GiftEntity{
@@ -37,6 +43,8 @@ fun Gift.toGiftEntity(): GiftEntity{
         contact_gift = contact_gift,
         contact_name = contact_name,
         pk = pk,
+        isChecked = isChecked,
+        isMultiSelectionModeEnabled = isMultiSelectionModeEnabled,
     )
 }
 
@@ -44,6 +52,8 @@ fun GiftEntity.toGift(): Gift{
     return Gift(
         contact_gift = contact_gift,
         contact_name = contact_name,
-        pk = pk
+        pk = pk,
+        isChecked = isChecked,
+        isMultiSelectionModeEnabled = isMultiSelectionModeEnabled,
     )
 }

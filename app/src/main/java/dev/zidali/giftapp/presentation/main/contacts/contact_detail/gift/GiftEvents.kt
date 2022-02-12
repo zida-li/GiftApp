@@ -31,4 +31,12 @@ sealed class GiftEvents {
 
     object OnRemoveHeadFromQueue: GiftEvents()
 
+    data class SetMultiSelectionMode(
+        val boolean: Boolean
+    ): GiftEvents()
+
+    data class SetIsCheckedGift(
+        val gift: Gift
+    ): GiftEvents()
+
 }

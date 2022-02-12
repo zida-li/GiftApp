@@ -24,9 +24,18 @@
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:layout_marginBottom="10dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/checkbox"
             app:layout_constraintTop_toTopOf="parent">
         </TextView>
+
+        <ImageView
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_check_box_outline_blank_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

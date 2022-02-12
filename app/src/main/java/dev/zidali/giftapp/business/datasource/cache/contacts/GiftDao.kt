@@ -26,4 +26,7 @@ interface GiftDao {
     @Query("UPDATE gift SET contact_name = :new_contact_name WHERE primary_key = :primary_key")
     suspend fun updateContactNameGift(new_contact_name: String, primary_key: Int)
 
+    @Query("UPDATE gift SET isChecked = :isChecked WHERE contact_name =:contact_name AND contact_gift =:contact_gift")
+    suspend fun updateIsChecked(isChecked: Boolean, contact_name: String, contact_gift: String)
+
 }
