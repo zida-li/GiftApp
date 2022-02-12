@@ -5,13 +5,10 @@ import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.zidali.giftapp.R
-import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.contacts.ContactEvents
-import dev.zidali.giftapp.presentation.main.contacts.ContactToolbarState
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
@@ -36,7 +33,7 @@ GiftListAdapter.Interaction
 
     override fun onResume() {
         super.onResume()
-        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentInView(true))
+        globalManager.onTriggerEvent(GlobalEvents.SetGiftFragmentInView(true))
 //        Log.d(Constants.TAG, "GiftFragment onResume()")
     }
 
@@ -185,14 +182,14 @@ GiftListAdapter.Interaction
 
     override fun onPause() {
         super.onPause()
-        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentInView(false))
+        globalManager.onTriggerEvent(GlobalEvents.SetGiftFragmentInView(false))
 //        Log.d(Constants.TAG, "GiftFragment onPause()")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        globalManager.onTriggerEvent(GlobalEvents.GiftFragmentInView(false))
+        globalManager.onTriggerEvent(GlobalEvents.SetGiftFragmentInView(false))
 //        Log.d(Constants.TAG, "GiftFragment onDestroyView()")
     }
 }

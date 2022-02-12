@@ -30,6 +30,7 @@ ContactListAdapter.Interaction
     override fun onResume() {
         super.onResume()
         viewModel.onTriggerEvent(ContactEvents.ResetContactName)
+        globalManager.onTriggerEvent(GlobalEvents.SetContactFragmentView(true))
     }
 
     override fun onCreateView(
@@ -53,9 +54,9 @@ ContactListAdapter.Interaction
     private fun subscribeObservers() {
 
         globalManager.state.observe(viewLifecycleOwner) { state ->
-            if (state.needToUpdate) {
+            if (state.needToUpdateContact) {
                 viewModel.onTriggerEvent(ContactEvents.FetchContacts)
-                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(false))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateContact(false))
             }
         }
 
@@ -67,7 +68,7 @@ ContactListAdapter.Interaction
 
             if (state.firstLoad) {
                 viewModel.onTriggerEvent(ContactEvents.SetFirstLoad(false))
-                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateContact(true))
             }
 
             viewModel.toolbarState.observe(viewLifecycleOwner) {toolbarState->
@@ -196,10 +197,15 @@ ContactListAdapter.Interaction
         return viewModel.contactListInteractionManager.isMultiSelectionStateActive()
     }
 
+    override fun onPause() {
+        super.onPause()
+        globalManager.onTriggerEvent(GlobalEvents.SetContactFragmentView(false))
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        globalManager.onTriggerEvent(GlobalEvents.SetContactFragmentView(false))
     }
 
 }

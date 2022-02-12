@@ -6,19 +6,27 @@ sealed class GlobalEvents {
         val boolean: Boolean
     ): GlobalEvents()
 
+    data class SetNeedToUpdateContact(
+        val boolean: Boolean
+    ): GlobalEvents()
+
     data class SetNeedToUpdateEventFragment(
         val boolean: Boolean
     ): GlobalEvents()
 
-    data class GiftFragmentInView(
+    data class SetGiftFragmentInView(
         val boolean: Boolean
     ): GlobalEvents()
 
-    data class EventFragmentInView(
+    data class SetEventFragmentInView(
         val boolean: Boolean
     ): GlobalEvents()
 
-    data class setEventDetailFragmentView(
+    data class SetEventDetailFragmentView(
+        val boolean: Boolean
+    ): GlobalEvents()
+
+    data class SetContactFragmentView(
         val boolean: Boolean
     ): GlobalEvents()
 

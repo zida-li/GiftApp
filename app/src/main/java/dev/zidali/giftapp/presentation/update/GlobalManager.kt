@@ -1,5 +1,6 @@
 package dev.zidali.giftapp.presentation.update
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,17 +20,23 @@ constructor(
             is GlobalEvents.SetNeedToUpdate -> {
                 setNeedToUpdate(event.boolean)
             }
+            is GlobalEvents.SetNeedToUpdateContact -> {
+                setNeedToUpdateContact(event.boolean)
+            }
             is GlobalEvents.SetNeedToUpdateEventFragment -> {
                 setNeedToUpdateEventFragment(event.boolean)
             }
-            is GlobalEvents.GiftFragmentInView -> {
+            is GlobalEvents.SetGiftFragmentInView -> {
                 setGiftFragmentView(event.boolean)
             }
-            is GlobalEvents.EventFragmentInView -> {
+            is GlobalEvents.SetEventFragmentInView -> {
                 setEventFragmentView(event.boolean)
             }
-            is GlobalEvents.setEventDetailFragmentView -> {
+            is GlobalEvents.SetEventDetailFragmentView -> {
                 setEventDetailFragmentView(event.boolean)
+            }
+            is GlobalEvents.SetContactFragmentView -> {
+                setContactFragmentView(event.boolean)
             }
         }
     }
@@ -37,6 +44,12 @@ constructor(
     private fun setNeedToUpdate(boolean: Boolean) {
         state.value?.let { state->
             this.state.value = state.copy(needToUpdate = boolean)
+        }
+    }
+
+    private fun setNeedToUpdateContact(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(needToUpdateContact = boolean)
         }
     }
 
@@ -63,6 +76,12 @@ constructor(
     private fun setEventDetailFragmentView(boolean: Boolean) {
         state.value?.let {state->
             this.state.value = state.copy(editFragmentInView = boolean)
+        }
+    }
+
+    private fun setContactFragmentView(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(contactFragmentInView = boolean)
         }
     }
 

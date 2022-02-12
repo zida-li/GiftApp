@@ -64,9 +64,29 @@ class MainActivity : BaseActivity() {
     private fun setupAppBar() {
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.setOnItemReselectedListener { item->
+
+            when(item.itemId) {
+                R.id.nav_contact -> {
+                    navController.popBackStack(R.id.contactFragment, false)
+                }
+            }
+
+        }
+
     }
 
     private fun subscribeObservers() {
+
+        globalManager.state.observe(this) {state->
+
+            if(state.contactFragmentInView) {
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            } else {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }
+
+        }
 
         sessionManager.state.observe(this) { state ->
 

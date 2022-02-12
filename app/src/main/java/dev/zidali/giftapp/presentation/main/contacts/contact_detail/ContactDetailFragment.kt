@@ -2,15 +2,15 @@ package dev.zidali.giftapp.presentation.main.contacts.contact_detail
 
 import android.os.Bundle
 import android.text.InputType
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentContactDetailBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
+import dev.zidali.giftapp.presentation.main.contacts.contact_detail.event.EventEvents
+import dev.zidali.giftapp.presentation.main.contacts.contact_detail.event.EventToolbarState
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.util.processQueue
 
@@ -36,7 +36,7 @@ class ContactDetailFragment : BaseMainFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setHasOptionsMenu(true)
         initViewPager()
         subscribeObservers()
     }
@@ -70,6 +70,30 @@ class ContactDetailFragment : BaseMainFragment() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        if(isEditModeEnabled()) {
+            inflater.inflate(R.menu.contact_menu_edit, menu)
+        } else {
+            inflater.inflate(R.menu.contact_menu, menu)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId) {
+            R.id.action_edit -> {
+                viewModel.onTriggerEvent(ContactDetailEvents.ActivateEditMode)
+            }
+            R.id.action_finished -> {
+                cacheState()
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateContact(true))
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun initViewPager() {
 
         val viewPager = binding.viewPager
@@ -89,33 +113,30 @@ class ContactDetailFragment : BaseMainFragment() {
 
     private fun activateEditMode() {
 
+        activity?.invalidateOptionsMenu()
         val editText = binding.contactName
 
-        binding.editButton.setImageResource(R.drawable.ic_baseline_check_24)
         editText.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
         editText.requestFocus()
         editText.setSelection(editText.length())
         uiCommunicationListener.showSoftKeyboard()
-        binding.editButton.setOnClickListener {
-            cacheState()
-            viewModel.onTriggerEvent(ContactDetailEvents.UpdateContact)
-            viewModel.onTriggerEvent(ContactDetailEvents.UpdateTitle)
-            globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
-            viewModel.onTriggerEvent(ContactDetailEvents.DeactivateEditMode)
-            uiCommunicationListener.hideSoftKeyboard()
-        }
     }
 
     private fun deactivateEditMode() {
-        binding.editButton.setOnClickListener {
-            viewModel.onTriggerEvent(ContactDetailEvents.ActivateEditMode)
-        }
-        binding.editButton.setImageResource(R.drawable.ic_baseline_edit_24)
+        activity?.invalidateOptionsMenu()
         binding.contactName.inputType = InputType.TYPE_NULL
     }
 
     private fun cacheState() {
         viewModel.onTriggerEvent(ContactDetailEvents.OnUpdateContact(binding.contactName.text.toString()))
+        viewModel.onTriggerEvent(ContactDetailEvents.UpdateContact)
+        viewModel.onTriggerEvent(ContactDetailEvents.UpdateTitle)
+        viewModel.onTriggerEvent(ContactDetailEvents.DeactivateEditMode)
+        uiCommunicationListener.hideSoftKeyboard()
+    }
+
+    private fun isEditModeEnabled(): Boolean {
+        return viewModel.state.value?.isEditing!!
     }
 
     override fun onDestroyView() {

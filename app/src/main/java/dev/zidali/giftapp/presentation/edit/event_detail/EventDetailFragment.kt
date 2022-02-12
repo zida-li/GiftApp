@@ -2,7 +2,6 @@ package dev.zidali.giftapp.presentation.edit.event_detail
 
 import android.os.Build
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,7 +55,7 @@ class EventDetailFragment : BaseEditFragment() {
 
     override fun onResume() {
         super.onResume()
-        globalManager.onTriggerEvent(GlobalEvents.setEventDetailFragmentView(true))
+        globalManager.onTriggerEvent(GlobalEvents.SetEventDetailFragmentView(true))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -109,12 +108,12 @@ class EventDetailFragment : BaseEditFragment() {
 
     override fun onPause() {
         super.onPause()
-        globalManager.onTriggerEvent(GlobalEvents.setEventDetailFragmentView(false))
+        globalManager.onTriggerEvent(GlobalEvents.SetEventDetailFragmentView(false))
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        globalManager.onTriggerEvent(GlobalEvents.setEventDetailFragmentView(false))
+        globalManager.onTriggerEvent(GlobalEvents.SetEventDetailFragmentView(false))
     }
 }
