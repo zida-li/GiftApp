@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.fab.create_event
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import dev.zidali.giftapp.databinding.FragmentReminderBinding
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 
 class ReminderFragment: DialogFragment() {
 
@@ -28,8 +30,27 @@ class ReminderFragment: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.noneRadioButton.isChecked = true
-        selectedReminders.add("None")
+        val bundle = arguments
+        if(bundle != null) {
+            if (bundle.getString("REMINDER_SELECTION")?.contains("day", true)!!) {
+                selectedReminders.add("day")
+                binding.oneDayCheckbox.isChecked = true
+                selectedReminders.remove("None")
+            }
+            if (bundle.getString("REMINDER_SELECTION")?.contains("week", true)!!) {
+                selectedReminders.add("week")
+                binding.oneWeekCheckbox.isChecked = true
+                selectedReminders.remove("None")
+            }
+            if (bundle.getString("REMINDER_SELECTION")?.contains("month", true)!!) {
+                selectedReminders.add("month")
+                binding.oneMonthCheckbox.isChecked = true
+                selectedReminders.remove("None")
+            }
+        } else {
+            binding.noneRadioButton.isChecked = true
+            selectedReminders.add("None")
+        }
 
         dialog?.window?.apply {
 

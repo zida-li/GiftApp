@@ -114,52 +114,21 @@ class CreateEventFragment: DialogFragment() {
     }
 
     private fun setUpOnClickListeners() {
+
         binding.datePicker.setOnClickListener {
-            val datePickerFragment = DatePickerFragment()
-            val supportFragmentManager = requireActivity().supportFragmentManager
+            initDatePicker()
+        }
 
-            supportFragmentManager.setFragmentResultListener(
-                "DATE_PICKER_RESULT",
-                viewLifecycleOwner
-            ) { resultKey, bundle->
-                if(resultKey == "DATE_PICKER_RESULT") {
-                    val userSelection = bundle.getString("USER_SELECTION")
-                    val dataBaseFormat = bundle.getString("SELECTED_YMD")
-                    binding.datePicker.setText(userSelection)
-
-                    val selectedYear = bundle.getInt("SELECTED_YEAR")
-                    val selectedMonth = bundle.getInt("SELECTED_MONTH")
-                    val selectedDate = bundle.getInt("SELECTED_DATE")
-                    viewModel.onTriggerEvent(CreateEventEvents.OnUpdateDatePicker(
-                        selectedYear, selectedMonth, selectedDate
-                    ))
-                    viewModel.onTriggerEvent(CreateEventEvents.OnUpdateYmdFormat(dataBaseFormat!!))
-                }
-            }
-
-            datePickerFragment.isCancelable = false
-            datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
-
+        binding.datePickerContainer.setEndIconOnClickListener {
+            initDatePicker()
         }
 
         binding.reminderPicker.setOnClickListener {
-            val reminderPickerFragment = ReminderFragment()
-            val supportFragmentManager = requireActivity().supportFragmentManager
+            initReminderPicker()
+        }
 
-            supportFragmentManager.setFragmentResultListener(
-                "REMINDER_PICKER_RESULT",
-                viewLifecycleOwner
-            ) {resultKey, bundle ->
-                if(resultKey == "REMINDER_PICKER_RESULT") {
-                    val reminder = bundle.getStringArrayList("SELECTED_REMINDERS")
-                    val joinToString = reminder?.joinToString(", ")
-                    binding.reminderPicker.setText(joinToString)
-                    viewModel.onTriggerEvent(CreateEventEvents.OnUpdateReminderPicker(joinToString!!))
-                }
-            }
-
-            reminderPickerFragment.isCancelable = false
-            reminderPickerFragment.show(supportFragmentManager, "ReminderPickerFragment")
+        binding.reminderPickerContainer.setEndIconOnClickListener {
+            initReminderPicker()
         }
 
         binding.createButton.setOnClickListener {
@@ -169,6 +138,59 @@ class CreateEventFragment: DialogFragment() {
         binding.cancelButton.setOnClickListener {
             dismiss()
         }
+    }
+
+    private fun initDatePicker() {
+        val datePickerFragment = DatePickerFragment()
+        val supportFragmentManager = requireActivity().supportFragmentManager
+
+        supportFragmentManager.setFragmentResultListener(
+            "DATE_PICKER_RESULT",
+            viewLifecycleOwner
+        ) { resultKey, bundle->
+            if(resultKey == "DATE_PICKER_RESULT") {
+                val userSelection = bundle.getString("USER_SELECTION")
+                val dataBaseFormat = bundle.getString("SELECTED_YMD")
+                binding.datePicker.setText(userSelection)
+
+                val selectedYear = bundle.getInt("SELECTED_YEAR")
+                val selectedMonth = bundle.getInt("SELECTED_MONTH")
+                val selectedDate = bundle.getInt("SELECTED_DATE")
+                viewModel.onTriggerEvent(CreateEventEvents.OnUpdateDatePicker(
+                    selectedYear, selectedMonth, selectedDate
+                ))
+                viewModel.onTriggerEvent(CreateEventEvents.OnUpdateYmdFormat(dataBaseFormat!!))
+            }
+        }
+
+        datePickerFragment.isCancelable = false
+        datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+    }
+
+    private fun initReminderPicker() {
+        val reminderPickerFragment = ReminderFragment()
+        val supportFragmentManager = requireActivity().supportFragmentManager
+
+        if(viewModel.state.value?.reminderSelectionHolder != "None") {
+            val bundle = Bundle()
+            bundle.putString("REMINDER_SELECTION", viewModel.state.value?.reminderSelectionHolder)
+            reminderPickerFragment.arguments = bundle
+        }
+
+        supportFragmentManager.setFragmentResultListener(
+            "REMINDER_PICKER_RESULT",
+            viewLifecycleOwner
+        ) {resultKey, bundle ->
+            if(resultKey == "REMINDER_PICKER_RESULT") {
+                val reminder = bundle.getStringArrayList("SELECTED_REMINDERS")
+                val joinToString = reminder?.joinToString(", ")
+                binding.reminderPicker.setText(joinToString)
+                viewModel.onTriggerEvent(CreateEventEvents.OnUpdateReminderPicker(joinToString!!))
+            }
+        }
+
+        reminderPickerFragment.isCancelable = false
+        reminderPickerFragment.show(supportFragmentManager, "ReminderPickerFragment")
     }
 
     override fun onDestroy() {

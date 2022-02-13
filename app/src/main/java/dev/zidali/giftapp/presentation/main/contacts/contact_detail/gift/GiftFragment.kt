@@ -9,6 +9,7 @@ import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
+import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
@@ -40,8 +41,6 @@ GiftListAdapter.Interaction
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        //removing contact name from appbar because it's already in the title box.
-//        (activity as MainActivity).supportActionBar?.title = viewModel.state.value?.contact_name
         subscribeObservers()
         initRecyclerView()
     }
