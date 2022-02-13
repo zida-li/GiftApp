@@ -182,7 +182,12 @@ GiftListAdapter.Interaction
 
     override fun onIsCheckedClicked(item: Gift, position: Int) {
         viewModel.onTriggerEvent(GiftEvents.SetIsCheckedGift(item))
-        recyclerAdapter?.notifyDataSetChanged()
+        if (item.isChecked) {
+            recyclerAdapter?.notifyItemChanged(position)
+            recyclerAdapter?.notifyItemMoved(position, viewModel.state.value?.contact_gifts?.size!!)
+        } else {
+            recyclerAdapter?.notifyItemChanged(position)
+        }
     }
 
     /**

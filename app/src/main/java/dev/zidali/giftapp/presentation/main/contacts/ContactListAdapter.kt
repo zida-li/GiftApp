@@ -114,13 +114,13 @@ class ContactListAdapter(
 
                 if(contact != null) {
                     if (contact.contains(mContact)) {
-                        binding.contactCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
+                        binding.contactCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
                     }
                     else {
-                        binding.contactCardView.setBackgroundColor(Color.WHITE)
+                        binding.contactCardView.setCardBackgroundColor(Color.WHITE)
                     }
                 } else {
-                    binding.contactCardView.setBackgroundColor(Color.WHITE)
+                    binding.contactCardView.setCardBackgroundColor(Color.WHITE)
                 }
             }
 
