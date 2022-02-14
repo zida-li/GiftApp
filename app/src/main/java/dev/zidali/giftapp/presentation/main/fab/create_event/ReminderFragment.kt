@@ -70,31 +70,31 @@ class ReminderFragment: DialogFragment() {
 
         binding.oneDayCheckbox.setOnCheckedChangeListener{_, isChecked->
             if(isChecked) {
-                selectedReminders.add("day")
+                selectedReminders.add("Day")
                 binding.noneRadioButton.isChecked = false
                 selectedReminders.remove("None")
             } else {
-                selectedReminders.remove("day")
+                selectedReminders.remove("Day")
             }
         }
 
         binding.oneWeekCheckbox.setOnCheckedChangeListener{_, isChecked->
             if(isChecked) {
-                selectedReminders.add("week")
+                selectedReminders.add("Week")
                 binding.noneRadioButton.isChecked = false
                 selectedReminders.remove("None")
             } else {
-                selectedReminders.remove("week")
+                selectedReminders.remove("Week")
             }
         }
 
         binding.oneMonthCheckbox.setOnCheckedChangeListener{_, isChecked->
             if(isChecked) {
-                selectedReminders.add("month")
+                selectedReminders.add("Month")
                 binding.noneRadioButton.isChecked = false
                 selectedReminders.remove("None")
             } else {
-                selectedReminders.remove("month")
+                selectedReminders.remove("Month")
             }
         }
 

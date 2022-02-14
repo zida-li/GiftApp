@@ -68,7 +68,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/date_reminder_layoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,14 +77,20 @@
         app:layout_constraintTop_toBottomOf="@+id/input_name_container"
         android:orientation="horizontal">
 
+        <View android:id="@+id/midline"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/date_picker_container"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:padding="5dp"
+        android:layout_alignEnd="@id/midline"
         android:text="@string/date"
         android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:maxLines="1"
         >
@@ -104,8 +110,9 @@
         android:id="@+id/reminder_picker_container"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:padding="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_alignStart="@id/midline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:layout_weight="0.5"
         android:maxLines="1"
@@ -115,13 +122,13 @@
             android:id="@+id/reminder_picker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/none"
+            android:hint="@string/reminder"
             android:inputType="none"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/cancel_create_layoutContainer"

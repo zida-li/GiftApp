@@ -186,24 +186,36 @@ class EventListAdapter(
                 if(contactEvent != null) {
                     if (contactEvent.contains(mContactEvent)) {
                         binding.eventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
+                        setTextColor(Color.WHITE)
                     }
                     else {
                         if(today > alarmDate) {
                             binding.eventCardView.setCardBackgroundColor(Color.GRAY)
+                            setTextColor(Color.BLACK)
                         } else {
                             binding.eventCardView.setCardBackgroundColor(Color.WHITE)
+                            setTextColor(Color.BLACK)
                         }
                     }
                 } else {
                     if(today > alarmDate) {
                         binding.eventCardView.setCardBackgroundColor(Color.GRAY)
+                        setTextColor(Color.BLACK)
                     } else {
                         binding.eventCardView.setCardBackgroundColor(Color.WHITE)
+                        setTextColor(Color.BLACK)
                     }
                 }
 
             }
 
+        }
+
+        private fun setTextColor(color: Int) {
+            binding.event.setTextColor(color)
+            binding.year.setTextColor(color)
+            binding.month.setTextColor(color)
+            binding.date.setTextColor(color)
         }
     }
 

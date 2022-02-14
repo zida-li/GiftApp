@@ -125,24 +125,45 @@ class GiftListAdapter(
                 if(gift != null) {
                     if (gift.contains(mGift)) {
                         binding.giftCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
+                        setTextColor(Color.WHITE)
+                        setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24_white)
+                        if(mGift.isChecked) {
+                            setCheckBox(R.drawable.ic_baseline_check_box_24_white)
+                        }
                     }
                     else {
                         if(item.isChecked) {
                             binding.giftCardView.setBackgroundColor(Color.GRAY)
+                            setTextColor(Color.BLACK)
+                            setCheckBox(R.drawable.ic_baseline_check_box_24)
                         } else {
                             binding.giftCardView.setBackgroundColor(Color.WHITE)
+                            setTextColor(Color.BLACK)
+                            setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24)
                         }
                     }
                 } else {
                     if(item.isChecked) {
                         binding.giftCardView.setBackgroundColor(Color.GRAY)
+                        setTextColor(Color.BLACK)
+                        setCheckBox(R.drawable.ic_baseline_check_box_24)
                     } else {
                         binding.giftCardView.setBackgroundColor(Color.WHITE)
+                        setTextColor(Color.BLACK)
+                        setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24)
                     }
                 }
 
             }
 
+        }
+
+        private fun setTextColor(color: Int) {
+            binding.giftName.setTextColor(color)
+        }
+
+        private fun setCheckBox(resId: Int) {
+            binding.checkbox.setImageResource(resId)
         }
 
         private fun checkCheckedOnInit(

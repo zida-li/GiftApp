@@ -33,6 +33,7 @@
     <string name="none">None</string>
     <string name="edit_event">Edit Event</string>
     <string name="finished">Finished</string>
+    <string name="event_name">Event Name</string>
 
     <string name="favorite">Favorite</string>
     <string name="account">Account</string>

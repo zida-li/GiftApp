@@ -115,15 +115,22 @@ class ContactListAdapter(
                 if(contact != null) {
                     if (contact.contains(mContact)) {
                         binding.contactCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
+                        setTextColor(Color.WHITE)
                     }
                     else {
                         binding.contactCardView.setCardBackgroundColor(Color.WHITE)
+                        setTextColor(Color.BLACK)
                     }
                 } else {
                     binding.contactCardView.setCardBackgroundColor(Color.WHITE)
+                    setTextColor(Color.BLACK)
                 }
             }
 
+        }
+
+        private fun setTextColor(color: Int) {
+            binding.contactName.setTextColor(color)
         }
     }
 

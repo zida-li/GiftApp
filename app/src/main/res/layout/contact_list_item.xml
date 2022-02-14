@@ -21,10 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="21dp"
-            android:gravity="center"
             android:text="@string/holder_text"
             android:textColor="@android:color/black"
             android:textSize="18sp"
+            android:textAlignment="textStart"
             android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

@@ -56,8 +56,6 @@ class ContactDetailFragment : BaseMainFragment() {
 
             (activity as MainActivity).supportActionBar?.title = state.contact_name
 
-            binding.contactName.setText(state.contact_name)
-
             if (state.isEditing) {
                 activateEditMode()
             }
@@ -105,6 +103,8 @@ class ContactDetailFragment : BaseMainFragment() {
             val icon: ImageView = searchView.findViewById(androidx.appcompat.R.id.search_button)
             icon.setImageResource(R.drawable.ic_baseline_edit_24)
 
+            val searchGoBtn: ImageView = searchView.findViewById(androidx.appcompat.R.id.search_go_btn)
+            searchGoBtn.setImageResource(R.drawable.ic_baseline_check_24)
         }
 
         val searchPlate = searchView.findViewById(R.id.search_src_text) as EditText
@@ -165,17 +165,17 @@ class ContactDetailFragment : BaseMainFragment() {
     private fun activateEditMode() {
 
         activity?.invalidateOptionsMenu()
-        val editText = binding.contactName
-
-        editText.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
-        editText.requestFocus()
-        editText.setSelection(editText.length())
+//        val editText = binding.contactName
+//
+//        editText.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
+//        editText.requestFocus()
+//        editText.setSelection(editText.length())
         uiCommunicationListener.showSoftKeyboard()
     }
 
     private fun deactivateEditMode() {
         activity?.invalidateOptionsMenu()
-        binding.contactName.inputType = InputType.TYPE_NULL
+//        binding.contactName.inputType = InputType.TYPE_NULL
     }
 
     private fun cacheState(new_name: String) {
