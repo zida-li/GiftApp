@@ -4,30 +4,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
     app:cardElevation="10dp"
     app:cardCornerRadius="4dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginBottom="8dp"
     android:id="@+id/contactCardView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/contact_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="21dp"
             android:text="@string/holder_text"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textAlignment="textStart"
-            android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:ellipsize="end"
+            android:maxLines="1"
+            >
         </TextView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

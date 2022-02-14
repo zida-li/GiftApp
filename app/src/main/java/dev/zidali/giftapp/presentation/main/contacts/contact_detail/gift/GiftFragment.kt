@@ -124,9 +124,9 @@ GiftListAdapter.Interaction
     private fun initRecyclerView() {
         binding.giftRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@GiftFragment.context)
-            val topSpacingDecorator = TopSpacingItemDecoration(30)
-            removeItemDecoration(topSpacingDecorator)
-            addItemDecoration(topSpacingDecorator)
+//            val topSpacingDecorator = TopSpacingItemDecoration(30)
+//            removeItemDecoration(topSpacingDecorator)
+//            addItemDecoration(topSpacingDecorator)
             recyclerAdapter = GiftListAdapter(
                 this@GiftFragment,
                 viewLifecycleOwner,

@@ -1,8 +1,8 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -10,10 +10,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.*
 import dev.zidali.giftapp.R
-import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.databinding.GiftListItemBinding
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 
 class GiftListAdapter(
     private val interaction: Interaction? = null,
@@ -124,8 +122,8 @@ class GiftListAdapter(
 
                 if(gift != null) {
                     if (gift.contains(mGift)) {
-                        binding.giftCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
-                        setTextColor(Color.WHITE)
+                        binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
+                        setNameColor(Color.WHITE)
                         setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24_white)
                         if(mGift.isChecked) {
                             setCheckBox(R.drawable.ic_baseline_check_box_24_white)
@@ -133,23 +131,23 @@ class GiftListAdapter(
                     }
                     else {
                         if(item.isChecked) {
-                            binding.giftCardView.setBackgroundColor(Color.GRAY)
-                            setTextColor(Color.BLACK)
+                            binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
+                            setNameColor(ContextCompat.getColor(context, R.color.inactive_name_color))
                             setCheckBox(R.drawable.ic_baseline_check_box_24)
                         } else {
-                            binding.giftCardView.setBackgroundColor(Color.WHITE)
-                            setTextColor(Color.BLACK)
+                            binding.giftCardView.setCardBackgroundColor(Color.WHITE)
+                            setNameColor(Color.BLACK)
                             setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24)
                         }
                     }
                 } else {
                     if(item.isChecked) {
-                        binding.giftCardView.setBackgroundColor(Color.GRAY)
-                        setTextColor(Color.BLACK)
+                        binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
+                        setNameColor(ContextCompat.getColor(context, R.color.inactive_name_color))
                         setCheckBox(R.drawable.ic_baseline_check_box_24)
                     } else {
-                        binding.giftCardView.setBackgroundColor(Color.WHITE)
-                        setTextColor(Color.BLACK)
+                        binding.giftCardView.setCardBackgroundColor(Color.WHITE)
+                        setNameColor(Color.BLACK)
                         setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24)
                     }
                 }
@@ -158,12 +156,16 @@ class GiftListAdapter(
 
         }
 
-        private fun setTextColor(color: Int) {
+        private fun setNameColor(color: Int) {
             binding.giftName.setTextColor(color)
         }
 
         private fun setCheckBox(resId: Int) {
             binding.checkbox.setImageResource(resId)
+        }
+
+        private fun setCardColor(context: Context, color: Int) {
+            binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, color))
         }
 
         private fun checkCheckedOnInit(
@@ -173,16 +175,16 @@ class GiftListAdapter(
                 binding.giftName.apply {
                     text = item.contact_gift
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_24)
+                    binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
                 }
-                binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_24)
-                binding.giftCardView.setCardBackgroundColor(Color.GRAY)
             } else if (!item.isChecked) {
                 binding.giftName.apply {
                     text = item.contact_gift
                     paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
+                    binding.giftCardView.setCardBackgroundColor(Color.WHITE)
                 }
-                binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
-                binding.giftCardView.setCardBackgroundColor(Color.WHITE)
             }
         }
 
@@ -193,14 +195,14 @@ class GiftListAdapter(
                     text = item.contact_gift
                     paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_24)
-                    binding.giftCardView.setCardBackgroundColor(Color.GRAY)
+                    binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
                 } else {
                     binding.giftName.apply {
                         text = item.contact_gift
                         paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                        binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
+                        binding.giftCardView.setCardBackgroundColor(Color.WHITE)
                     }
-                    binding.checkbox.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
-                    binding.giftCardView.setCardBackgroundColor(Color.WHITE)
                 }
             }
         }

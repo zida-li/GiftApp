@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color_primary"
+    >
 
     <View android:id="@+id/topDivider"
         android:layout_width="match_parent"
@@ -34,6 +36,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/view_pager"
+        android:background="@color/background_color_primary"
         />
 
     <androidx.viewpager2.widget.ViewPager2

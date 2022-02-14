@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
 import android.graphics.Color
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
