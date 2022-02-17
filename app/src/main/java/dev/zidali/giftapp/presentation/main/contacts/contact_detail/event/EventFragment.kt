@@ -126,9 +126,10 @@ EventListAdapter.Interaction {
     private fun initRecyclerView() {
         binding.eventsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@EventFragment.context)
-            val topSpacingDecorator = TopSpacingItemDecoration(30)
-            removeItemDecoration(topSpacingDecorator)
-            addItemDecoration(topSpacingDecorator)
+//            val topSpacingDecorator = TopSpacingItemDecoration(30)
+//            removeItemDecoration(topSpacingDecorator)
+//            addItemDecoration(topSpacingDecorator)
+            setBackgroundColor(context.getColor(R.color.background_color_primary))
             recyclerAdapter = EventListAdapter(
                 this@EventFragment,
                 viewLifecycleOwner,

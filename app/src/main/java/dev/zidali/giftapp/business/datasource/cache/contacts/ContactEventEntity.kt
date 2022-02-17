@@ -45,6 +45,9 @@ data class ContactEventEntity (
     @ColumnInfo(name = "ymd_format")
     var ymd_format: String,
 
+    @ColumnInfo(name = "expired")
+    var expired: Boolean,
+
 )
 
 fun ContactEvent.toContactEventEntity(): ContactEventEntity {
@@ -57,6 +60,7 @@ fun ContactEvent.toContactEventEntity(): ContactEventEntity {
         day = day,
         pk = pk,
         ymd_format = ymd_format,
+        expired = expired,
     )
 }
 
@@ -70,5 +74,6 @@ fun ContactEventEntity.toContactEvent(): ContactEvent {
         day = day,
         pk = pk,
         ymd_format = ymd_format,
+        expired = expired,
     )
 }

@@ -16,7 +16,9 @@ import dev.zidali.giftapp.business.interactors.main.shared.UpdateContactEventRem
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class AllEventViewModel
@@ -79,6 +81,7 @@ constructor(
                 }
 
             }.launchIn(viewModelScope)
+
         }
     }
 
@@ -136,6 +139,7 @@ constructor(
                     day = contactEvent.day,
                     pk = contactEvent.pk,
                     ymd_format = contactEvent.ymd_format,
+                    expired = contactEvent.expired,
                 )
             )
         }

@@ -1,6 +1,5 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
@@ -132,7 +131,7 @@ class GiftListAdapter(
                     else {
                         if(item.isChecked) {
                             binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
-                            setNameColor(ContextCompat.getColor(context, R.color.inactive_name_color))
+                            setNameColor(ContextCompat.getColor(context, R.color.light_gray))
                             setCheckBox(R.drawable.ic_baseline_check_box_24)
                         } else {
                             binding.giftCardView.setCardBackgroundColor(Color.WHITE)
@@ -143,7 +142,7 @@ class GiftListAdapter(
                 } else {
                     if(item.isChecked) {
                         binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
-                        setNameColor(ContextCompat.getColor(context, R.color.inactive_name_color))
+                        setNameColor(ContextCompat.getColor(context, R.color.light_gray))
                         setCheckBox(R.drawable.ic_baseline_check_box_24)
                     } else {
                         binding.giftCardView.setCardBackgroundColor(Color.WHITE)
@@ -162,10 +161,6 @@ class GiftListAdapter(
 
         private fun setCheckBox(resId: Int) {
             binding.checkbox.setImageResource(resId)
-        }
-
-        private fun setCardColor(context: Context, color: Int) {
-            binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, color))
         }
 
         private fun checkCheckedOnInit(

@@ -186,24 +186,28 @@ class EventListAdapter(
                 if(contactEvent != null) {
                     if (contactEvent.contains(mContactEvent)) {
                         binding.eventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
-                        setTextColor(Color.WHITE)
+                        setTextColor(Color.WHITE, Color.WHITE)
                     }
                     else {
                         if(today > alarmDate) {
-                            binding.eventCardView.setCardBackgroundColor(Color.GRAY)
-                            setTextColor(Color.BLACK)
+                            binding.eventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
+                            setTextColor(Color.BLACK, ContextCompat.getColor(context, R.color.light_gray))
+                            binding.eventCardView.elevation = 5f
                         } else {
                             binding.eventCardView.setCardBackgroundColor(Color.WHITE)
-                            setTextColor(Color.BLACK)
+                            setTextColor(Color.BLACK, ContextCompat.getColor(context, R.color.darker_gray))
+                            binding.eventCardView.elevation = 10f
                         }
                     }
                 } else {
                     if(today > alarmDate) {
-                        binding.eventCardView.setCardBackgroundColor(Color.GRAY)
-                        setTextColor(Color.BLACK)
+                        binding.eventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
+                        setTextColor(Color.BLACK, ContextCompat.getColor(context, R.color.light_gray))
+                        binding.eventCardView.elevation = 5f
                     } else {
                         binding.eventCardView.setCardBackgroundColor(Color.WHITE)
-                        setTextColor(Color.BLACK)
+                        setTextColor(Color.BLACK, ContextCompat.getColor(context, R.color.darker_gray))
+                        binding.eventCardView.elevation = 10f
                     }
                 }
 
@@ -211,11 +215,11 @@ class EventListAdapter(
 
         }
 
-        private fun setTextColor(color: Int) {
-            binding.event.setTextColor(color)
-            binding.year.setTextColor(color)
-            binding.month.setTextColor(color)
-            binding.date.setTextColor(color)
+        private fun setTextColor(eventColor: Int, dateColor: Int) {
+            binding.event.setTextColor(eventColor)
+            binding.year.setTextColor(dateColor)
+            binding.month.setTextColor(dateColor)
+            binding.date.setTextColor(dateColor)
         }
     }
 

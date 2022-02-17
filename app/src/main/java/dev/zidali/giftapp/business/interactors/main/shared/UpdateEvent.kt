@@ -10,6 +10,7 @@ import dev.zidali.giftapp.business.domain.util.UIComponentType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import java.util.*
 
 class UpdateEvent(
     private val contactEventDao: ContactEventDao,
@@ -20,6 +21,15 @@ class UpdateEvent(
         updatedEvent: ContactEvent,
     ): Flow<DataState<ContactEvent>> = flow<DataState<ContactEvent>> {
 
+        val today = Calendar.getInstance()
+
+        val alarmDate = Calendar.getInstance(Locale.getDefault())
+        alarmDate.set(Calendar.MONTH, updatedEvent.month)
+        alarmDate.set(Calendar.DAY_OF_MONTH, updatedEvent.day)
+        alarmDate.set(Calendar.YEAR, updatedEvent.year)
+
+        updatedEvent.expired = today > alarmDate
+
         contactEventDao.updateContactEvent(
             updatedEvent.contact_event,
             updatedEvent.contact_event_reminder,
@@ -27,6 +37,7 @@ class UpdateEvent(
             updatedEvent.month,
             updatedEvent.day,
             updatedEvent.ymd_format,
+            updatedEvent.expired,
             initialEvent.contact_event,
             initialEvent.contact_name,
         )

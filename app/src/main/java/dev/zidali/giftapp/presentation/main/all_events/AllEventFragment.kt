@@ -115,9 +115,9 @@ AllEventListAdapter.Interaction {
     private fun initRecyclerView() {
         binding.allEventsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@AllEventFragment.context)
-            val topSpacingDecorator = TopSpacingItemDecoration(30)
-            removeItemDecoration(topSpacingDecorator)
-            addItemDecoration(topSpacingDecorator)
+//            val topSpacingDecorator = TopSpacingItemDecoration(30)
+//            removeItemDecoration(topSpacingDecorator)
+//            addItemDecoration(topSpacingDecorator)
             recyclerAdapter = AllEventListAdapter(
                 this@AllEventFragment,
                 viewLifecycleOwner,

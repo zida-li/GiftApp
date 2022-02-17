@@ -31,6 +31,6 @@
         android:id="@+id/nav_events"
         android:icon="@drawable/ic_baseline_event_24"
         android:enabled="true"
-        android:title="@string/event"
+        android:title="@string/events"
         app:showAsAction="withText" />
 </menu>

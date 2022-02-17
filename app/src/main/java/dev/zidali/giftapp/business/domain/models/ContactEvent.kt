@@ -10,5 +10,6 @@ data class ContactEvent(
     var day: Int,
     var pk: Int,
     var ymd_format: String,
+    var expired: Boolean,
 
 )

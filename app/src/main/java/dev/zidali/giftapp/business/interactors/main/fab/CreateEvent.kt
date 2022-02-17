@@ -10,6 +10,7 @@ import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import java.util.*
 
 class CreateEvent(
     private val contactEventDao: ContactEventDao,
@@ -22,6 +23,17 @@ class CreateEvent(
 
         val contactPk = contactDao.getByName(contactEvent.contact_name)
 
+        val today = Calendar.getInstance()
+
+        val alarmDate = Calendar.getInstance(Locale.getDefault())
+        alarmDate.set(Calendar.MONTH, contactEvent.month)
+        alarmDate.set(Calendar.DAY_OF_MONTH, contactEvent.day)
+        alarmDate.set(Calendar.YEAR, contactEvent.year)
+
+        if (today > alarmDate) {
+            contactEvent.expired = true
+        }
+
         val finalContactEvent = ContactEvent(
             contact_name = contactEvent.contact_name,
             contact_event = contactEvent.contact_event,
@@ -31,6 +43,7 @@ class CreateEvent(
             day = contactEvent.day,
             pk = contactPk?.pk!!,
             ymd_format = contactEvent.ymd_format,
+            expired = contactEvent.expired,
         )
 
         contactEventDao.insert(finalContactEvent.toContactEventEntity())

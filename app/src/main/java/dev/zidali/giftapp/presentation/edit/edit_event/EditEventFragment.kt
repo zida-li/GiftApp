@@ -62,7 +62,7 @@ class EditEventFragment : BaseEditFragment() {
                 state.contact_event?.let { setEventProperties(it) }
             }
 
-            (activity as EditEventActivity).supportActionBar?.title = state.contact_event?.contact_name
+//            (activity as EditEventActivity).supportActionBar?.title = state.contact_event?.contact_name
 
             if(state.editEventSuccessful) {
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))

@@ -17,7 +17,7 @@
     <string name="select_contact">Select Contact</string>
     <string name="add_gift">Add Gift</string>
     <string name="create_event">Create Event</string>
-    <string name="event">Events</string>
+    <string name="events">Events</string>
     <string name="gift">Gift</string>
     <string name="date">Date</string>
     <string name="reminder">Reminder</string>
@@ -34,6 +34,10 @@
     <string name="edit_event">Edit Event</string>
     <string name="finished">Finished</string>
     <string name="event_name">Event Name</string>
+    <string name="when">When</string>
+    <string name="when_colon">When:</string>
+    <string name="reminder_colon">Reminder:</string>
+    <string name="event">Event</string>
 
     <string name="favorite">Favorite</string>
     <string name="account">Account</string>

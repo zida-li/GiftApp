@@ -7,22 +7,42 @@
     app:cardElevation="10dp"
     app:cardCornerRadius="4dp"
     app:cardPreventCornerOverlap="false"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginBottom="8dp"
     android:id="@+id/eventCardView"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:padding="12dp"
         >
+
+        <TextView
+            android:id="@+id/event"
+            android:text="@string/holder_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textStyle="bold"
+            />
+
+        <ImageView
+            android:id="@+id/notificationIcon"
+            android:src="@drawable/ic_baseline_notifications_24_inactive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/event"
         app:layout_constraintLeft_toLeftOf="parent"
         android:orientation="horizontal"
         android:id="@+id/calendar_container"
@@ -58,25 +78,6 @@
             />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/event"
-        android:text="@string/holder_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/calendar_container"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
-
-        <ImageView
-            android:id="@+id/notificationIcon"
-            android:src="@drawable/ic_baseline_notifications_24_inactive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

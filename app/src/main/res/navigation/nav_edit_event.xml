@@ -15,6 +15,6 @@
     <fragment
         android:id="@+id/editEventFragment"
         android:name="dev.zidali.giftapp.presentation.edit.edit_event.EditEventFragment"
-        android:label="" />
+        android:label="Edit Event" />
 
 </navigation>

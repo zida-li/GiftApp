@@ -5,12 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.main.all_events.AllEventFragment">
+    tools:context=".presentation.main.all_events.AllEventFragment"
+    android:background="@color/background_color_primary"
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_events_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

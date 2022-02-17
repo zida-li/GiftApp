@@ -167,6 +167,7 @@ constructor(
                     day = contactEvent.day,
                     pk = contactEvent.pk,
                     ymd_format = contactEvent.ymd_format,
+                    expired = contactEvent.expired,
                 )
             )
         }
