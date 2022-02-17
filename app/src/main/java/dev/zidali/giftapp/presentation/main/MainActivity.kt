@@ -47,6 +47,10 @@ class MainActivity : BaseActivity() {
         setupActionBar()
         setupAppBar()
 
+        if(navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/contactFragment") {
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
+
     }
 
     private fun setupActionBar() {
@@ -77,16 +81,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun subscribeObservers() {
-
-        globalManager.state.observe(this) {state->
-
-            if(state.contactFragmentInView) {
-                supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            } else {
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            }
-
-        }
 
         sessionManager.state.observe(this) { state ->
 

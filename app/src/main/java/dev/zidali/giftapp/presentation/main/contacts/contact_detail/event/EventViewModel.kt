@@ -141,7 +141,7 @@ constructor(
                 if(event.contact_event == contactEvent.contact_event
                     && event.contact_name == contactEvent.contact_name) {
 
-                    contactEvent.contact_event_reminder = ""
+                    contactEvent.contact_event_reminder = "None"
 
                     updateContactEventReminder.execute(contactEvent).onEach { dataState ->
 

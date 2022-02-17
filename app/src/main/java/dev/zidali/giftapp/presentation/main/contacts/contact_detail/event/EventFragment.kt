@@ -76,10 +76,12 @@ EventListAdapter.Interaction {
                 when(toolbarState) {
 
                     is EventToolbarState.MultiSelectionState -> {
+                        globalManager.onTriggerEvent(GlobalEvents.SetMultiSelection(true))
                         activity?.invalidateOptionsMenu()
                     }
                     is EventToolbarState.RegularState -> {
                         viewModel.onTriggerEvent(EventEvents.ClearSelectedContactEvents)
+                        globalManager.onTriggerEvent(GlobalEvents.SetMultiSelection(false))
                         activity?.invalidateOptionsMenu()
                     }
                 }
@@ -229,6 +231,8 @@ EventListAdapter.Interaction {
     override fun onPause() {
         super.onPause()
         globalManager.onTriggerEvent(GlobalEvents.SetEventFragmentInView(false))
+        viewModel.onTriggerEvent(EventEvents.SetToolBarState(EventToolbarState.RegularState))
+        uiCommunicationListener.hideSoftKeyboard()
 //        Log.d(TAG, "EventFragment onPause()")
     }
 

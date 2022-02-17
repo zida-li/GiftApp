@@ -9,12 +9,23 @@
     android:padding="15dp"
     >
 
+    <TextView
+        android:id="@+id/create_contact_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/create_contact"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_name_container"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_contact_Title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintHorizontal_weight="1"
         android:hint="@string/name">

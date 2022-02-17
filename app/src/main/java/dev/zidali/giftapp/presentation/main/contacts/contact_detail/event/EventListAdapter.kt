@@ -164,7 +164,7 @@ class EventListAdapter(
                     item.contact_event_reminder.contains("month",true)) {
 
                     interaction?.turnOffNotifications(item)
-                    binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_24_inactive)
+                    binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_inactive)
 
                 } else {
 
@@ -176,9 +176,9 @@ class EventListAdapter(
             if(item.contact_event_reminder.contains("day", true) ||
                 item.contact_event_reminder.contains("week", true) ||
                 item.contact_event_reminder.contains("month",true)) {
-                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_active_24)
+                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_active)
             } else {
-                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_24_inactive)
+                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_inactive)
             }
 
             selectedContactEvents.observe(lifecycleOwner) {contactEvent->
@@ -187,6 +187,11 @@ class EventListAdapter(
                     if (contactEvent.contains(mContactEvent)) {
                         binding.eventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
                         setTextColor(Color.WHITE, Color.WHITE)
+                        if (mContactEvent.contact_event_reminder == "None") {
+                            setIcon(R.drawable.ic_baseline_notifications_inactive_white)
+                        } else {
+                            setIcon(R.drawable.ic_baseline_notifications_active_white)
+                        }
                     }
                     else {
                         if(today > alarmDate) {
@@ -196,7 +201,12 @@ class EventListAdapter(
                         } else {
                             binding.eventCardView.setCardBackgroundColor(Color.WHITE)
                             setTextColor(Color.BLACK, ContextCompat.getColor(context, R.color.darker_gray))
-                            binding.eventCardView.elevation = 10f
+                            binding.eventCardView.elevation = 20f
+                            if (mContactEvent.contact_event_reminder == "None") {
+                                setIcon(R.drawable.ic_baseline_notifications_inactive)
+                            } else {
+                                setIcon(R.drawable.ic_baseline_notifications_active)
+                            }
                         }
                     }
                 } else {
@@ -207,7 +217,12 @@ class EventListAdapter(
                     } else {
                         binding.eventCardView.setCardBackgroundColor(Color.WHITE)
                         setTextColor(Color.BLACK, ContextCompat.getColor(context, R.color.darker_gray))
-                        binding.eventCardView.elevation = 10f
+                        binding.eventCardView.elevation = 20f
+                        if (mContactEvent.contact_event_reminder == "None") {
+                            setIcon(R.drawable.ic_baseline_notifications_inactive)
+                        } else {
+                            setIcon(R.drawable.ic_baseline_notifications_active)
+                        }
                     }
                 }
 
@@ -220,6 +235,10 @@ class EventListAdapter(
             binding.year.setTextColor(dateColor)
             binding.month.setTextColor(dateColor)
             binding.date.setTextColor(dateColor)
+        }
+
+        private fun setIcon(icon: Int) {
+            binding.notificationIcon.setImageResource(icon)
         }
     }
 

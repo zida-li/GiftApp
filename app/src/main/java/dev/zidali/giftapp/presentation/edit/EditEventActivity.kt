@@ -51,7 +51,7 @@ class EditEventActivity: BaseActivity() {
         globalManager.state.observe(this) {state->
 
              if(state.editFragmentInView) {
-                 supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_close_24)
+//                 supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_close_24)
                  supportActionBar?.setDisplayHomeAsUpEnabled(true)
              }
         }

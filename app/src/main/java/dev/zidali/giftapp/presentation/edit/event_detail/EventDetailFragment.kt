@@ -73,7 +73,7 @@ class EventDetailFragment : BaseEditFragment() {
 
             state.contact_event?.let { setEventProperties(it) }
 
-            (activity as EditEventActivity).supportActionBar?.title = state.contact_event?.contact_name
+            (activity as EditEventActivity).supportActionBar?.title = state.contact_event?.contact_event
 
             processQueue(
                 context = context,
@@ -98,6 +98,7 @@ class EventDetailFragment : BaseEditFragment() {
         val userSelection = SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH).format(calendar.time)
 
         binding.inputEvent.text = contactEvent.contact_event
+        binding.inputName.text = contactEvent.contact_name
         binding.datePicker.text = userSelection
         if(contactEvent.contact_event_reminder != "") {
             binding.reminderPicker.text = contactEvent.contact_event_reminder

@@ -99,6 +99,8 @@ class ContactListAdapter(
 
         fun bind(item: Contact) = with(itemView) {
 
+            binding.contactCardView.elevation = 20f
+
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }

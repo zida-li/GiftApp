@@ -16,7 +16,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         >
 
         <TextView
@@ -26,12 +29,13 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:textSize="18sp"
             android:textStyle="bold"
             />
 
         <ImageView
             android:id="@+id/notificationIcon"
-            android:src="@drawable/ic_baseline_notifications_24_inactive"
+            android:src="@drawable/ic_baseline_notifications_inactive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"

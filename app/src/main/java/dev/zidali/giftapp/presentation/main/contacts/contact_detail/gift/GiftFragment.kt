@@ -196,6 +196,9 @@ GiftListAdapter.Interaction
     override fun onPause() {
         super.onPause()
         globalManager.onTriggerEvent(GlobalEvents.SetGiftFragmentInView(false))
+        viewModel.onTriggerEvent(GiftEvents.SetToolBarState(GiftToolbarState.RegularState))
+        viewModel.onTriggerEvent(GiftEvents.SetMultiSelectionMode(false))
+        uiCommunicationListener.hideSoftKeyboard()
 //        Log.d(Constants.TAG, "GiftFragment onPause()")
     }
 

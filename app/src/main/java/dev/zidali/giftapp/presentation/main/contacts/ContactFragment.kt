@@ -31,7 +31,6 @@ ContactListAdapter.Interaction
     override fun onResume() {
         super.onResume()
         viewModel.onTriggerEvent(ContactEvents.ResetContactName)
-        globalManager.onTriggerEvent(GlobalEvents.SetContactFragmentView(true))
     }
 
     override fun onCreateView(
@@ -48,6 +47,7 @@ ContactListAdapter.Interaction
         setHasOptionsMenu(true)
         subscribeObservers()
         initRecyclerView()
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
 
@@ -200,13 +200,11 @@ ContactListAdapter.Interaction
 
     override fun onPause() {
         super.onPause()
-        globalManager.onTriggerEvent(GlobalEvents.SetContactFragmentView(false))
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        globalManager.onTriggerEvent(GlobalEvents.SetContactFragmentView(false))
     }
 
 }

@@ -3,6 +3,7 @@ package dev.zidali.giftapp.presentation.main.all_events
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
@@ -18,6 +19,8 @@ import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.main.fab.create_event.ReminderFragment
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
+import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
@@ -44,6 +47,7 @@ AllEventListAdapter.Interaction {
         setHasOptionsMenu(true)
         subscribeObservers()
         initRecyclerView()
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     override fun onResume() {
@@ -208,6 +212,13 @@ AllEventListAdapter.Interaction {
 
         reminderPickerFragment.isCancelable = false
         reminderPickerFragment.show(supportFragmentManager, "ReminderPickerFragment")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(isMultiSelectionModeEnabled()) {
+            viewModel.onTriggerEvent(AllEventEvents.SetToolBarState(AllEventToolbarState.RegularState))
+        }
     }
 
     override fun onDestroyView() {

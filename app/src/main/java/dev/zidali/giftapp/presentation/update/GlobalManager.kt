@@ -35,9 +35,6 @@ constructor(
             is GlobalEvents.SetEventDetailFragmentView -> {
                 setEventDetailFragmentView(event.boolean)
             }
-            is GlobalEvents.SetContactFragmentView -> {
-                setContactFragmentView(event.boolean)
-            }
             is GlobalEvents.SetMultiSelection -> {
                 setMultiSelection(event.boolean)
             }
@@ -79,12 +76,6 @@ constructor(
     private fun setEventDetailFragmentView(boolean: Boolean) {
         state.value?.let {state->
             this.state.value = state.copy(editFragmentInView = boolean)
-        }
-    }
-
-    private fun setContactFragmentView(boolean: Boolean) {
-        state.value?.let { state->
-            this.state.value = state.copy(contactFragmentInView = boolean)
         }
     }
 

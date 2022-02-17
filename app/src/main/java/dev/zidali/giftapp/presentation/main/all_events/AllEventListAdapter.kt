@@ -169,7 +169,7 @@ class AllEventListAdapter(
                    item.contact_event_reminder.contains("month",true)) {
 
                     interaction?.turnOffNotifications(item)
-                    binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_24_inactive)
+                    binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_inactive)
 
                 } else {
 
@@ -181,9 +181,9 @@ class AllEventListAdapter(
             if(item.contact_event_reminder.contains("day", true) ||
             item.contact_event_reminder.contains("week", true) ||
             item.contact_event_reminder.contains("month",true)) {
-                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_active_24)
+                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_active)
             } else {
-                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_24_inactive)
+                binding.notificationIcon.setImageResource(R.drawable.ic_baseline_notifications_inactive)
             }
 
             selectedEvents.observe(lifecycleOwner) {contactEvent->
@@ -191,6 +191,11 @@ class AllEventListAdapter(
                     if (contactEvent.contains(mContactEvent)) {
                         binding.allEventCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_color))
                         setTextColor(Color.WHITE, Color.WHITE)
+                        if (mContactEvent.contact_event_reminder == "None") {
+                            setIcon(R.drawable.ic_baseline_notifications_inactive_white)
+                        } else {
+                            setIcon(R.drawable.ic_baseline_notifications_active_white)
+                        }
                     }
                     else {
                         if(today > alarmDate) {
@@ -200,7 +205,12 @@ class AllEventListAdapter(
                         } else {
                             binding.allEventCardView.setCardBackgroundColor(Color.WHITE)
                             setTextColor(Color.BLACK, ContextCompat.getColor(context, R.color.darker_gray))
-                            binding.allEventCardView.elevation = 10f
+                            binding.allEventCardView.elevation = 20f
+                            if (mContactEvent.contact_event_reminder == "None") {
+                                setIcon(R.drawable.ic_baseline_notifications_inactive)
+                            } else {
+                                setIcon(R.drawable.ic_baseline_notifications_active)
+                            }
                         }
                     }
                 } else {
@@ -211,7 +221,12 @@ class AllEventListAdapter(
                     } else {
                         binding.allEventCardView.setCardBackgroundColor(Color.WHITE)
                         setTextColor(Color.BLACK, ContextCompat.getColor(context, R.color.darker_gray))
-                        binding.allEventCardView.elevation = 10f
+                        binding.allEventCardView.elevation = 20f
+                        if (mContactEvent.contact_event_reminder == "None") {
+                            setIcon(R.drawable.ic_baseline_notifications_inactive)
+                        } else {
+                            setIcon(R.drawable.ic_baseline_notifications_active)
+                        }
                     }
                 }
             }
@@ -219,11 +234,15 @@ class AllEventListAdapter(
         }
 
         private fun setTextColor(eventColor: Int, dateColor: Int) {
-            binding.contactName.setTextColor(eventColor)
+            binding.contactName.setTextColor(dateColor)
             binding.event.setTextColor(eventColor)
             binding.year.setTextColor(dateColor)
             binding.month.setTextColor(dateColor)
             binding.date.setTextColor(dateColor)
+        }
+
+        private fun setIcon(icon: Int) {
+            binding.notificationIcon.setImageResource(icon)
         }
     }
 

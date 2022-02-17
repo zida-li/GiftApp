@@ -48,6 +48,7 @@ class ContactDetailFragment : BaseMainFragment() {
         setHasOptionsMenu(true)
         initViewPager()
         subscribeObservers()
+
     }
 
     private fun subscribeObservers(){

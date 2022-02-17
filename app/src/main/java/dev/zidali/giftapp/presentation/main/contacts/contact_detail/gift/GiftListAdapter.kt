@@ -99,6 +99,8 @@ class GiftListAdapter(
 
         fun bind(item: Gift) = with(itemView) {
 
+            binding.giftCardView.elevation = 20f
+
             checkCheckedOnInit(item)
 
             itemView.setOnClickListener {
@@ -126,6 +128,7 @@ class GiftListAdapter(
                         setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24_white)
                         if(mGift.isChecked) {
                             setCheckBox(R.drawable.ic_baseline_check_box_24_white)
+                            binding.giftCardView.elevation = 5f
                         }
                     }
                     else {
@@ -133,10 +136,12 @@ class GiftListAdapter(
                             binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
                             setNameColor(ContextCompat.getColor(context, R.color.light_gray))
                             setCheckBox(R.drawable.ic_baseline_check_box_24)
+                            binding.giftCardView.elevation = 5f
                         } else {
                             binding.giftCardView.setCardBackgroundColor(Color.WHITE)
                             setNameColor(Color.BLACK)
                             setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24)
+                            binding.giftCardView.elevation = 20f
                         }
                     }
                 } else {
@@ -144,10 +149,12 @@ class GiftListAdapter(
                         binding.giftCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.inactive_background))
                         setNameColor(ContextCompat.getColor(context, R.color.light_gray))
                         setCheckBox(R.drawable.ic_baseline_check_box_24)
+                        binding.giftCardView.elevation = 5f
                     } else {
                         binding.giftCardView.setCardBackgroundColor(Color.WHITE)
                         setNameColor(Color.BLACK)
                         setCheckBox(R.drawable.ic_baseline_check_box_outline_blank_24)
+                        binding.giftCardView.elevation = 20f
                     }
                 }
 
