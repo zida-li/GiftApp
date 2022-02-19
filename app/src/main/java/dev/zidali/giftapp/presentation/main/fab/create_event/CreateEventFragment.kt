@@ -61,12 +61,12 @@ class CreateEventFragment: DialogFragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
 
             val arrayAdapter =
-                ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contacts)
+                ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contact_display_list)
             binding.contactDropDownMenu.setAdapter(arrayAdapter)
 
             if (globalManager.state.value?.eventFragmentInView!! && !state.dataLoaded) {
                 if (state.current_contact_name != "") {
-                    state.contacts.add(0, state.current_contact_name)
+                    state.contact_display_list.add(0, state.current_contact_name)
                     binding.contactDropDownMenu.setText(state.current_contact_name)
                     viewModel.onTriggerEvent(CreateEventEvents.SetDataLoaded(true))
                 }
@@ -80,6 +80,7 @@ class CreateEventFragment: DialogFragment() {
 
             if (state.addEventSuccessful) {
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateEventFragment(true))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
                 AlarmScheduler.scheduleInitialAlarmsForReminder(requireContext(), state.createEvent)
                 dismiss()
             }

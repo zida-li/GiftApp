@@ -4,16 +4,15 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftState
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -57,6 +56,7 @@ constructor(
 
     private fun fetchContacts(){
         state.value?.let {state->
+
             fetchContacts.execute().onEach {dataState ->
 
                 val contactNames: MutableList<String> = mutableListOf()
@@ -65,7 +65,10 @@ constructor(
                     for (contact in contacts) {
                         contactNames.add(contact.contact_name!!)
                     }
-                    this.state.value = state.copy(contacts = contactNames)
+                    this.state.value = state.copy(
+                        contact_display_list = contactNames,
+                        contacts = contacts
+                    )
                 }
 
             }.launchIn(viewModelScope)
@@ -87,10 +90,16 @@ constructor(
 
     private fun onUpdateGift(contact: String, gift: String) {
         state.value?.let { state->
-            this.state.value = state.copy(
-                contact_name_holder = contact,
-                contact_gift_holder = gift,
-            )
+
+            for(individualContact in state.contacts) {
+                if(contact == individualContact.contact_name) {
+                    this.state.value = state.copy(
+                        contact_name_holder = contact,
+                        contact_gift_holder = gift,
+                        contact_pk_holder = individualContact.pk!!
+                    )
+                }
+            }
         }
     }
 
@@ -170,9 +179,10 @@ constructor(
                 gift = Gift(
                     contact_gift = state.contact_gift_holder,
                     contact_name = state.contact_name_holder,
-                    pk = 0,
+                    pk = state.contact_pk_holder,
                     isChecked = false,
                     isMultiSelectionModeEnabled = false,
+                    gift_pk = 0,
                 )
             )
         }

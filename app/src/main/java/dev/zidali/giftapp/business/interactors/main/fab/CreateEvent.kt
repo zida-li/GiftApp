@@ -1,12 +1,14 @@
 package dev.zidali.giftapp.business.interactors.main.fab
 
+import android.util.Log
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEventEntity
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
-import dev.zidali.giftapp.presentation.notification.AlarmScheduler
+import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventState
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -14,14 +16,11 @@ import java.util.*
 
 class CreateEvent(
     private val contactEventDao: ContactEventDao,
-    private val contactDao: ContactDao
 ) {
 
     fun execute(
         contactEvent: ContactEvent
-    ): Flow<DataState<ContactEvent>> = flow<DataState<ContactEvent>> {
-
-        val contactPk = contactDao.getByName(contactEvent.contact_name)
+    ): Flow<DataState<CreateEventState>> = flow<DataState<CreateEventState>> {
 
         val today = Calendar.getInstance()
 
@@ -34,25 +33,16 @@ class CreateEvent(
             contactEvent.expired = true
         }
 
-        val finalContactEvent = ContactEvent(
-            contact_name = contactEvent.contact_name,
-            contact_event = contactEvent.contact_event,
-            contact_event_reminder = contactEvent.contact_event_reminder,
-            year = contactEvent.year,
-            month = contactEvent.month,
-            day = contactEvent.day,
-            pk = contactPk?.pk!!,
-            ymd_format = contactEvent.ymd_format,
-            expired = contactEvent.expired,
-        )
-
-        contactEventDao.insert(finalContactEvent.toContactEventEntity())
+        val pk = contactEventDao.insert(contactEvent.toContactEventEntity())
 
         emit(DataState.data(
             response = Response(
                 message = "${contactEvent.contact_event} Event Created",
                 uiComponentType = UIComponentType.Toast,
                 messageType = MessageType.None,
+            ),
+            data = CreateEventState(
+                new_event_pk_holder = pk.toInt()
             )
         ))
 

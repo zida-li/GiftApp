@@ -86,7 +86,6 @@ object MainModule {
     ): AddGift {
         return AddGift(
             giftDao,
-            contactDao,
         )
     }
 
@@ -98,7 +97,6 @@ object MainModule {
     ): CreateEvent {
         return CreateEvent(
             contactEventDao,
-            contactDao
         )
     }
 

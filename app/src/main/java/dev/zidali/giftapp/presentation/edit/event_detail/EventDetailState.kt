@@ -6,8 +6,8 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 
 data class EventDetailState(
     val contact_event: ContactEvent? = null,
-    val updated_event: String = "",
-    val contact_holder: String = "",
+    val event_pk: String = "",
+    val contact_pk: String = "",
     val isLoading: Boolean = false,
     val queue: Queue<StateMessage> = Queue(mutableListOf())
 )

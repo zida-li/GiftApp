@@ -9,6 +9,7 @@ sealed class ContactEvents {
 
     data class PassDataToViewPager(
         val contact_name: String,
+        val contact_pk: Int,
     ): ContactEvents()
 
     object ResetContactName: ContactEvents()

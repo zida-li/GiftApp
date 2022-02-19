@@ -33,7 +33,7 @@ constructor(
 
         when(event) {
             is EventDetailEvents.FetchEvent -> {
-                fetchEvent(event.contact_name, event.contact_event)
+                fetchEvent(event.contact_pk, event.event_pk)
             }
             is EventDetailEvents.Refresh -> {
                 refresh()
@@ -53,11 +53,11 @@ constructor(
         }
     }
 
-    private fun fetchEvent(contact_name: String, contact_event: String) {
+    private fun fetchEvent(contact_pk: Int, event_pk: Int,) {
         state.value?.let { state->
             fetchEvent.execute(
-                contact_name,
-                contact_event
+                contact_pk,
+                event_pk,
             ).onEach { dataState ->
 
                 dataState.data?.let { event->
@@ -73,16 +73,16 @@ constructor(
         state.value?.let { state->
 
             flow<EventDetailState> {
-                val updatedEvent = appDataStore.readValue(DataStoreKeys.NEW_EVENT_NAME)
-                val contactHolder = appDataStore.readValue(DataStoreKeys.CONTACT_NAME_HOLDER)
+                val eventPk = appDataStore.readValue(DataStoreKeys.EVENT_PK)
+                val contactPk = appDataStore.readValue(DataStoreKeys.CONTACT_PK)
                 emit(EventDetailState(
-                    updated_event = updatedEvent!!,
-                    contact_holder = contactHolder!!,
+                    event_pk = eventPk!!,
+                    contact_pk = contactPk!!,
                 ))
             }.onEach {
                 this.state.value = state.copy(
-                    updated_event = it.updated_event,
-                    contact_holder = it.contact_holder,
+                    event_pk = it.event_pk,
+                    contact_pk = it.contact_pk,
                 )
             }.launchIn(viewModelScope)
 
@@ -94,8 +94,8 @@ constructor(
     private fun reload() {
         state.value?.let { state->
             fetchEvent.execute(
-                state.contact_holder,
-                state.updated_event,
+                state.contact_pk.toInt(),
+                state.event_pk.toInt(),
             ).onEach { dataState ->
                 dataState.data?.let { event->
                     this.state.value = state.copy(contact_event = event)

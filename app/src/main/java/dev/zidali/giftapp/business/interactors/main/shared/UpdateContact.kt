@@ -22,15 +22,13 @@ class UpdateContact(
 ) {
 
     fun execute(
+        contactPk: Int,
         new_name: String,
-        old_name: String,
     ): Flow<DataState<Contact>> = flow <DataState<Contact>>{
 
-        val contactPk = contactDao.getByName(old_name)
-
-        giftDao.updateContactNameGift(new_name, contactPk?.pk!!)
-        contactEventDao.updateContactNameEvent(new_name, contactPk.pk)
-        contactDao.updateContact(new_name, contactPk.pk)
+        giftDao.updateContactNameGift(new_name, contactPk)
+        contactEventDao.updateContactNameEvent(new_name, contactPk)
+        contactDao.updateContact(new_name, contactPk)
 
         emit(DataState.data(
             response = Response(

@@ -14,8 +14,8 @@ interface ContactDao {
     @Delete
     suspend fun deleteContacts(contact: ContactEntity)
 
-    @Query("SELECT * FROM contact WHERE contact_name = :contact_name")
-    suspend fun getByName(contact_name: String): ContactEntity?
+    @Query("SELECT * FROM contact WHERE primary_key = :primary_key")
+    suspend fun getByPk(primary_key: Int): ContactEntity?
 
     @Query("SELECT * FROM contact")
     suspend fun getAllContacts(): MutableList<ContactEntity>

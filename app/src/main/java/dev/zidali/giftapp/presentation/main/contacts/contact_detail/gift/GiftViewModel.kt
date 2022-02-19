@@ -42,8 +42,8 @@ constructor(
             is GiftEvents.FetchGifts -> {
                 fetchGifts()
             }
-            is GiftEvents.FetchContactName -> {
-                fetchContactName()
+            is GiftEvents.FetchContactPk -> {
+                fetchContactPk()
             }
             is GiftEvents.SetFirstLoad -> {
                 setFirstLoad(event.boolean)
@@ -78,7 +78,7 @@ constructor(
     private fun fetchGifts() {
         state.value?.let { state->
             fetchGifts.execute(
-                state.contact_name
+                state.contact_pk.toInt()
             ).onEach { dataState ->
 
                 dataState.data?.let { gift->
@@ -89,15 +89,15 @@ constructor(
         }
     }
 
-    private fun fetchContactName() {
+    private fun fetchContactPk() {
         state.value?.let {state->
             flow<GiftState> {
-                val contactName = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_NAME)
+                val contactPk = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_PK)
                 emit(GiftState(
-                    contact_name = contactName!!
+                    contact_pk = contactPk?.toInt()!!
                 ))
             }.onEach {
-                this.state.value = state.copy(contact_name = it.contact_name)
+                this.state.value = state.copy(contact_pk = it.contact_pk)
             }.launchIn(viewModelScope)
         }
     }

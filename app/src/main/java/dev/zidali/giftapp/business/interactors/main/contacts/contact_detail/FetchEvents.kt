@@ -14,10 +14,10 @@ class FetchEvents(
 ) {
 
     fun execute(
-        contact_name: String,
+        contact_pk: Int,
     ): Flow<DataState<EventState>> = flow {
 
-        val results = contactEventDao.getAllEventsOfContact(contact_name).map { it.toContactEvent() }.toMutableList()
+        val results = contactEventDao.getAllEventsOfContact(contact_pk).map { it.toContactEvent() }.toMutableList()
 
         val events = EventState(
             contact_events = results

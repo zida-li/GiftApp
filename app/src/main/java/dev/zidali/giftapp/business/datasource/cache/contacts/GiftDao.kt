@@ -14,11 +14,11 @@ interface GiftDao {
     @Delete
     suspend fun deleteGift(gift: GiftEntity)
 
-    @Query("SELECT * FROM gift WHERE contact_gift = :contact_gift")
-    suspend fun searchByGift(contact_gift: String): GiftEntity?
+    @Query("SELECT * FROM gift WHERE gift_pk = :gift_pk")
+    suspend fun searchByGift(gift_pk: Int): GiftEntity?
 
-    @Query("SELECT ALL * FROM gift WHERE contact_name = :contact_name")
-    suspend fun getAllGiftByContact(contact_name: String): MutableList<GiftEntity>
+    @Query("SELECT ALL * FROM gift WHERE primary_key = :primary_key")
+    suspend fun getAllGiftByContact(primary_key: Int): MutableList<GiftEntity>
 
     @Query("SELECT * FROM gift")
     suspend fun getAllContacts(): MutableList<GiftEntity>
@@ -26,7 +26,7 @@ interface GiftDao {
     @Query("UPDATE gift SET contact_name = :new_contact_name WHERE primary_key = :primary_key")
     suspend fun updateContactNameGift(new_contact_name: String, primary_key: Int)
 
-    @Query("UPDATE gift SET isChecked = :isChecked WHERE contact_name =:contact_name AND contact_gift =:contact_gift")
-    suspend fun updateIsChecked(isChecked: Boolean, contact_name: String, contact_gift: String)
+    @Query("UPDATE gift SET isChecked = :isChecked WHERE gift_pk = :gift_pk")
+    suspend fun updateIsChecked(isChecked: Boolean, gift_pk: Int,)
 
 }

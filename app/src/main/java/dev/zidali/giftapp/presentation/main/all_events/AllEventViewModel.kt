@@ -42,6 +42,9 @@ constructor(
             is AllEventEvents.FetchEvents -> {
                 fetchEvents()
             }
+            is AllEventEvents.SetFirstLoad -> {
+                setFirstLoad(event.boolean)
+            }
             is AllEventEvents.TurnOnNotifications -> {
                 turnOnNotifications(event.contactEvent, event.reminderPickerResult)
             }
@@ -82,6 +85,14 @@ constructor(
 
             }.launchIn(viewModelScope)
 
+        }
+    }
+
+    private fun setFirstLoad(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                firstLoad = boolean
+            )
         }
     }
 
@@ -140,6 +151,7 @@ constructor(
                     pk = contactEvent.pk,
                     ymd_format = contactEvent.ymd_format,
                     expired = contactEvent.expired,
+                    event_pk = contactEvent.event_pk,
                 )
             )
         }

@@ -9,9 +9,7 @@ import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
-import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
 class GiftFragment : BaseMainFragment(),
@@ -50,7 +48,7 @@ GiftListAdapter.Interaction
         globalManager.state.observe(viewLifecycleOwner) { state ->
 
             if (state.needToUpdate) {
-                viewModel.onTriggerEvent(GiftEvents.FetchContactName)
+                viewModel.onTriggerEvent(GiftEvents.FetchContactPk)
                 viewModel.onTriggerEvent(GiftEvents.FetchGifts)
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(false))
             }

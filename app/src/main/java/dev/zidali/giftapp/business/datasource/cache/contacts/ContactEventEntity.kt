@@ -20,7 +20,10 @@ import dev.zidali.giftapp.business.domain.models.ContactEvent
 )
 data class ContactEventEntity (
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "event_pk")
+    var event_pk: Int,
+
     @ColumnInfo(name = "contact_event")
     var contact_event: String,
 
@@ -61,6 +64,7 @@ fun ContactEvent.toContactEventEntity(): ContactEventEntity {
         pk = pk,
         ymd_format = ymd_format,
         expired = expired,
+        event_pk = event_pk,
     )
 }
 
@@ -75,5 +79,6 @@ fun ContactEventEntity.toContactEvent(): ContactEvent {
         pk = pk,
         ymd_format = ymd_format,
         expired = expired,
+        event_pk = event_pk,
     )
 }

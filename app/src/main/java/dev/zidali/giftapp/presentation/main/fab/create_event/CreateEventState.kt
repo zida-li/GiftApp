@@ -1,12 +1,14 @@
 package dev.zidali.giftapp.presentation.main.fab.create_event
 
 import dev.zidali.giftapp.business.domain.models.CalendarSelection
+import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.Queue
 import dev.zidali.giftapp.business.domain.util.StateMessage
 
 data class CreateEventState(
-    var contacts: MutableList<String> = mutableListOf(),
+    var contact_display_list: MutableList<String> = mutableListOf(),
+    var contacts: MutableList<Contact> = mutableListOf(),
     var event: String = "",
     var createEvent: ContactEvent = ContactEvent(
         contact_name = "",
@@ -18,12 +20,15 @@ data class CreateEventState(
         pk = 0,
         ymd_format = "",
         expired = false,
+        event_pk = 0,
     ),
     var calendarSelectionHolder: CalendarSelection = CalendarSelection(
         selectedYear = 0,
         selectedMonth = 0,
         selectedDay = 0,
     ),
+    var contact_pk_holder: Int = 0,
+    var new_event_pk_holder: Int = 0,
     var ymd_formatHolder: String = "",
     var reminderSelectionHolder: String = "",
     var selectedContact: String = "",

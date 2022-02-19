@@ -6,8 +6,8 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 sealed class EventDetailEvents {
 
     data class FetchEvent(
-        val contact_name: String,
-        val contact_event: String
+        val contact_pk: Int,
+        val event_pk: Int,
     ): EventDetailEvents()
 
     object Refresh: EventDetailEvents()

@@ -6,4 +6,5 @@ data class Gift (
     var pk: Int,
     var isChecked: Boolean = false,
     var isMultiSelectionModeEnabled: Boolean = false,
+    var gift_pk: Int,
 )

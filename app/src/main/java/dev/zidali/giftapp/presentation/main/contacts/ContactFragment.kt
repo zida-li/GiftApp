@@ -171,8 +171,10 @@ ContactListAdapter.Interaction
         } else {
             try {
                 viewModel.state.value?.let {
-                    val bundle = bundleOf("selectedContact" to item.contact_name)
-                    viewModel.onTriggerEvent(ContactEvents.PassDataToViewPager(item.contact_name!!))
+                    val bundle = Bundle()
+                    bundle.putString("selectedContact", item.contact_name)
+                    bundle.putInt("selectedContactPk", item.pk!!)
+                    viewModel.onTriggerEvent(ContactEvents.PassDataToViewPager(item.contact_name!!, item.pk!!))
                     findNavController().navigate(R.id.action_contactFragment_to_contactDetailFragment,
                         bundle)
                 } ?: throw Exception("Null Contact")

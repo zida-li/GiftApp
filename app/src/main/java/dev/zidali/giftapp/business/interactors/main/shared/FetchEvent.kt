@@ -14,11 +14,11 @@ class FetchEvent(
 ) {
 
     fun execute(
-        contactName: String,
-        contactEvent: String,
+        contact_pk: Int,
+        event_pk: Int,
     ): Flow<DataState<ContactEvent>> = flow<DataState<ContactEvent>> {
 
-        val result = contactEventDao.searchByEvent(contactName, contactEvent)?.toContactEvent()
+        val result = contactEventDao.searchByEvent(contact_pk, event_pk)?.toContactEvent()
 
         emit(DataState.data(
             response = null,

@@ -14,7 +14,6 @@ data class EditEventState(
         selectedDay = 0,
     ),
     val reminderSelectionHolder: String = "",
-    val initial_contact_event_holder: ContactEvent? = null,
     val update_contact_event: ContactEvent? = null,
     val initialLoadComplete: Boolean = false,
     val ymd_formatHolder: String = "",

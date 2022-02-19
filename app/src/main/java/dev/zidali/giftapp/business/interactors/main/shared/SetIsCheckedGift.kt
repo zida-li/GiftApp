@@ -16,7 +16,7 @@ class SetIsCheckedGift(
         gift: Gift
     ): Flow<DataState<Gift>> = flow<DataState<Gift>> {
 
-        giftDao.updateIsChecked(gift.isChecked, gift.contact_name, gift.contact_gift)
+        giftDao.updateIsChecked(gift.isChecked, gift.gift_pk)
 
     }.catch { e->
         emit(handleUseCaseException(e))

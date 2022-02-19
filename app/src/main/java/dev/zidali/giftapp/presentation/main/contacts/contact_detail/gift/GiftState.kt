@@ -6,7 +6,7 @@ import dev.zidali.giftapp.business.domain.util.Queue
 import dev.zidali.giftapp.business.domain.util.StateMessage
 
 data class GiftState(
-    val contact_name: String = "",
+    val contact_pk: Int = 0,
     var contact_gifts: MutableList<Gift> = mutableListOf(),
     val firstLoad: Boolean = true,
     val isLoading: Boolean = false,

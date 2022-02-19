@@ -1,7 +1,6 @@
 package dev.zidali.giftapp.presentation.main.fab.add_gift
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentAddGiftBinding
-import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.presentation.update.GlobalManager
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 import javax.inject.Inject
 
@@ -72,12 +69,12 @@ class AddGiftFragment: DialogFragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
 
             val arrayAdapter =
-                ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contacts)
+                ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contact_display_list)
             binding.contactDropDownMenu.setAdapter(arrayAdapter)
 
             if (globalManager.state.value?.giftFragmentInView!! && !state.dataLoaded) {
                 if (state.current_contact_name != "") {
-                    state.contacts.add(0, state.current_contact_name)
+                    state.contact_display_list.add(0, state.current_contact_name)
                     binding.contactDropDownMenu.setText(state.current_contact_name)
                     viewModel.onTriggerEvent(AddGiftEvents.SetDataLoaded(true))
                 }

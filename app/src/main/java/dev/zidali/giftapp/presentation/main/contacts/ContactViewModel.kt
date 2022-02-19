@@ -42,7 +42,7 @@ constructor(
                 fetchContacts()
             }
             is ContactEvents.PassDataToViewPager -> {
-                passDataToViewPager(event.contact_name)
+                passDataToViewPager(event.contact_name, event.contact_pk)
             }
             is ContactEvents.ResetContactName -> {
                 resetContactName()
@@ -88,7 +88,10 @@ constructor(
         }
     }
 
-    private fun passDataToViewPager(contact_name: String) {
+    private fun passDataToViewPager(contact_name: String, contact_pk: Int) {
+        viewModelScope.launch {
+            appDataStore.setValue(DataStoreKeys.SELECTED_CONTACT_PK, contact_pk.toString())
+        }
         viewModelScope.launch {
             appDataStore.setValue(DataStoreKeys.SELECTED_CONTACT_NAME, contact_name)
         }

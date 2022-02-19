@@ -115,8 +115,8 @@ object AlarmScheduler {
 
         val intent = Intent(context.applicationContext, AlarmReceiver::class.java).apply {
             action = context.getString(R.string.action_notify_gift_event)
-            type = "${reminder}-${reminderData.contact_event}"
-            putExtra(Constants.KEY_ID, reminderData.contact_event)
+            type = "${reminder}-${reminderData.event_pk}"
+            putExtra(Constants.KEY_ID, reminderData.event_pk)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -138,10 +138,10 @@ object AlarmScheduler {
         // create the intent using a unique type
         val intent = Intent(context.applicationContext, AlarmReceiver::class.java).apply {
             action = context.getString(R.string.action_notify_gift_event)
-            type = "${reminder}-${reminderData.contact_event}"
+            type = "${reminder}-${reminderData.event_pk}"
             val intentBundle = Bundle()
-            intentBundle.putString("CONTACT_NAME", reminderData.contact_name)
-            intentBundle.putString("CONTACT_EVENT", reminderData.contact_event)
+            intentBundle.putInt("CONTACT_PK", reminderData.pk)
+            intentBundle.putInt("EVENT_PK", reminderData.event_pk)
             putExtras(intentBundle)
         }
 

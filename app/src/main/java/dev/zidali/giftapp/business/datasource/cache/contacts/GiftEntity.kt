@@ -20,7 +20,10 @@ import dev.zidali.giftapp.business.domain.models.Gift
 
 data class GiftEntity (
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "gift_pk")
+    var gift_pk: Int,
+
     @ColumnInfo(name = "contact_gift")
     var contact_gift: String,
 
@@ -45,6 +48,7 @@ fun Gift.toGiftEntity(): GiftEntity{
         pk = pk,
         isChecked = isChecked,
         isMultiSelectionModeEnabled = isMultiSelectionModeEnabled,
+        gift_pk = gift_pk,
     )
 }
 
@@ -55,5 +59,6 @@ fun GiftEntity.toGift(): Gift{
         pk = pk,
         isChecked = isChecked,
         isMultiSelectionModeEnabled = isMultiSelectionModeEnabled,
+        gift_pk = gift_pk,
     )
 }

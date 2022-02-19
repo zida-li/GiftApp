@@ -39,8 +39,8 @@ constructor(
     fun onTriggerEvent(event: EventEvents) {
 
         when(event) {
-            is EventEvents.FetchContactName -> {
-                fetchContactName()
+            is EventEvents.FetchContactPk -> {
+                fetchContactPk()
             }
             is EventEvents.FetchEvents -> {
                 fetchEvents()
@@ -81,7 +81,7 @@ constructor(
     private fun fetchEvents() {
         state.value?.let { state->
             fetchEvents.execute(
-                state.contact_name
+                state.contact_pk.toInt()
             ).onEach { dataState ->
 
                 dataState.data?.let { event->
@@ -92,15 +92,15 @@ constructor(
         }
     }
 
-    private fun fetchContactName() {
+    private fun fetchContactPk() {
         state.value?.let {state->
             flow<EventState> {
-                val contactName = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_NAME)
+                val contactPk = appDataStore.readValue(DataStoreKeys.SELECTED_CONTACT_PK)
                 emit(EventState(
-                    contact_name = contactName!!
+                    contact_pk = contactPk!!
                 ))
             }.onEach {
-                this.state.value = state.copy(contact_name = it.contact_name)
+                this.state.value = state.copy(contact_pk = it.contact_pk)
             }.launchIn(viewModelScope)
         }
     }
@@ -168,6 +168,7 @@ constructor(
                     pk = contactEvent.pk,
                     ymd_format = contactEvent.ymd_format,
                     expired = contactEvent.expired,
+                    event_pk = contactEvent.event_pk,
                 )
             )
         }

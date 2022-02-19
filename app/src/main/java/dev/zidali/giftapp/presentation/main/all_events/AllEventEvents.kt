@@ -7,6 +7,10 @@ sealed class AllEventEvents {
 
     object FetchEvents: AllEventEvents()
 
+    data class SetFirstLoad(
+        val boolean: Boolean
+    ): AllEventEvents()
+
     data class TurnOnNotifications(
         val contactEvent: ContactEvent,
         val reminderPickerResult: String,

@@ -14,24 +14,13 @@ import kotlinx.coroutines.flow.flow
 
 class AddGift(
     private val giftDao: GiftDao,
-    private val contactDao: ContactDao
 ) {
 
     fun execute(
         gift: Gift
     ): Flow<DataState<AddGiftState>> = flow <DataState<AddGiftState>>{
 
-        val contactPk = contactDao.getByName(gift.contact_name)?.toContact()
-
-        val editedGift = Gift(
-            contact_name = gift.contact_name,
-            contact_gift = gift.contact_gift,
-            pk = contactPk?.pk!!,
-            isChecked = gift.isChecked,
-            isMultiSelectionModeEnabled = gift.isMultiSelectionModeEnabled,
-        )
-
-        giftDao.insert(editedGift.toGiftEntity())
+        giftDao.insert(gift.toGiftEntity())
 
         emit(DataState.data(
             response = Response(

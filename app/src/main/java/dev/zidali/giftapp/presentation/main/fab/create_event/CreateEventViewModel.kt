@@ -11,8 +11,6 @@ import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.interactors.main.fab.CreateEvent
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftState
-import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.flow
@@ -82,7 +80,10 @@ constructor(
                     for (contact in contacts) {
                         contactNames.add(contact.contact_name!!)
                     }
-                    this.state.value = state.copy(contacts = contactNames)
+                    this.state.value = state.copy(
+                        contact_display_list = contactNames,
+                        contacts = contacts
+                    )
                 }
 
             }.launchIn(viewModelScope)
@@ -113,10 +114,17 @@ constructor(
     }
 
     private fun onUpdateContactSelection(contact: String) {
+
         state.value?.let { state->
-            this.state.value = state.copy(
-                selectedContact = contact
-            )
+
+            for(individualContact in state.contacts) {
+                if(contact == individualContact.contact_name) {
+                    this.state.value = state.copy(
+                        selectedContact = contact,
+                        contact_pk_holder = individualContact.pk!!
+                    )
+                }
+            }
         }
     }
 
@@ -161,6 +169,14 @@ constructor(
                     dataState.stateMessage?.let { stateMessage ->
                         appendToMessageQueue(stateMessage)
                     }
+
+                    dataState.data?.let {
+                        this.state.value = state.copy(
+                            new_event_pk_holder = it.new_event_pk_holder
+                        )
+                    }
+
+                    setPostCreateEventState()
 
                     setEventSuccessful(true)
 
@@ -219,9 +235,29 @@ constructor(
                     year = state.calendarSelectionHolder.selectedYear,
                     month = state.calendarSelectionHolder.selectedMonth,
                     day = state.calendarSelectionHolder.selectedDay,
-                    pk = 0,
+                    pk = state.contact_pk_holder,
                     ymd_format = state.ymd_formatHolder,
                     expired = false,
+                    event_pk = 0,
+                )
+            )
+        }
+    }
+
+    private fun setPostCreateEventState(){
+        state.value?.let { state->
+            this.state.value = state.copy(
+                createEvent = ContactEvent(
+                    contact_name = state.selectedContact,
+                    contact_event = state.event,
+                    contact_event_reminder = state.reminderSelectionHolder,
+                    year = state.calendarSelectionHolder.selectedYear,
+                    month = state.calendarSelectionHolder.selectedMonth,
+                    day = state.calendarSelectionHolder.selectedDay,
+                    pk = state.contact_pk_holder,
+                    ymd_format = state.ymd_formatHolder,
+                    expired = false,
+                    event_pk = state.new_event_pk_holder,
                 )
             )
         }

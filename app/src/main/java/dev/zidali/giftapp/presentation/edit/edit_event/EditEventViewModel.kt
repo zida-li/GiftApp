@@ -12,7 +12,6 @@ import dev.zidali.giftapp.business.interactors.main.shared.UpdateContactEventRem
 import dev.zidali.giftapp.business.interactors.main.shared.UpdateEvent
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -31,8 +30,8 @@ constructor(
     val state: MutableLiveData<EditEventState> = MutableLiveData(EditEventState())
 
     init {
-        val contactName = savedStateHandle.get<String>("CONTACT_NAME")
-        val contactEvent = savedStateHandle.get<String>("CONTACT_EVENT")
+        val contactName = savedStateHandle.get<Int>("CONTACT_PK")
+        val contactEvent = savedStateHandle.get<Int>("EVENT_PK")
         onTriggerEvent(EditEventEvents.FetchEvent(contactName!!, contactEvent!!))
     }
 
@@ -40,7 +39,7 @@ constructor(
 
         when(event) {
             is EditEventEvents.FetchEvent -> {
-                fetchEvent(event.contact_name, event.contact_event)
+                fetchEvent(event.contact_pk, event.event_pk)
             }
             is EditEventEvents.UpdateContactEvent -> {
                 updateContactEvent()
@@ -78,17 +77,16 @@ constructor(
         }
     }
 
-    private fun fetchEvent(contact_name: String, contact_event: String) {
+    private fun fetchEvent(contact_pk: Int, event_pk: Int) {
         state.value?.let { state->
             fetchEvent.execute(
-                contact_name,
-                contact_event
+                contact_pk,
+                event_pk
             ).onEach { dataState ->
 
                 dataState.data?.let { event->
                     this.state.value = state.copy(
                         contact_event = event,
-                        initial_contact_event_holder = event,
                         reminderSelectionHolder = event.contact_event_reminder,
                         calendarSelectionHolder = CalendarSelection(
                             selectedYear = event.year,
@@ -150,7 +148,6 @@ constructor(
             ).isValid()
             if(updateEventError == EditEventState.UpdateEventError.none()) {
                 updateEvent.execute(
-                    state.initial_contact_event_holder!!,
                     state.update_contact_event!!,
                 ).onEach { dataState ->
 
@@ -158,8 +155,8 @@ constructor(
                         appendToMessageQueue(stateMessage)
                     }
 
-                    appDataStore.setValue(DataStoreKeys.NEW_EVENT_NAME, state.event_holder)
-                    appDataStore.setValue(DataStoreKeys.CONTACT_NAME_HOLDER, state.contact_event?.contact_name!!)
+                    appDataStore.setValue(DataStoreKeys.EVENT_PK, state.contact_event?.event_pk.toString())
+                    appDataStore.setValue(DataStoreKeys.CONTACT_PK, state.contact_event?.pk.toString())
 
                     setUpdateEventSuccessful(true)
 
@@ -191,9 +188,10 @@ constructor(
                     year = state.calendarSelectionHolder.selectedYear,
                     month = state.calendarSelectionHolder.selectedMonth,
                     day = state.calendarSelectionHolder.selectedDay,
-                    pk = 0,
+                    pk = state.contact_event.pk,
                     ymd_format = state.ymd_formatHolder,
                     expired = state.contact_event.expired,
+                    event_pk = state.contact_event.event_pk,
                 )
             )
         }

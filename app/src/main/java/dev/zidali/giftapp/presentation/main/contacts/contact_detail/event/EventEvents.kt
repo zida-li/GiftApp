@@ -5,7 +5,7 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 
 sealed class EventEvents {
 
-    object FetchContactName: EventEvents()
+    object FetchContactPk: EventEvents()
 
     object FetchEvents: EventEvents()
 

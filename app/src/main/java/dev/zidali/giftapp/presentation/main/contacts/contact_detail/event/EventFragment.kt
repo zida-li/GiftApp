@@ -16,7 +16,6 @@ import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.fab.create_event.ReminderFragment
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
 class EventFragment : BaseMainFragment(),
@@ -54,9 +53,9 @@ EventListAdapter.Interaction {
         globalManager.state.observe(viewLifecycleOwner) { state ->
 
             if (state.needToUpdateEventFragment) {
-                viewModel.onTriggerEvent(EventEvents.FetchContactName)
-                viewModel.onTriggerEvent(EventEvents.FetchEvents)
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateEventFragment(false))
+                viewModel.onTriggerEvent(EventEvents.FetchContactPk)
+                viewModel.onTriggerEvent(EventEvents.FetchEvents)
             }
         }
 
@@ -177,8 +176,8 @@ EventListAdapter.Interaction {
                 val intent = Intent(requireContext(), EditEventActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("CONTACT_NAME", item.contact_name)
-                intent.putExtra("CONTACT_EVENT", item.contact_event)
+                intent.putExtra("CONTACT_PK", item.pk)
+                intent.putExtra("EVENT_PK", item.event_pk)
                 startActivity(intent)
             }
         }

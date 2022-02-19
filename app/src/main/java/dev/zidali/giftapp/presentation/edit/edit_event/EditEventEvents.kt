@@ -7,8 +7,8 @@ import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventEvents
 sealed class EditEventEvents {
 
     data class FetchEvent(
-        val contact_name: String,
-        val contact_event: String
+        val contact_pk: Int,
+        val event_pk: Int,
     ): EditEventEvents()
 
     object UpdateContactEvent: EditEventEvents()

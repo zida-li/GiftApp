@@ -41,14 +41,14 @@ class EventDetailFragment : BaseEditFragment() {
         setHasOptionsMenu(true)
         subscribeObservers()
 
-        val contactName = activity?.intent?.extras?.get("CONTACT_NAME").toString()
-        val contactEvent = activity?.intent?.extras?.get("CONTACT_EVENT").toString()
+        val contactName = activity?.intent?.extras?.get("CONTACT_PK").toString().toInt()
+        val contactEvent = activity?.intent?.extras?.get("EVENT_PK").toString().toInt()
         viewModel.onTriggerEvent(EventDetailEvents.FetchEvent(contactName, contactEvent))
 
         binding.fabEditEvent.setOnClickListener {
             val bundle = bundleOf()
-            bundle.putString("CONTACT_NAME", viewModel.state.value?.contact_event?.contact_name)
-            bundle.putString("CONTACT_EVENT", viewModel.state.value?.contact_event?.contact_event)
+            bundle.putInt("CONTACT_PK", viewModel.state.value?.contact_event?.pk!!)
+            bundle.putInt("EVENT_PK", viewModel.state.value?.contact_event?.event_pk!!)
             findNavController().navigate(R.id.action_eventDetailFragment_to_editEventFragment, bundle)
         }
     }

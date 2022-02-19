@@ -17,7 +17,6 @@ class UpdateEvent(
 ) {
 
     fun execute(
-        initialEvent: ContactEvent,
         updatedEvent: ContactEvent,
     ): Flow<DataState<ContactEvent>> = flow<DataState<ContactEvent>> {
 
@@ -38,8 +37,7 @@ class UpdateEvent(
             updatedEvent.day,
             updatedEvent.ymd_format,
             updatedEvent.expired,
-            initialEvent.contact_event,
-            initialEvent.contact_name,
+            updatedEvent.event_pk,
         )
 
         emit(DataState.data(

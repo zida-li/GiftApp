@@ -15,10 +15,10 @@ class FetchGifts(
 ) {
 
     fun execute(
-        contact_name: String,
+        contact_pk: Int,
     ): Flow<DataState<GiftState>> = flow {
 
-        val results = giftDao.getAllGiftByContact(contact_name).map { it.toGift() }.toMutableList()
+        val results = giftDao.getAllGiftByContact(contact_pk).map { it.toGift() }.toMutableList()
 
         val gifts = GiftState(
             contact_gifts = results

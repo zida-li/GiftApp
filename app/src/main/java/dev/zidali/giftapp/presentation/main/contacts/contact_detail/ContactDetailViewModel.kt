@@ -33,6 +33,11 @@ constructor(
                 this.state.value = state.copy(contact_name = contact_name)
             }
         }
+        state.value?.let { state->
+            savedStateHandle.get<Int>("selectedContactPk")?.let { contact_pk->
+                this.state.value = state.copy(contact_pk = contact_pk)
+            }
+        }
     }
 
     fun onTriggerEvent(event: ContactDetailEvents) {
@@ -83,8 +88,8 @@ constructor(
         state.value?.let { state->
 
             updateContact.execute(
+                state.contact_pk,
                 state.changed_name,
-                state.contact_name,
             ).onEach { dataState ->
 
                 dataState.stateMessage?.let { stateMessage ->

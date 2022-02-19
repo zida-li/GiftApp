@@ -17,6 +17,7 @@ import dev.zidali.giftapp.databinding.FragmentAllEventsBinding
 import dev.zidali.giftapp.presentation.edit.EditEventActivity
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.MainActivity
+import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftEvents
 import dev.zidali.giftapp.presentation.main.fab.create_event.ReminderFragment
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.update.GlobalEvents
@@ -52,13 +53,26 @@ AllEventListAdapter.Interaction {
 
     override fun onResume() {
         super.onResume()
-        viewModel.onTriggerEvent(AllEventEvents.FetchEvents)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun subscribeObservers() {
 
+        globalManager.state.observe(viewLifecycleOwner) { state ->
+
+            if (state.needToUpdate) {
+                viewModel.onTriggerEvent(AllEventEvents.FetchEvents)
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(false))
+            }
+        }
+
         viewModel.state.observe(viewLifecycleOwner) { state ->
+
+            if (state.firstLoad) {
+                viewModel.onTriggerEvent(AllEventEvents.SetFirstLoad(false))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+            }
 
             recyclerAdapter?.apply {
                 submitList(list = state.contact_events)
@@ -167,8 +181,8 @@ AllEventListAdapter.Interaction {
                 val intent = Intent(requireContext(), EditEventActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("CONTACT_NAME", item.contact_name)
-                intent.putExtra("CONTACT_EVENT", item.contact_event)
+                intent.putExtra("CONTACT_PK", item.pk)
+                intent.putExtra("EVENT_PK", item.event_pk)
                 startActivity(intent)
             }
         }

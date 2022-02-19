@@ -21,7 +21,7 @@ class UpdateContactEventReminder(
     ): Flow<DataState<ContactEvent>> = flow<DataState<ContactEvent>> {
 
         contactEventDao.updateContactReminder(
-            contactEvent.contact_event_reminder, contactEvent.pk, contactEvent.contact_event
+            contactEvent.contact_event_reminder, contactEvent.pk, contactEvent.event_pk
         )
 
         emit(
