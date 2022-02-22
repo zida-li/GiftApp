@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.di.auth
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,11 +39,13 @@ object AuthModule {
     @Provides
     fun provideLoginWithGoogle(
         firebaseAuth: FirebaseAuth,
-        accountPropertiesDao: AccountPropertiesDao
+        accountPropertiesDao: AccountPropertiesDao,
+        fireStore: FirebaseFirestore,
     ): LoginWithGoogle {
         return LoginWithGoogle(
             firebaseAuth,
-            accountPropertiesDao
+            accountPropertiesDao,
+            fireStore
         )
     }
 

@@ -51,7 +51,22 @@ data class ContactEventEntity (
     @ColumnInfo(name = "expired")
     var expired: Boolean,
 
-)
+) {
+
+    constructor(): this(
+        0,
+        "",
+        "",
+        "",
+        0,
+        0,
+        0,
+        0,
+        "",
+        false,
+    )
+
+}
 
 fun ContactEvent.toContactEventEntity(): ContactEventEntity {
     return ContactEventEntity(

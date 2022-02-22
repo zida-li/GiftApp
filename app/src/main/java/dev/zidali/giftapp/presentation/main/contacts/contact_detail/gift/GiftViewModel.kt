@@ -81,6 +81,8 @@ constructor(
                 state.contact_pk.toInt()
             ).onEach { dataState ->
 
+                this.state.value = state.copy(isLoading = dataState.isLoading)
+
                 dataState.data?.let { gift->
                     this.state.value = state.copy(contact_gifts = gift.contact_gifts)
                 }

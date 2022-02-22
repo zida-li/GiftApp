@@ -1,21 +1,28 @@
 package dev.zidali.giftapp.business.interactors.main.fab
 
 import android.util.Log
-import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
-import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
-import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEventEntity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import dev.zidali.giftapp.business.datasource.cache.contacts.*
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventState
-import dev.zidali.giftapp.util.Constants.Companion.TAG
+import dev.zidali.giftapp.util.Constants.*
+import dev.zidali.giftapp.util.Constants.Companion.CONTACTS_COLLECTION
+import dev.zidali.giftapp.util.Constants.Companion.EVENTS_COLLECTION
+import dev.zidali.giftapp.util.Constants.Companion.USERS_COLLECTION
+import dev.zidali.giftapp.util.cLog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
 import java.util.*
 
 class CreateEvent(
     private val contactEventDao: ContactEventDao,
+    private val firebaseAuth: FirebaseAuth,
+    private val fireStore: FirebaseFirestore,
 ) {
 
     fun execute(
@@ -34,6 +41,21 @@ class CreateEvent(
         }
 
         val pk = contactEventDao.insert(contactEvent.toContactEventEntity())
+
+        contactEvent.event_pk = pk.toInt()
+
+        fireStore
+            .collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser!!.uid)
+            .collection(CONTACTS_COLLECTION)
+            .document(contactEvent.pk.toString())
+            .collection(EVENTS_COLLECTION)
+            .document(contactEvent.event_pk.toString())
+            .set(contactEvent.toContactEventEntity())
+            .addOnFailureListener {
+                cLog(it.message)
+            }
+            .await()
 
         emit(DataState.data(
             response = Response(

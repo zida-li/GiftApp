@@ -36,4 +36,8 @@ sealed class ContactEvents {
 
     object OnRemoveHeadFromQueue: ContactEvents()
 
+    data class SetIsLoading(
+        val boolean: Boolean
+    ): ContactEvents()
+
 }

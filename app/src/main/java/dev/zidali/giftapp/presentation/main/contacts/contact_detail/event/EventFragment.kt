@@ -61,6 +61,8 @@ EventListAdapter.Interaction {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
 
+            uiCommunicationListener.displayProgressBar(state.isLoading)
+
             recyclerAdapter?.apply {
                 submitList(list = state.contact_events)
             }

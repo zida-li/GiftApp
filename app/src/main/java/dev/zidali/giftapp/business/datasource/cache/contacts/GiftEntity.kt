@@ -39,7 +39,18 @@ data class GiftEntity (
     @ColumnInfo(name = "isMultiSelectionModeEnabled")
     var isMultiSelectionModeEnabled: Boolean,
 
-)
+) {
+
+    constructor(): this(
+        0,
+        "",
+        "",
+        0,
+        false,
+        false,
+    )
+
+}
 
 fun Gift.toGiftEntity(): GiftEntity{
     return GiftEntity(

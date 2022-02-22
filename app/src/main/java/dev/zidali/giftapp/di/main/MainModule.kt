@@ -1,6 +1,8 @@
 package dev.zidali.giftapp.di.main
 
+import android.net.ConnectivityManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,50 +33,72 @@ object MainModule {
     @Singleton
     @Provides
     fun provideCreateContact(
-        contactDao: ContactDao
+        contactDao: ContactDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): CreateContact {
         return CreateContact(
-            contactDao
+            contactDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
     @Singleton
     @Provides
     fun provideFetchContacts(
-        contactDao: ContactDao
+        contactDao: ContactDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
     ): FetchContacts {
         return FetchContacts(
-            contactDao
+            contactDao,
+            firebaseAuth,
+            fireStore,
+            connectivityManager
         )
     }
 
     @Singleton
     @Provides
     fun provideFetchGifts(
-        giftDao: GiftDao
+        giftDao: GiftDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): FetchGifts {
         return FetchGifts(
-            giftDao
+            giftDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
     @Singleton
     @Provides
     fun provideFetchEvents(
-        contactEventDao: ContactEventDao
+        contactEventDao: ContactEventDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): FetchEvents {
         return FetchEvents(
-            contactEventDao
+            contactEventDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
     @Singleton
     @Provides
     fun provideFetchAllEvents(
-        contactEventDao: ContactEventDao
+        contactEventDao: ContactEventDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): FetchAllEvents {
         return FetchAllEvents(
-            contactEventDao
+            contactEventDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
@@ -82,10 +106,13 @@ object MainModule {
     @Provides
     fun provideAddGift(
         giftDao: GiftDao,
-        contactDao: ContactDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): AddGift {
         return AddGift(
             giftDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
@@ -93,10 +120,13 @@ object MainModule {
     @Provides
     fun provideCreateEvent(
         contactEventDao: ContactEventDao,
-        contactDao: ContactDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): CreateEvent {
         return CreateEvent(
             contactEventDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
@@ -106,11 +136,15 @@ object MainModule {
         contactDao: ContactDao,
         giftDao: GiftDao,
         contactEventDao: ContactEventDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): UpdateContact {
         return UpdateContact (
             contactDao,
             giftDao,
             contactEventDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
@@ -127,30 +161,42 @@ object MainModule {
     @Singleton
     @Provides
     fun provideDeleteContacts(
-        contactDao: ContactDao
+        contactDao: ContactDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): DeleteContacts {
         return DeleteContacts(
-            contactDao
+            contactDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
     @Singleton
     @Provides
     fun provideDeleteEvents(
-        contactEventDao: ContactEventDao
+        contactEventDao: ContactEventDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): DeleteEvents {
         return DeleteEvents(
-            contactEventDao
+            contactEventDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
     @Singleton
     @Provides
     fun provideDeleteGifts(
-        giftDao: GiftDao
+        giftDao: GiftDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): DeleteGifts {
         return DeleteGifts(
-            giftDao
+            giftDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 
@@ -187,10 +233,14 @@ object MainModule {
     @Singleton
     @Provides
     fun provideUpdateGift(
-        giftDao: GiftDao
+        giftDao: GiftDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): SetIsCheckedGift {
         return SetIsCheckedGift(
-            giftDao
+            giftDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 

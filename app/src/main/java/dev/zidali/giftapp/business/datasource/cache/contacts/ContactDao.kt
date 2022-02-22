@@ -6,7 +6,7 @@ import androidx.room.*
 interface ContactDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(contactEntity: ContactEntity)
+    suspend fun insert(contactEntity: ContactEntity): Long
 
     @Query("DELETE FROM contact")
     suspend fun clearContacts()

@@ -31,7 +31,15 @@ data class ContactEntity(
     @ColumnInfo(name = "current_authUser_email")
     var current_authUser_email: String,
 
-)
+) {
+
+    constructor(): this
+        (
+         0,
+        "",
+        ""
+        )
+}
 
 fun ContactEntity.toContact(): Contact {
     return Contact(

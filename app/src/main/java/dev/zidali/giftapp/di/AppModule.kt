@@ -2,12 +2,17 @@ package dev.zidali.giftapp.di
 
 import android.app.AlarmManager
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase.Companion.DATABASE_NAME
@@ -28,6 +33,20 @@ object AppModule {
         app: Application
     ): AppDataStore {
         return AppDataStoreManager(app)
+    }
+
+    @Singleton
+    @Provides
+    fun provideConnectivityManager(
+        @ApplicationContext context: Context
+    ) = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    @Singleton
+    @Provides
+    fun provideNetworkRequest(): NetworkRequest.Builder{
+        return NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
     }
 
     /**

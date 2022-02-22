@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.view.isInvisible
 import androidx.navigation.NavController
@@ -111,7 +112,11 @@ class MainActivity : BaseActivity() {
     }
 
     override fun displayProgressBar(isLoading: Boolean) {
-        //
+        if(isLoading){
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

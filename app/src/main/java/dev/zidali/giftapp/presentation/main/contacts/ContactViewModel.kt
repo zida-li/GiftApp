@@ -76,6 +76,8 @@ constructor(
         state.value?.let { state->
             fetchContacts.execute().onEach {dataState ->
 
+                this.state.value = state.copy(isLoading = dataState.isLoading)
+
                 dataState.data?.let { contactList->
                     this.state.value = state.copy(contactList = contactList)
                 }
