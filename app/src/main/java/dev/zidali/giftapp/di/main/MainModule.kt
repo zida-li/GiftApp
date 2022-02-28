@@ -11,6 +11,7 @@ import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
+import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.interactors.main.contacts.DeleteContacts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.DeleteGifts
 import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.FetchEvents
@@ -36,11 +37,13 @@ object MainModule {
         contactDao: ContactDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
     ): CreateContact {
         return CreateContact(
             contactDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
         )
     }
 
@@ -48,15 +51,21 @@ object MainModule {
     @Provides
     fun provideFetchContacts(
         contactDao: ContactDao,
+        giftDao: GiftDao,
+        contactEventDao: ContactEventDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
         connectivityManager: ConnectivityManager,
+        appDataStore: AppDataStore,
     ): FetchContacts {
         return FetchContacts(
             contactDao,
+            giftDao,
+            contactEventDao,
             firebaseAuth,
             fireStore,
-            connectivityManager
+            connectivityManager,
+            appDataStore,
         )
     }
 
@@ -66,11 +75,15 @@ object MainModule {
         giftDao: GiftDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
+        appDataStore: AppDataStore,
     ): FetchGifts {
         return FetchGifts(
             giftDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
+            appDataStore,
         )
     }
 
@@ -80,11 +93,15 @@ object MainModule {
         contactEventDao: ContactEventDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
+        appDataStore: AppDataStore,
     ): FetchEvents {
         return FetchEvents(
             contactEventDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
+            appDataStore
         )
     }
 
@@ -108,11 +125,13 @@ object MainModule {
         giftDao: GiftDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
     ): AddGift {
         return AddGift(
             giftDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
         )
     }
 
@@ -122,11 +141,13 @@ object MainModule {
         contactEventDao: ContactEventDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
     ): CreateEvent {
         return CreateEvent(
             contactEventDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
         )
     }
 
@@ -138,6 +159,7 @@ object MainModule {
         contactEventDao: ContactEventDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
     ): UpdateContact {
         return UpdateContact (
             contactDao,
@@ -145,6 +167,7 @@ object MainModule {
             contactEventDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
         )
     }
 
@@ -164,11 +187,15 @@ object MainModule {
         contactDao: ContactDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
+        appDataStore: AppDataStore,
     ): DeleteContacts {
         return DeleteContacts(
             contactDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
+            appDataStore,
         )
     }
 
@@ -178,11 +205,15 @@ object MainModule {
         contactEventDao: ContactEventDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
+        appDataStore: AppDataStore,
     ): DeleteEvents {
         return DeleteEvents(
             contactEventDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
+            appDataStore,
         )
     }
 
@@ -192,11 +223,15 @@ object MainModule {
         giftDao: GiftDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
+        appDataStore: AppDataStore,
     ): DeleteGifts {
         return DeleteGifts(
             giftDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
+            appDataStore,
         )
     }
 
@@ -223,10 +258,17 @@ object MainModule {
     @Singleton
     @Provides
     fun provideUpdateEvent(
-        contactEventDao: ContactEventDao
+        contactEventDao: ContactEventDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
+
     ): UpdateEvent {
         return UpdateEvent (
-            contactEventDao
+            contactEventDao,
+            firebaseAuth,
+            fireStore,
+            connectivityManager,
         )
     }
 
@@ -236,11 +278,13 @@ object MainModule {
         giftDao: GiftDao,
         firebaseAuth: FirebaseAuth,
         fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
     ): SetIsCheckedGift {
         return SetIsCheckedGift(
             giftDao,
             firebaseAuth,
             fireStore,
+            connectivityManager,
         )
     }
 

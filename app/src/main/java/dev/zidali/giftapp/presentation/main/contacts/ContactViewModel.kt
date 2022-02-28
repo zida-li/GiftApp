@@ -74,6 +74,7 @@ constructor(
     private fun fetchContacts() {
 
         state.value?.let { state->
+
             fetchContacts.execute().onEach {dataState ->
 
                 this.state.value = state.copy(isLoading = dataState.isLoading)

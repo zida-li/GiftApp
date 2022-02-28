@@ -16,6 +16,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase.Companion.DATABASE_NAME
+import dev.zidali.giftapp.business.datasource.cache.AppDatabase.Companion.MIGRATION_1_2
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStoreManager
@@ -75,7 +76,7 @@ object AppModule {
     fun provideAppDb(app: Application): AppDatabase {
         return Room
             .databaseBuilder(app, AppDatabase::class.java, DATABASE_NAME)
-            .fallbackToDestructiveMigration()
+            .addMigrations(MIGRATION_1_2)
             .build()
     }
 

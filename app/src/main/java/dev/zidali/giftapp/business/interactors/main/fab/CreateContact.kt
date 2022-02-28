@@ -1,5 +1,7 @@
 package dev.zidali.giftapp.business.interactors.main.fab
 
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,6 +27,7 @@ class CreateContact(
     private val contactDao: ContactDao,
     private val firebaseAuth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
+    private val connectivityManager: ConnectivityManager,
 ) {
 
     fun execute(
@@ -33,18 +36,21 @@ class CreateContact(
 
         val pk = contactDao.insert(contact.toContactsEntity())
 
-        contact.pk = pk.toInt()
+        if(isOnline()) {
 
-        fireStore
-            .collection(USERS_COLLECTION)
-            .document(firebaseAuth.currentUser!!.uid)
-            .collection(CONTACTS_COLLECTION)
-            .document(contact.pk.toString())
-            .set(contact.toContactsEntity())
-            .addOnFailureListener {
-                cLog(it.message)
-            }
-            .await()
+            contact.pk = pk.toInt()
+
+            fireStore
+                .collection(USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(CONTACTS_COLLECTION)
+                .document(contact.pk.toString())
+                .set(contact.toContactsEntity())
+                .addOnFailureListener {
+                    cLog(it.message)
+                }
+                .await()
+        }
 
         emit(
             DataState.data(
@@ -59,6 +65,20 @@ class CreateContact(
 
     }.catch { e->
         Log.d(TAG, e.toString())
+    }
+
+    private fun isOnline(): Boolean {
+
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+
+        if(capabilities != null) {
+            if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            }
+        }
+        return false
     }
 
 }

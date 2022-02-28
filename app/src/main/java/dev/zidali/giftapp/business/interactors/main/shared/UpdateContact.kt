@@ -1,5 +1,8 @@
 package dev.zidali.giftapp.business.interactors.main.shared
 
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.*
@@ -24,6 +27,7 @@ class UpdateContact(
     private val contactEventDao: ContactEventDao,
     private val firebaseAuth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
+    private val connectivityManager: ConnectivityManager,
 ) {
 
     fun execute(
@@ -35,84 +39,93 @@ class UpdateContact(
          * Updating GiftEntity
          */
 
-        val giftCollectionRef = fireStore
-            .collection(Constants.USERS_COLLECTION)
-            .document(firebaseAuth.currentUser!!.uid)
-            .collection(Constants.CONTACTS_COLLECTION)
-            .document(contactPk.toString())
-            .collection(Constants.GIFTS_COLLECTION)
+        if(isOnline()) {
 
-        giftDao.updateContactNameGift(new_name, contactPk)
-        val giftFireStoreData =
-            giftCollectionRef
-                .get()
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
-                .toObjects(GiftEntity::class.java)
+            val giftCollectionRef = fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(contactPk.toString())
+                .collection(Constants.GIFTS_COLLECTION)
 
-        for(data in giftFireStoreData) {
-            data.contact_name = new_name
-            giftCollectionRef
-                .document(data.gift_pk.toString())
-                .set(data)
-                .await()
-        }
+            giftDao.updateContactNameGift(new_name, contactPk)
 
-        /**
-         * Updating ContactEventEntity
-         */
+            val giftFireStoreData =
+                giftCollectionRef
+                    .get()
+                    .addOnFailureListener {
+                        cLog(it.message)
+                    }
+                    .await()
+                    .toObjects(GiftEntity::class.java)
 
-        val eventCollectionRef = fireStore
-            .collection(Constants.USERS_COLLECTION)
-            .document(firebaseAuth.currentUser!!.uid)
-            .collection(Constants.CONTACTS_COLLECTION)
-            .document(contactPk.toString())
-            .collection(Constants.EVENTS_COLLECTION)
+            for (data in giftFireStoreData) {
+                data.contact_name = new_name
+                giftCollectionRef
+                    .document(data.gift_pk.toString())
+                    .set(data.toGift())
+                    .await()
+            }
 
-        contactEventDao.updateContactNameEvent(new_name, contactPk)
-        val eventFireStoreData =
-            eventCollectionRef
-                .get()
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
-                .toObjects(ContactEventEntity::class.java)
+            /**
+             * Updating ContactEventEntity
+             */
 
-        for(data in eventFireStoreData) {
-            data.contact_name = new_name
-            eventCollectionRef
-                .document(data.event_pk.toString())
-                .set(data)
-                .await()
-        }
+            val eventCollectionRef = fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(contactPk.toString())
+                .collection(Constants.EVENTS_COLLECTION)
 
-        /**
-         * Updating ContactEntity
-         */
+            contactEventDao.updateContactNameEvent(new_name, contactPk)
+            val eventFireStoreData =
+                eventCollectionRef
+                    .get()
+                    .addOnFailureListener {
+                        cLog(it.message)
+                    }
+                    .await()
+                    .toObjects(ContactEventEntity::class.java)
 
-        val contactCollectionRef = fireStore
-            .collection(Constants.USERS_COLLECTION)
-            .document(firebaseAuth.currentUser!!.uid)
-            .collection(Constants.CONTACTS_COLLECTION)
-            .document(contactPk.toString())
+            for (data in eventFireStoreData) {
+                data.contact_name = new_name
+                eventCollectionRef
+                    .document(data.event_pk.toString())
+                    .set(data.toContactEvent())
+                    .await()
+            }
 
-        contactDao.updateContact(new_name, contactPk)
-        val contactFireStoreData =
-            contactCollectionRef
-                .get()
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
-                .toObject(ContactEntity::class.java)
+            /**
+             * Updating ContactEntity
+             */
+
+            val contactCollectionRef = fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(contactPk.toString())
+
+            contactDao.updateContact(new_name, contactPk)
+            val contactFireStoreData =
+                contactCollectionRef
+                    .get()
+                    .addOnFailureListener {
+                        cLog(it.message)
+                    }
+                    .await()
+                    .toObject(ContactEntity::class.java)
 
             contactFireStoreData?.contact_name = new_name
             contactCollectionRef
                 .set(contactFireStoreData!!)
                 .await()
+
+        } else {
+            giftDao.updateContactNameGift(new_name, contactPk)
+            contactEventDao.updateContactNameEvent(new_name, contactPk)
+            contactDao.updateContact(new_name, contactPk)
+        }
 
         emit(DataState.data(
             response = Response(
@@ -123,7 +136,21 @@ class UpdateContact(
         ))
 
     }.catch { e->
-        emit(handleUseCaseException(e))
+        Log.d(Constants.TAG, e.toString())
+    }
+
+    private fun isOnline(): Boolean {
+
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+
+        if(capabilities != null) {
+            if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            }
+        }
+        return false
     }
 
 }

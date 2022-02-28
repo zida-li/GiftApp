@@ -1,5 +1,7 @@
 package dev.zidali.giftapp.business.interactors.main.fab
 
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,6 +13,7 @@ import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventState
 import dev.zidali.giftapp.util.Constants.*
 import dev.zidali.giftapp.util.Constants.Companion.CONTACTS_COLLECTION
 import dev.zidali.giftapp.util.Constants.Companion.EVENTS_COLLECTION
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.Constants.Companion.USERS_COLLECTION
 import dev.zidali.giftapp.util.cLog
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +26,7 @@ class CreateEvent(
     private val contactEventDao: ContactEventDao,
     private val firebaseAuth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
+    private val connectivityManager: ConnectivityManager,
 ) {
 
     fun execute(
@@ -42,20 +46,23 @@ class CreateEvent(
 
         val pk = contactEventDao.insert(contactEvent.toContactEventEntity())
 
-        contactEvent.event_pk = pk.toInt()
+        if(isOnline()) {
 
-        fireStore
-            .collection(USERS_COLLECTION)
-            .document(firebaseAuth.currentUser!!.uid)
-            .collection(CONTACTS_COLLECTION)
-            .document(contactEvent.pk.toString())
-            .collection(EVENTS_COLLECTION)
-            .document(contactEvent.event_pk.toString())
-            .set(contactEvent.toContactEventEntity())
-            .addOnFailureListener {
-                cLog(it.message)
-            }
-            .await()
+            contactEvent.event_pk = pk.toInt()
+
+            fireStore
+                .collection(USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(CONTACTS_COLLECTION)
+                .document(contactEvent.pk.toString())
+                .collection(EVENTS_COLLECTION)
+                .document(contactEvent.event_pk.toString())
+                .set(contactEvent.toContactEventEntity())
+                .addOnFailureListener {
+                    cLog(it.message)
+                }
+                .await()
+        }
 
         emit(DataState.data(
             response = Response(
@@ -69,7 +76,21 @@ class CreateEvent(
         ))
 
     }.catch { e->
-        emit(handleUseCaseException(e))
+        Log.d(TAG, e.toString())
+    }
+
+    private fun isOnline(): Boolean {
+
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+
+        if(capabilities != null) {
+            if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            }
+        }
+        return false
     }
 
 }

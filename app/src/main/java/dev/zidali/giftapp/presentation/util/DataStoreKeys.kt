@@ -12,7 +12,12 @@ class DataStoreKeys {
         val EVENT_PK = "dev.zidali.giftapp.SELECTED_EVENT_PK"
         val CONTACT_PK = "dev.zidali.giftapp.CONTACT_PK"
         val SELECTED_CONTACT_PK = "dev.zidali.giftapp.SELECTED_CONTACT_PK"
-
+        val CONTACT_UPDATED = "dev.zidali.giftapp.SELECTED_CONTACT_UPDATED"
+        val GIFT_UPDATED = "dev.zidali.giftapp.SELECTED_GIFT_UPDATED"
+        val EVENT_UPDATED = "dev.zidali.giftapp.SELECTED_EVENT_UPDATED"
+        val CONTACT_FIRST_RUN = "dev.zidali.giftapp.CONTACT_FIRST_RUN"
+        val GIFT_FIRST_RUN = "dev.zidali.giftapp.GIFT_FIRST_RUN"
+        val EVENT_FIRST_RUN = "dev.zidali.giftapp.EVENT_FIRST_RUN"
     }
 
 }

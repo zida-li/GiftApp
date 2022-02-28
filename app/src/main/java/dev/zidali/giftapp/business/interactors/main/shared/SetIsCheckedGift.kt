@@ -1,5 +1,8 @@
 package dev.zidali.giftapp.business.interactors.main.shared
 
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
@@ -19,29 +22,48 @@ class SetIsCheckedGift(
     private val giftDao: GiftDao,
     private val firebaseAuth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
+    private val connectivityManager: ConnectivityManager,
 ) {
 
     fun execute(
         gift: Gift
     ): Flow<DataState<Gift>> = flow<DataState<Gift>> {
 
-        fireStore
-            .collection(Constants.USERS_COLLECTION)
-            .document(firebaseAuth.currentUser!!.uid)
-            .collection(Constants.CONTACTS_COLLECTION)
-            .document(gift.pk.toString())
-            .collection(Constants.GIFTS_COLLECTION)
-            .document(gift.gift_pk.toString())
-            .set(gift.toGiftEntity())
-            .addOnFailureListener {
-                cLog(it.message)
-            }
-            .await()
+        if(isOnline()) {
+            fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(gift.pk.toString())
+                .collection(Constants.GIFTS_COLLECTION)
+                .document(gift.gift_pk.toString())
+                .set(gift.toGiftEntity())
+                .addOnFailureListener {
+                    cLog(it.message)
+                }
+                .await()
 
-        giftDao.updateIsChecked(gift.isChecked, gift.gift_pk)
+            giftDao.updateIsChecked(gift.isChecked, gift.gift_pk)
+        } else {
+            giftDao.updateIsChecked(gift.isChecked, gift.gift_pk)
+        }
 
     }.catch { e->
-        emit(handleUseCaseException(e))
+        Log.d(Constants.TAG, e.toString())
+    }
+
+    private fun isOnline(): Boolean {
+
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+
+        if(capabilities != null) {
+            if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            }
+        }
+        return false
     }
 
 }
