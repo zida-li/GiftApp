@@ -6,10 +6,12 @@ import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.util.StateMessage
 import dev.zidali.giftapp.business.domain.util.SuccessHandling.Companion.RESPONSE_CHECK_PREVIOUS_AUTH_USER_DONE
+import dev.zidali.giftapp.business.domain.util.SuccessHandling.Companion.SUCCESS_DELETE_ACCOUNT
 import dev.zidali.giftapp.business.domain.util.SuccessHandling.Companion.SUCCESS_LOGOUT
 import dev.zidali.giftapp.business.domain.util.UIComponentType
 import dev.zidali.giftapp.business.domain.util.doesMessageAlreadyExistInQueue
 import dev.zidali.giftapp.business.interactors.session.CheckPreviousAuthUser
+import dev.zidali.giftapp.business.interactors.session.DeleteAccount
 import dev.zidali.giftapp.business.interactors.session.Logout
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import kotlinx.coroutines.*
@@ -25,6 +27,7 @@ class SessionManager
 constructor(
     private val checkPreviousAuthUser: CheckPreviousAuthUser,
     private val logout: Logout,
+    private val deleteAccount: DeleteAccount,
     private val appDataStoreManager: AppDataStore,
 ) {
 
@@ -49,11 +52,17 @@ constructor(
             is SessionEvents.Logout -> {
                 logout()
             }
+            is SessionEvents.DeleteAccount -> {
+                deleteAccount()
+            }
             is SessionEvents.CheckPreviousAuthUser -> {
                 checkPreviousAuthUser()
             }
             is SessionEvents.OnRemoveHeadFromQueue ->{
                 removeHeadFromQueue()
+            }
+            is SessionEvents.AppendToMessageQueue -> {
+                appendToMessageQueue(event.stateMessage)
             }
         }
     }
@@ -126,6 +135,27 @@ constructor(
                 }
             }.launchIn(sessionScope)
         }
+    }
+
+    private fun deleteAccount() {
+
+        state.value?.let { state->
+            deleteAccount.execute().onEach { dataState ->
+
+                this.state.value = state.copy(isLoading = dataState.isLoading)
+
+                dataState.data?.let { response ->
+                    if(response.message.equals(SUCCESS_DELETE_ACCOUNT)){
+                        logout()
+                    }
+                }
+
+                dataState.stateMessage?.let { stateMessage ->
+                    appendToMessageQueue(stateMessage)
+                }
+            }.launchIn(sessionScope)
+        }
+
     }
 
     private fun onFinishCheckingPrevAuthUser(){

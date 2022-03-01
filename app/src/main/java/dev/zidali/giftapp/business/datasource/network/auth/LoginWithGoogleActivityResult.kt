@@ -2,10 +2,12 @@ package dev.zidali.giftapp.business.datasource.network.auth
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.Constants.Companion.default_web_client_id
 
 class LoginWithGoogleActivityResult : ActivityResultContract<Unit, String?>() {
@@ -22,7 +24,7 @@ class LoginWithGoogleActivityResult : ActivityResultContract<Unit, String?>() {
         val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
         return try {
             val account = task.getResult(ApiException::class.java)!!
-//            Log.d(TAG,"LoginWithGoogle: parseResult Successful")
+            Log.d(TAG,"LoginWithGoogle: parseResult Successful")
             account.idToken!!
         } catch (e: Exception) {
             null

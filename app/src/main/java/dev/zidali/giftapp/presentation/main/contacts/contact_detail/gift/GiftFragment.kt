@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.processQueue
 
 class GiftFragment : BaseMainFragment(),

@@ -31,7 +31,7 @@ class LoginWithGoogle(
 
         if(firebaseAuth.currentUser != null) {
 
-            accountPropertiesDao.insertAndReplace(
+            accountPropertiesDao.insertOrIgnore(
                 AccountProperties(
                     current_authUser_email = firebaseAuth.currentUser?.email!!
                 ).toEntity()

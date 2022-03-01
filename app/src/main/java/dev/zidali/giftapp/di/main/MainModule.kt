@@ -8,6 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase
+import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
@@ -20,6 +21,7 @@ import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.Fetc
 import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.fab.CreateEvent
 import dev.zidali.giftapp.business.interactors.main.shared.*
+import dev.zidali.giftapp.business.interactors.session.DeleteAccount
 import dev.zidali.giftapp.business.interactors.session.Logout
 import javax.inject.Singleton
 
@@ -285,6 +287,22 @@ object MainModule {
             firebaseAuth,
             fireStore,
             connectivityManager,
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteAccount(
+        accountPropertiesDao: AccountPropertiesDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
+    ): DeleteAccount {
+        return DeleteAccount(
+            accountPropertiesDao,
+            firebaseAuth,
+            fireStore,
+            connectivityManager
         )
     }
 

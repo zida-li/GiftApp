@@ -14,6 +14,7 @@ import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.Fetc
 import dev.zidali.giftapp.business.interactors.main.shared.SetIsCheckedGift
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

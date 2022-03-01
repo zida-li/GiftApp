@@ -47,7 +47,8 @@ ContactListAdapter.Interaction
         setHasOptionsMenu(true)
         subscribeObservers()
         initRecyclerView()
-        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
     }
 
 

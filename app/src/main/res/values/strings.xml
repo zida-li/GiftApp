@@ -38,6 +38,7 @@
     <string name="when_colon">When:</string>
     <string name="reminder_colon">Reminder:</string>
     <string name="event">Event</string>
+    <string name="delete_account">Delete Account</string>
 
     <string name="favorite">Favorite</string>
     <string name="account">Account</string>

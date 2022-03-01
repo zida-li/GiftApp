@@ -20,4 +20,7 @@ interface AccountPropertiesDao {
     @Query("SELECT * FROM account_properties")
     suspend fun getAllUsers(): MutableList<AccountPropertiesEntity>
 
+    @Query("DELETE FROM account_properties WHERE current_authUser_email = :email")
+    suspend fun deleteUser(email: String)
+
 }
