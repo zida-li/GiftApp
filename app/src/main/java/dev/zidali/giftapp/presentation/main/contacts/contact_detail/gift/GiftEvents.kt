@@ -36,7 +36,8 @@ sealed class GiftEvents {
     ): GiftEvents()
 
     data class SetIsCheckedGift(
-        val gift: Gift
+        val gift: Gift,
+        val position: Int
     ): GiftEvents()
 
 }

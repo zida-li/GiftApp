@@ -24,7 +24,7 @@ class LoginWithGoogleActivityResult : ActivityResultContract<Unit, String?>() {
         val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
         return try {
             val account = task.getResult(ApiException::class.java)!!
-            Log.d(TAG,"LoginWithGoogle: parseResult Successful")
+//            Log.d(TAG,"LoginWithGoogle: parseResult Successful")
             account.idToken!!
         } catch (e: Exception) {
             null

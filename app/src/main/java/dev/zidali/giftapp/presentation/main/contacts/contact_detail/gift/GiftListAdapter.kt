@@ -2,6 +2,7 @@ package dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift
 
 import android.graphics.Color
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.*
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.databinding.GiftListItemBinding
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 
 class GiftListAdapter(
     private val interaction: Interaction? = null,
@@ -22,7 +24,7 @@ class GiftListAdapter(
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Gift>() {
 
         override fun areItemsTheSame(oldItem: Gift, newItem: Gift): Boolean {
-            return oldItem.contact_gift == newItem.contact_gift
+            return oldItem.gift_pk == newItem.gift_pk
         }
 
         override fun areContentsTheSame(oldItem: Gift, newItem: Gift): Boolean {
@@ -74,7 +76,7 @@ class GiftListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is GiftViewHolder -> {
-                holder.bind(differ.currentList.get(position))
+                holder.bind(differ.currentList[position])
             }
         }
     }
@@ -115,6 +117,7 @@ class GiftListAdapter(
                 interaction?.onItemSelected(adapterPosition, mGift)
                 true
             }
+
             mGift = item
 
             binding.giftName.text = item.contact_gift

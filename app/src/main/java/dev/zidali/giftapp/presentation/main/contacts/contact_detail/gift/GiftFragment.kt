@@ -12,6 +12,7 @@ import dev.zidali.giftapp.databinding.FragmentGiftBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.util.Constants
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 
 class GiftFragment : BaseMainFragment(),
@@ -182,7 +183,7 @@ GiftListAdapter.Interaction
     }
 
     override fun onIsCheckedClicked(item: Gift, position: Int) {
-        viewModel.onTriggerEvent(GiftEvents.SetIsCheckedGift(item))
+        viewModel.onTriggerEvent(GiftEvents.SetIsCheckedGift(item, position))
         if (item.isChecked) {
             recyclerAdapter?.notifyItemChanged(position)
             recyclerAdapter?.notifyItemMoved(position, viewModel.state.value?.contact_gifts?.size!!)

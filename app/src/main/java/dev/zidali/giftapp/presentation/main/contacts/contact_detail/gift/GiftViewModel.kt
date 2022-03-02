@@ -71,7 +71,7 @@ constructor(
                 setMultiSelectionMode(event.boolean)
             }
             is GiftEvents.SetIsCheckedGift -> {
-                setIsChecked(event.gift)
+                setIsChecked(event.gift, event.position)
             }
         }
     }
@@ -185,13 +185,12 @@ constructor(
         }
     }
 
-    private fun setIsChecked(item: Gift) {
+    private fun setIsChecked(item: Gift, position: Int) {
         state.value?.let { state->
-            for(gift in state.contact_gifts) {
-                if(gift.contact_gift == item.contact_gift) {
-                    item.isChecked = !item.isChecked
-                    setIsCheckedGift.execute(item).launchIn(viewModelScope)
-                }
+            if(state.contact_gifts.contains(item)) {
+                item.isChecked = !item.isChecked
+                state.contact_gifts[position] = item
+                setIsCheckedGift.execute(item).launchIn(viewModelScope)
             }
             if(item.isChecked) {
                 state.contact_gifts.remove(item)
