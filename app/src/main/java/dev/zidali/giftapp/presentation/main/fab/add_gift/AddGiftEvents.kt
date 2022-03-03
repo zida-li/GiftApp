@@ -1,11 +1,13 @@
 package dev.zidali.giftapp.presentation.main.fab.add_gift
 
+import android.content.Context
 import dev.zidali.giftapp.business.domain.util.StateMessage
 
 sealed class AddGiftEvents {
 
     data class FetchContacts(
         val email: String,
+        val context: Context,
     ): AddGiftEvents()
 
     object FetchCurrentContact: AddGiftEvents()

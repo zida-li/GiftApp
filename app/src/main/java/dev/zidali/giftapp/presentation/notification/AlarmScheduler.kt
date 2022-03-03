@@ -119,7 +119,7 @@ object AlarmScheduler {
             putExtra(Constants.KEY_ID, reminderData.event_pk)
         }
 
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         Log.d(Constants.TAG, "cancelScheduledAlarmForReminder: ${reminderData.contact_name} + $reminder")
 
@@ -145,7 +145,7 @@ object AlarmScheduler {
             putExtras(intentBundle)
         }
 
-        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
 
     }

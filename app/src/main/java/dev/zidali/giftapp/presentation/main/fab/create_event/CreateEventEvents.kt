@@ -1,11 +1,13 @@
 package dev.zidali.giftapp.presentation.main.fab.create_event
 
+import android.content.Context
 import dev.zidali.giftapp.business.domain.util.StateMessage
 
 sealed class CreateEventEvents {
 
     data class FetchContacts(
         val email: String,
+        val context: Context,
     ): CreateEventEvents()
 
     object FetchCurrentContact: CreateEventEvents()

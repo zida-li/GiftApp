@@ -1,12 +1,14 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
+import android.content.Context
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.StateMessage
 
 sealed class ContactEvents {
 
     data class FetchContacts(
-        val email: String
+        val email: String,
+        val context: Context,
     ) : ContactEvents()
 
     data class PassDataToViewPager(

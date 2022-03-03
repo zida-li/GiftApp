@@ -1,5 +1,6 @@
 package dev.zidali.giftapp.business.interactors.main.shared
 
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
@@ -9,6 +10,7 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.*
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.DataState
+import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.util.DataStoreKeys.Companion.CONTACT_FIRST_RUN
 import dev.zidali.giftapp.presentation.util.DataStoreKeys.Companion.CONTACT_UPDATED
 import dev.zidali.giftapp.util.Constants
@@ -18,10 +20,12 @@ import dev.zidali.giftapp.util.Constants.Companion.GIFTS_COLLECTION
 import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.Constants.Companion.USERS_COLLECTION
 import dev.zidali.giftapp.util.cLog
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.coroutineContext
 
 class FetchContacts(
     private val contactDao: ContactDao,
@@ -35,6 +39,7 @@ class FetchContacts(
 
     fun execute(
         email: String,
+        context: Context,
     ): Flow<DataState<MutableList<Contact>>> = flow {
 
         val finalList: MutableList<Contact> = mutableListOf()
@@ -221,6 +226,7 @@ class FetchContacts(
 
                     for(event in events) {
                         contactEventDao.insert(event)
+                        AlarmScheduler.scheduleInitialAlarmsForReminder(context, event.toContactEvent())
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -39,7 +40,7 @@ constructor(
     fun onTriggerEvent(event: ContactEvents){
         when (event) {
             is ContactEvents.FetchContacts -> {
-                fetchContacts(event.email)
+                fetchContacts(event.email, event.context)
             }
             is ContactEvents.PassDataToViewPager -> {
                 passDataToViewPager(event.contact_name, event.contact_pk)
@@ -71,12 +72,13 @@ constructor(
         }
     }
 
-    private fun fetchContacts(email: String) {
+    private fun fetchContacts(email: String, context: Context) {
 
         state.value?.let { state->
 
             fetchContacts.execute(
-                email
+                email,
+                context,
             ).onEach {dataState ->
 
                 this.state.value = state.copy(isLoading = dataState.isLoading)

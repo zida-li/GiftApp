@@ -51,7 +51,10 @@ ContactListAdapter.Interaction
 
         globalManager.state.observe(viewLifecycleOwner) { state ->
             if (state.needToUpdateContact) {
-                viewModel.onTriggerEvent(ContactEvents.FetchContacts(sessionManager.state.value?.accountProperties!!.current_authUser_email))
+                viewModel.onTriggerEvent(ContactEvents.FetchContacts(
+                    sessionManager.state.value?.accountProperties!!.current_authUser_email,
+                    requireContext()
+                ))
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateContact(false))
             }
         }

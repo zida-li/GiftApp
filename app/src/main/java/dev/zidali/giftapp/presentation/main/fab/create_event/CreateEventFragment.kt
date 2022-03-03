@@ -53,7 +53,10 @@ class CreateEventFragment: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeObservers()
-        viewModel.onTriggerEvent(CreateEventEvents.FetchContacts(sessionManager.state.value?.accountProperties!!.current_authUser_email))
+        viewModel.onTriggerEvent(CreateEventEvents.FetchContacts(
+            sessionManager.state.value?.accountProperties!!.current_authUser_email,
+            requireContext()
+        ))
         setUpWindow()
         setUpOnClickListeners()
 

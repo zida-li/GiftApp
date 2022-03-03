@@ -1,5 +1,6 @@
 package dev.zidali.giftapp.presentation.main.fab.add_gift
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,7 +32,7 @@ constructor(
     fun onTriggerEvent(event: AddGiftEvents) {
         when(event) {
             is AddGiftEvents.FetchContacts ->
-                fetchContacts(event.email)
+                fetchContacts(event.email, event.context)
             is AddGiftEvents.FetchCurrentContact -> {
                 fetchCurrentContact()
             }
@@ -53,11 +54,12 @@ constructor(
         }
     }
 
-    private fun fetchContacts(email: String){
+    private fun fetchContacts(email: String, context: Context){
         state.value?.let {state->
 
             fetchContacts.execute(
-                email
+                email,
+                context,
             ).onEach {dataState ->
 
                 val contactNames: MutableList<String> = mutableListOf()

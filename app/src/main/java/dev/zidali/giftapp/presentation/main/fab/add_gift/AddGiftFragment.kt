@@ -50,7 +50,10 @@ class AddGiftFragment: DialogFragment() {
 
         subscribeObservers()
 
-        viewModel.onTriggerEvent(AddGiftEvents.FetchContacts(sessionManager.state.value?.accountProperties!!.current_authUser_email))
+        viewModel.onTriggerEvent(AddGiftEvents.FetchContacts(
+            sessionManager.state.value?.accountProperties!!.current_authUser_email,
+            requireContext(),
+        ))
 
         dialog?.window?.apply {
             setGravity(Gravity.BOTTOM)
