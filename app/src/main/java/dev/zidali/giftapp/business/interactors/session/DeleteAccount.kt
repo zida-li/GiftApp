@@ -117,6 +117,8 @@ class DeleteAccount(
                 }
                 .await()
 
+            firebaseAuth.currentUser?.delete()
+
             emit(DataState.data<Response>(
                 data = Response(
                     message = SuccessHandling.SUCCESS_DELETE_ACCOUNT,
