@@ -39,21 +39,21 @@ class LoginFragment: BaseAuthFragment() {
 
     private fun subscribeObservers() {
 
-        viewModel.state.observe(viewLifecycleOwner, { state->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
 
             uiCommunicationListener.displayProgressBar(state.isLoading)
 
             processQueue(
                 context = context,
                 queue = state.queue,
-                stateMessageCallback = object: StateMessageCallback {
+                stateMessageCallback = object : StateMessageCallback {
                     override fun removeMessageFromStack() {
                         viewModel.onTriggerEvent(LoginEvents.OnRemoveHeadFromQueue)
                     }
                 }
             )
 
-        })
+        }
 
     }
 

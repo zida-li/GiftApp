@@ -1,5 +1,7 @@
 package dev.zidali.giftapp.business.interactors.session
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.business.domain.util.SuccessHandling.Companion.SUCCESS_LOGOUT
@@ -9,9 +11,11 @@ import kotlinx.coroutines.flow.flow
 
 class Logout(
     private val firebaseAuth: FirebaseAuth,
+    private val googleSignInClient: GoogleSignInClient,
 ) {
     fun execute(): Flow<DataState<Response>> = flow {
         emit(DataState.loading<Response>())
+        googleSignInClient.signOut()
         firebaseAuth.signOut()
         emit(DataState.data<Response>(
             data = Response(

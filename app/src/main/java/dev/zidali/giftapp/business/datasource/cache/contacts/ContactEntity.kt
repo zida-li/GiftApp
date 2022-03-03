@@ -23,7 +23,7 @@ data class ContactEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name ="primary_key")
-    var pk: Int,
+    var contact_pk: Int,
 
     @ColumnInfo(name ="contact_name")
     var contact_name: String,
@@ -31,7 +31,7 @@ data class ContactEntity(
     @ColumnInfo(name = "current_authUser_email")
     var current_authUser_email: String,
 
-) {
+    ) {
 
     constructor(): this
         (
@@ -45,7 +45,7 @@ fun ContactEntity.toContact(): Contact {
     return Contact(
         contact_name = contact_name,
         current_authUser_email = current_authUser_email,
-        pk = pk,
+        contact_pk = contact_pk,
     )
 }
 
@@ -53,7 +53,7 @@ fun Contact.toContactsEntity(): ContactEntity{
     return ContactEntity(
         contact_name = contact_name!!,
         current_authUser_email = current_authUser_email!!,
-        pk = pk!!,
+        contact_pk = contact_pk!!,
     )
 }
 

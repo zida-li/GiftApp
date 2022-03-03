@@ -5,7 +5,9 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 
 sealed class ContactEvents {
 
-    object FetchContacts: ContactEvents()
+    data class FetchContacts(
+        val email: String
+    ) : ContactEvents()
 
     data class PassDataToViewPager(
         val contact_name: String,

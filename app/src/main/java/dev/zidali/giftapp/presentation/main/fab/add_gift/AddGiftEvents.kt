@@ -4,7 +4,9 @@ import dev.zidali.giftapp.business.domain.util.StateMessage
 
 sealed class AddGiftEvents {
 
-    object FetchContacts: AddGiftEvents()
+    data class FetchContacts(
+        val email: String,
+    ): AddGiftEvents()
 
     object FetchCurrentContact: AddGiftEvents()
 

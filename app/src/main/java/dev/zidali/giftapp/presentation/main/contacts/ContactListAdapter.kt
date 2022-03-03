@@ -2,6 +2,7 @@ package dev.zidali.giftapp.presentation.main.contacts
 
 import android.graphics.Color
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.*
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.databinding.ContactListItemBinding
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 
 class ContactListAdapter(
     private val interaction: Interaction? = null,

@@ -34,7 +34,7 @@ class CheckPreviousAuthUser(
 //            val currentUser = accountPropertiesDao.searchByEmail(firebaseAuth.currentUser?.email!!)?.toAccountProperties()
 
             val currentUser = AccountProperties(
-                current_authUser_email = firebaseAuth.currentUser?.email!!
+                current_authUser_email = firebaseAuth.currentUser?.email!!,
             )
 
 

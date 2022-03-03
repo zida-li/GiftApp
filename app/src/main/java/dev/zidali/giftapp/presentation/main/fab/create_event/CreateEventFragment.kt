@@ -15,6 +15,7 @@ import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentCreateEventBinding
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
+import dev.zidali.giftapp.presentation.session.SessionManager
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.presentation.update.GlobalManager
 import dev.zidali.giftapp.util.processQueue
@@ -29,6 +30,9 @@ class CreateEventFragment: DialogFragment() {
 
     @Inject
     lateinit var globalManager: GlobalManager
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +53,7 @@ class CreateEventFragment: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeObservers()
-        viewModel.onTriggerEvent(CreateEventEvents.FetchContacts)
+        viewModel.onTriggerEvent(CreateEventEvents.FetchContacts(sessionManager.state.value?.accountProperties!!.current_authUser_email))
         setUpWindow()
         setUpOnClickListeners()
 

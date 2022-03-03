@@ -15,7 +15,7 @@ interface AccountPropertiesDao {
     suspend fun insertOrIgnore(accountPropertiesEntity: AccountPropertiesEntity?): Long
 
     @Query("SELECT * FROM account_properties WHERE current_authUser_email = :email")
-    suspend fun searchByEmail(email: String): AccountPropertiesEntity?
+    suspend fun getByEmail(email: String): AccountPropertiesEntity?
 
     @Query("SELECT * FROM account_properties")
     suspend fun getAllUsers(): MutableList<AccountPropertiesEntity>

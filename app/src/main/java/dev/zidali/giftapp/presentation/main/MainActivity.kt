@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.view.isInvisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -117,6 +118,10 @@ class MainActivity : BaseActivity() {
 
     private fun subscribeObservers() {
 
+        navigationView = binding.navView
+
+        val header = navigationView.getHeaderView(0)
+
         sessionManager.state.observe(this) { state ->
 
             displayProgressBar(state.isLoading)
@@ -133,6 +138,8 @@ class MainActivity : BaseActivity() {
             if (state.accountProperties == null) {
                 navAuthActivity()
             }
+
+            header.findViewById<TextView>(R.id.text_description).text = state.accountProperties?.current_authUser_email
 
         }
     }

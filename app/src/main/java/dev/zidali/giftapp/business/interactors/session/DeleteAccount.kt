@@ -2,8 +2,6 @@ package dev.zidali.giftapp.business.interactors.session
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.provider.ContactsContract
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
@@ -11,12 +9,10 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftEntity
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
-import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.Constants.Companion.CONTACTS_COLLECTION
 import dev.zidali.giftapp.util.Constants.Companion.GIFTS_COLLECTION
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.Constants.Companion.USERS_COLLECTION
 import dev.zidali.giftapp.util.cLog
 import kotlinx.coroutines.flow.Flow
@@ -57,14 +53,14 @@ class DeleteAccount(
                     .collection(Constants.USERS_COLLECTION)
                     .document(firebaseAuth.currentUser!!.uid)
                     .collection(Constants.CONTACTS_COLLECTION)
-                    .document(contact.pk.toString())
+                    .document(contact.contact_pk.toString())
                     .collection(GIFTS_COLLECTION)
 
                 val eventCollectionRef = fireStore
                     .collection(Constants.USERS_COLLECTION)
                     .document(firebaseAuth.currentUser!!.uid)
                     .collection(Constants.CONTACTS_COLLECTION)
-                    .document(contact.pk.toString())
+                    .document(contact.contact_pk.toString())
                     .collection(Constants.EVENTS_COLLECTION)
 
                 val gifts = giftCollectionRef
@@ -104,7 +100,7 @@ class DeleteAccount(
                 }
 
                 contactCollectionRef
-                    .document(contact.pk.toString())
+                    .document(contact.contact_pk.toString())
                     .delete()
                     .addOnFailureListener {
                         cLog(it.message)

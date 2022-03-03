@@ -5,12 +5,8 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
-import dev.zidali.giftapp.business.datasource.cache.account.toEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactsEntity
-import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
-import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.util.Constants.Companion.CONTACTS_COLLECTION
@@ -38,13 +34,13 @@ class CreateContact(
 
         if(isOnline()) {
 
-            contact.pk = pk.toInt()
+            contact.contact_pk = pk.toInt()
 
             fireStore
                 .collection(USERS_COLLECTION)
                 .document(firebaseAuth.currentUser!!.uid)
                 .collection(CONTACTS_COLLECTION)
-                .document(contact.pk.toString())
+                .document(contact.contact_pk.toString())
                 .set(contact.toContactsEntity())
                 .addOnFailureListener {
                     cLog(it.message)

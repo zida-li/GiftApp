@@ -33,7 +33,9 @@ class FetchContacts(
     private val appDataStore: AppDataStore,
 ) {
 
-    fun execute(): Flow<DataState<MutableList<Contact>>> = flow {
+    fun execute(
+        email: String,
+    ): Flow<DataState<MutableList<Contact>>> = flow {
 
         val finalList: MutableList<Contact> = mutableListOf()
 
@@ -41,7 +43,7 @@ class FetchContacts(
 
         if(isOnline()) {
 
-            val results = contactDao.getAllContacts().map { it.toContact() }.toMutableList()
+            val results = contactDao.getAllContactOfUser(email).map { it.toContact() }.toMutableList()
 
             val contactCollectionRef = fireStore
                 .collection(USERS_COLLECTION)
@@ -77,7 +79,7 @@ class FetchContacts(
                         finalList.add(result)
                         //updates contact
                         contactCollectionRef
-                            .document(result.pk.toString())
+                            .document(result.contact_pk.toString())
                             .set(result)
                             .addOnFailureListener {
                                 cLog(it.message)
@@ -88,14 +90,14 @@ class FetchContacts(
                             .collection(USERS_COLLECTION)
                             .document(firebaseAuth.currentUser!!.uid)
                             .collection(CONTACTS_COLLECTION)
-                            .document(result.pk.toString())
+                            .document(result.contact_pk.toString())
                             .collection(GIFTS_COLLECTION)
 
                         val eventCollectionRef = fireStore
                             .collection(USERS_COLLECTION)
                             .document(firebaseAuth.currentUser!!.uid)
                             .collection(CONTACTS_COLLECTION)
-                            .document(result.pk.toString())
+                            .document(result.contact_pk.toString())
                             .collection(EVENTS_COLLECTION)
 
                         //updates contact name in GiftEntity
@@ -149,7 +151,7 @@ class FetchContacts(
                         } else {
                             //if anything ends up here, it means contact was deleted offline. So must delete from firebase.
                             contactCollectionRef
-                                .document(contact.pk.toString())
+                                .document(contact.contact_pk.toString())
                                 .delete()
                                 .addOnFailureListener {
                                     cLog(it.message)
@@ -161,9 +163,11 @@ class FetchContacts(
             }
 
             //first launch
-            if(appDataStore.readValue(CONTACT_FIRST_RUN) == null) {
+            if(appDataStore.readValue(CONTACT_FIRST_RUN) == null ||
+               appDataStore.readValue(CONTACT_FIRST_RUN) == "null") {
                 appDataStore.setValue(CONTACT_FIRST_RUN, "completed")
 
+//                Log.d(TAG, "FetchContacts: first launch")
                 //Take all contacts from firebase and add them to room.
                 val contacts = contactCollectionRef
                     .get()
@@ -177,7 +181,7 @@ class FetchContacts(
                     contactDao.insert(contact)
                 }
 
-                val firstResults = contactDao.getAllContacts().map { it.toContact() }.toMutableList()
+                val firstResults = contactDao.getAllContactOfUser(email).map { it.toContact() }.toMutableList()
                 finalList.addAll(firstResults)
 
                 //Take all gifts of all contacts from firebase and add them to room.
@@ -186,7 +190,7 @@ class FetchContacts(
                         .collection(USERS_COLLECTION)
                         .document(firebaseAuth.currentUser!!.uid)
                         .collection(CONTACTS_COLLECTION)
-                        .document(contact.pk.toString())
+                        .document(contact.contact_pk.toString())
                         .collection(GIFTS_COLLECTION)
                         .get()
                         .addOnFailureListener {
@@ -206,7 +210,7 @@ class FetchContacts(
                         .collection(Constants.USERS_COLLECTION)
                         .document(firebaseAuth.currentUser!!.uid)
                         .collection(Constants.CONTACTS_COLLECTION)
-                        .document(contact.pk.toString())
+                        .document(contact.contact_pk.toString())
                         .collection(Constants.EVENTS_COLLECTION)
                         .get()
                         .addOnFailureListener {
@@ -221,10 +225,8 @@ class FetchContacts(
                 }
             }
 
-
-
         } else {
-            val results = contactDao.getAllContacts().map { it.toContact() }.toMutableList()
+            val results = contactDao.getAllContactOfUser(email).map { it.toContact() }.toMutableList()
             finalList.addAll(results)
         }
 
@@ -255,7 +257,7 @@ class FetchContacts(
 
     private fun isRoomEntityNew(result: Contact, fireBaseList: MutableList<Contact>): Boolean {
         for (fire in fireBaseList) {
-            if(result.pk == fire.pk) {
+            if(result.contact_pk == fire.contact_pk) {
                 return false
             }
         }
@@ -264,7 +266,7 @@ class FetchContacts(
 
     private fun doesFirebaseEntityMatch(event: Contact, roomList: MutableList<Contact>): Boolean {
         for (room in roomList) {
-            if(room.pk == event.pk) {
+            if(room.contact_pk == event.contact_pk) {
                 return true
             }
         }

@@ -12,7 +12,6 @@ import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.shared.FetchContacts
 import dev.zidali.giftapp.presentation.util.DataStoreKeys
 import dev.zidali.giftapp.util.Constants
-import dev.zidali.giftapp.util.Constants.Companion.TAG
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -32,7 +31,7 @@ constructor(
     fun onTriggerEvent(event: AddGiftEvents) {
         when(event) {
             is AddGiftEvents.FetchContacts ->
-                fetchContacts()
+                fetchContacts(event.email)
             is AddGiftEvents.FetchCurrentContact -> {
                 fetchCurrentContact()
             }
@@ -54,10 +53,12 @@ constructor(
         }
     }
 
-    private fun fetchContacts(){
+    private fun fetchContacts(email: String){
         state.value?.let {state->
 
-            fetchContacts.execute().onEach {dataState ->
+            fetchContacts.execute(
+                email
+            ).onEach {dataState ->
 
                 val contactNames: MutableList<String> = mutableListOf()
 
@@ -96,7 +97,7 @@ constructor(
                     this.state.value = state.copy(
                         contact_name_holder = contact,
                         contact_gift_holder = gift,
-                        contact_pk_holder = individualContact.pk!!
+                        contact_pk_holder = individualContact.contact_pk!!
                     )
                 }
             }

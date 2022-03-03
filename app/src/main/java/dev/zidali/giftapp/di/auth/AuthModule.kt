@@ -41,11 +41,13 @@ object AuthModule {
         firebaseAuth: FirebaseAuth,
         accountPropertiesDao: AccountPropertiesDao,
         fireStore: FirebaseFirestore,
+        appDataStore: AppDataStore,
     ): LoginWithGoogle {
         return LoginWithGoogle(
             firebaseAuth,
             accountPropertiesDao,
-            fireStore
+            fireStore,
+            appDataStore,
         )
     }
 
@@ -55,11 +57,13 @@ object AuthModule {
         firebaseAuth: FirebaseAuth,
         appDataStore: AppDataStore,
         accountPropertiesDao: AccountPropertiesDao,
+        fireStore: FirebaseFirestore,
     ): RegisterWithEmailAndPassword {
         return RegisterWithEmailAndPassword (
             firebaseAuth,
             appDataStore,
             accountPropertiesDao,
+            fireStore,
         )
     }
 
@@ -67,9 +71,15 @@ object AuthModule {
     @Provides
     fun provideLoginWithEmailAndPassword(
         firebaseAuth: FirebaseAuth,
+        accountPropertiesDao: AccountPropertiesDao,
+        fireStore: FirebaseFirestore,
+        appDataStore: AppDataStore,
     ): LoginWithEmailAndPassword {
         return LoginWithEmailAndPassword(
-            firebaseAuth
+            firebaseAuth,
+            accountPropertiesDao,
+            fireStore,
+            appDataStore,
         )
     }
 

@@ -36,7 +36,7 @@ constructor(
     fun onTriggerEvent(event: CreateEventEvents) {
         when(event) {
             is CreateEventEvents.FetchContacts ->
-                fetchContacts()
+                fetchContacts(event.email)
             is CreateEventEvents.FetchCurrentContact -> {
                 fetchCurrentContact()
             }
@@ -70,9 +70,11 @@ constructor(
         }
     }
 
-    private fun fetchContacts(){
+    private fun fetchContacts(email: String){
         state.value?.let {state->
-            fetchContacts.execute().onEach {dataState ->
+            fetchContacts.execute(
+                email
+            ).onEach {dataState ->
 
                 val contactNames: MutableList<String> = mutableListOf()
 
@@ -121,7 +123,7 @@ constructor(
                 if(contact == individualContact.contact_name) {
                     this.state.value = state.copy(
                         selectedContact = contact,
-                        contact_pk_holder = individualContact.pk!!
+                        contact_pk_holder = individualContact.contact_pk!!
                     )
                 }
             }

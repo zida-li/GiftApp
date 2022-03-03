@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.util.StateMessageCallback
 import dev.zidali.giftapp.databinding.FragmentAddGiftBinding
+import dev.zidali.giftapp.presentation.session.SessionManager
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.presentation.update.GlobalManager
 import dev.zidali.giftapp.util.processQueue
@@ -26,6 +27,9 @@ class AddGiftFragment: DialogFragment() {
 
     @Inject
     lateinit var globalManager: GlobalManager
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +50,7 @@ class AddGiftFragment: DialogFragment() {
 
         subscribeObservers()
 
-        viewModel.onTriggerEvent(AddGiftEvents.FetchContacts)
+        viewModel.onTriggerEvent(AddGiftEvents.FetchContacts(sessionManager.state.value?.accountProperties!!.current_authUser_email))
 
         dialog?.window?.apply {
             setGravity(Gravity.BOTTOM)

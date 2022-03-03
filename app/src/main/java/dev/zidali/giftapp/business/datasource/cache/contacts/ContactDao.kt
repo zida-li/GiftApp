@@ -20,6 +20,9 @@ interface ContactDao {
     @Query("SELECT * FROM contact")
     suspend fun getAllContacts(): MutableList<ContactEntity>
 
+    @Query("SELECT * FROM contact WHERE current_authUser_email = :email")
+    suspend fun getAllContactOfUser(email: String): MutableList<ContactEntity>
+
     @Query("UPDATE contact SET contact_name = :new_contact_name WHERE primary_key = :primary_key")
     suspend fun updateContact(new_contact_name: String, primary_key: Int)
 

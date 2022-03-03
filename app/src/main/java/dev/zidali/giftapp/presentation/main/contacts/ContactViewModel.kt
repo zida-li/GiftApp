@@ -39,7 +39,7 @@ constructor(
     fun onTriggerEvent(event: ContactEvents){
         when (event) {
             is ContactEvents.FetchContacts -> {
-                fetchContacts()
+                fetchContacts(event.email)
             }
             is ContactEvents.PassDataToViewPager -> {
                 passDataToViewPager(event.contact_name, event.contact_pk)
@@ -71,11 +71,13 @@ constructor(
         }
     }
 
-    private fun fetchContacts() {
+    private fun fetchContacts(email: String) {
 
         state.value?.let { state->
 
-            fetchContacts.execute().onEach {dataState ->
+            fetchContacts.execute(
+                email
+            ).onEach {dataState ->
 
                 this.state.value = state.copy(isLoading = dataState.isLoading)
 

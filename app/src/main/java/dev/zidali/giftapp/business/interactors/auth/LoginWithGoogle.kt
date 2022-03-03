@@ -1,14 +1,19 @@
 package dev.zidali.giftapp.business.interactors.auth
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
+import dev.zidali.giftapp.business.datasource.cache.account.toAccountProperties
 import dev.zidali.giftapp.business.datasource.cache.account.toEntity
+import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.AccountProperties
 import dev.zidali.giftapp.business.domain.util.DataState
 import dev.zidali.giftapp.presentation.auth.launcher.LauncherState
+import dev.zidali.giftapp.presentation.util.DataStoreKeys
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.cLog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -19,6 +24,7 @@ class LoginWithGoogle(
     private val firebaseAuth: FirebaseAuth,
     private val accountPropertiesDao: AccountPropertiesDao,
     private val fireStore: FirebaseFirestore,
+    private val appDataStore: AppDataStore,
 ) {
 
     fun execute(
@@ -31,15 +37,21 @@ class LoginWithGoogle(
 
         if(firebaseAuth.currentUser != null) {
 
+            val allAccounts = accountPropertiesDao.getAllUsers().map { it.toAccountProperties() }.toMutableList()
+
+            if(!doesUserExist(firebaseAuth.currentUser!!.email!!, allAccounts)){
+                appDataStore.setValue(DataStoreKeys.CONTACT_FIRST_RUN, "null")
+            }
+
             accountPropertiesDao.insertOrIgnore(
                 AccountProperties(
-                    current_authUser_email = firebaseAuth.currentUser?.email!!
+                    current_authUser_email = firebaseAuth.currentUser?.email!!,
                 ).toEntity()
             )
 
             val user = LauncherState(
                 accountProperties = AccountProperties(
-                    current_authUser_email = firebaseAuth.currentUser?.email!!
+                    current_authUser_email = firebaseAuth.currentUser?.email!!,
                 )
             )
 
@@ -60,6 +72,15 @@ class LoginWithGoogle(
 
     }.catch { e->
         emit(handleUseCaseException(e))
+    }
+
+    private fun doesUserExist(current_user_email: String, all_existing_users: MutableList<AccountProperties>): Boolean {
+        for(user in all_existing_users) {
+            if (user.current_authUser_email == current_user_email) {
+                return true
+            }
+        }
+        return false
     }
 
 }

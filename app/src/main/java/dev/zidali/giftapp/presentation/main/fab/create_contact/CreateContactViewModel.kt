@@ -48,7 +48,7 @@ constructor(
                 contact = Contact(
                     name,
                     current_authUser_email = firebaseAuth.currentUser?.email,
-                    pk = 0
+                    contact_pk = 0,
                 )
             )
 

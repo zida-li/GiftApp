@@ -1,13 +1,10 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.tabs.TabLayout
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.*
@@ -15,8 +12,6 @@ import dev.zidali.giftapp.databinding.FragmentContactsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.util.Constants.Companion.TAG
-import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
 class ContactFragment : BaseMainFragment(),
@@ -56,7 +51,7 @@ ContactListAdapter.Interaction
 
         globalManager.state.observe(viewLifecycleOwner) { state ->
             if (state.needToUpdateContact) {
-                viewModel.onTriggerEvent(ContactEvents.FetchContacts)
+                viewModel.onTriggerEvent(ContactEvents.FetchContacts(sessionManager.state.value?.accountProperties!!.current_authUser_email))
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateContact(false))
             }
         }
@@ -176,8 +171,8 @@ ContactListAdapter.Interaction
                 viewModel.state.value?.let {
                     val bundle = Bundle()
                     bundle.putString("selectedContact", item.contact_name)
-                    bundle.putInt("selectedContactPk", item.pk!!)
-                    viewModel.onTriggerEvent(ContactEvents.PassDataToViewPager(item.contact_name!!, item.pk!!))
+                    bundle.putInt("selectedContactPk", item.contact_pk!!)
+                    viewModel.onTriggerEvent(ContactEvents.PassDataToViewPager(item.contact_name!!, item.contact_pk!!))
                     findNavController().navigate(R.id.action_contactFragment_to_contactDetailFragment,
                         bundle)
                 } ?: throw Exception("Null Contact")

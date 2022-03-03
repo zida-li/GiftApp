@@ -8,7 +8,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactsEntity
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
-import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.DataState
 import dev.zidali.giftapp.presentation.util.DataStoreKeys.Companion.CONTACT_UPDATED
@@ -39,7 +38,7 @@ class DeleteContacts(
                     .collection(Constants.USERS_COLLECTION)
                     .document(firebaseAuth.currentUser!!.uid)
                     .collection(Constants.CONTACTS_COLLECTION)
-                    .document(contact.pk.toString())
+                    .document(contact.contact_pk.toString())
                     .delete()
                     .addOnFailureListener {
                         cLog(it.message)

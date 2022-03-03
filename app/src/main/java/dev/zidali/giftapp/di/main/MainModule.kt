@@ -1,6 +1,8 @@
 package dev.zidali.giftapp.di.main
 
 import android.net.ConnectivityManager
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -177,9 +179,11 @@ object MainModule {
     @Provides
     fun provideLogout(
         firebaseAuth: FirebaseAuth,
+        googleSignInClient: GoogleSignInClient,
     ): Logout {
         return Logout(
-            firebaseAuth
+            firebaseAuth,
+            googleSignInClient,
         )
     }
 
