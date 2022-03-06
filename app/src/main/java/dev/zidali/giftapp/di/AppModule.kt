@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -68,6 +69,15 @@ object AppModule {
     @Provides
     fun provideFireBaseFireStore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestoreSettings(): FirebaseFirestoreSettings {
+        return FirebaseFirestoreSettings.Builder()
+            .setPersistenceEnabled(true)
+            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+            .build()
     }
 
     @Singleton
