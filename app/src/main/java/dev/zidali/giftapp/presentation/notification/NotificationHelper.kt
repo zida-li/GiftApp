@@ -7,13 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.presentation.main.MainActivity
-import dev.zidali.giftapp.util.Constants
 
 object NotificationHelper {
 
@@ -66,7 +64,7 @@ object NotificationHelper {
 
         // call notify for both the group and the pet notification
         val notificationManager = NotificationManagerCompat.from(context)
-        notificationManager.notify(reminderData.pk, notificationBuilder.build())
+        notificationManager.notify(reminderData.contact_pk, notificationBuilder.build())
     }
 
 

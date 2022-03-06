@@ -8,11 +8,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toGiftEntity
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
-import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.DataState
-import dev.zidali.giftapp.presentation.util.DataStoreKeys.Companion.GIFT_UPDATED
 import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.cLog
 import kotlinx.coroutines.flow.Flow
@@ -32,29 +30,20 @@ class DeleteGifts(
         gifts: List<Gift>
     ): Flow<DataState<Contact>> = flow<DataState<Contact>> {
 
-        if(isOnline()) {
-            for (gift in gifts) {
-
-                fireStore
-                    .collection(Constants.USERS_COLLECTION)
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection(Constants.CONTACTS_COLLECTION)
-                    .document(gift.pk.toString())
-                    .collection(Constants.GIFTS_COLLECTION)
-                    .document(gift.gift_pk.toString())
-                    .delete()
-                    .addOnFailureListener {
-                        cLog(it.message)
-                    }
-                    .await()
-
-                giftDao.deleteGift(gift.toGiftEntity())
-            }
-        } else {
-            appDataStore.setValue(GIFT_UPDATED, "true")
-            for(gift in gifts) {
-                giftDao.deleteGift(gift.toGiftEntity())
-            }
+        for (gift in gifts) {
+            giftDao.deleteGift(gift.toGiftEntity())
+            fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(gift.contact_pk.toString())
+                .collection(Constants.GIFTS_COLLECTION)
+                .document(gift.gift_pk.toString())
+                .delete()
+                .addOnFailureListener {
+                    cLog(it.message)
+                }
+                .await()
         }
 
     }.catch { e->

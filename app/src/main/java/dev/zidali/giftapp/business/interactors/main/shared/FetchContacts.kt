@@ -46,194 +46,60 @@ class FetchContacts(
 
         emit(DataState.loading<MutableList<Contact>>())
 
-        if(isOnline()) {
-
-            val results = contactDao.getAllContactOfUser(email).map { it.toContact() }.toMutableList()
-
             val contactCollectionRef = fireStore
                 .collection(USERS_COLLECTION)
                 .document(firebaseAuth.currentUser!!.uid)
                 .collection(CONTACTS_COLLECTION)
 
-            val fireStoreData = contactCollectionRef
+            val fireStoreContacts = contactCollectionRef
                 .get()
-                .addOnFailureListener {
+                .addOnFailureListener{
                     cLog(it.message)
                 }
                 .await()
                 .toObjects(ContactEntity::class.java)
 
-            val fireStoreToContact = fireStoreData.map { it.toContact() }.toMutableList()
-
-            for(result in results) {
-                if(fireStoreToContact.contains(result)) {
-                    finalList.add(result)
-                } else {
-                    //the result that goes here have either been created or updated while offline.
-                    if(isRoomEntityNew(result, fireStoreToContact)) {
-                        //if true, the contact is new so we need to add a new contact in firebase.
-                        finalList.add(result)
-                        contactCollectionRef
-                            .add(result.toContactsEntity())
-                            .addOnFailureListener {
-                                cLog(it.message)
-                            }
-                            .await()
-                    } else {
-                        //if anything ends up here, it means the contact already exists so we just need to update it.
-                        finalList.add(result)
-                        //updates contact
-                        contactCollectionRef
-                            .document(result.contact_pk.toString())
-                            .set(result)
-                            .addOnFailureListener {
-                                cLog(it.message)
-                            }
-                            .await()
-
-                        val giftCollectionRef = fireStore
-                            .collection(USERS_COLLECTION)
-                            .document(firebaseAuth.currentUser!!.uid)
-                            .collection(CONTACTS_COLLECTION)
-                            .document(result.contact_pk.toString())
-                            .collection(GIFTS_COLLECTION)
-
-                        val eventCollectionRef = fireStore
-                            .collection(USERS_COLLECTION)
-                            .document(firebaseAuth.currentUser!!.uid)
-                            .collection(CONTACTS_COLLECTION)
-                            .document(result.contact_pk.toString())
-                            .collection(EVENTS_COLLECTION)
-
-                        //updates contact name in GiftEntity
-                        val giftFireStoreData =
-                            giftCollectionRef
-                            .get()
-                            .addOnFailureListener {
-                                cLog(it.message)
-                            }
-                            .await()
-                            .toObjects(GiftEntity::class.java)
-
-                        for(gift in giftFireStoreData){
-                            gift.contact_name = result.contact_name!!
-                            giftCollectionRef
-                                .document(gift.gift_pk.toString())
-                                .set(gift.toGift())
-                                .await()
-                        }
-
-                        //updates contact name in ContactEventEntity
-                        val eventFireStoreData =
-                            eventCollectionRef
-                                .get()
-                                .addOnFailureListener {
-                                    cLog(it.message)
-                                }
-                                .await()
-                                .toObjects(ContactEventEntity::class.java)
-
-                        for(event in eventFireStoreData) {
-                            event.contact_name = result.contact_name!!
-                            eventCollectionRef
-                                .document(event.event_pk.toString())
-                                .set(event.toContactEvent())
-                                .await()
-                        }
-                    }
-                }
+            finalList.addAll(fireStoreContacts.map { it.toContact()})
+            for(contact in fireStoreContacts) {
+                contactDao.insert(contact)
             }
 
-            val wasContactDeletedOffline = appDataStore.readValue(CONTACT_UPDATED)
-
-            if(wasContactDeletedOffline == "true") {
-                appDataStore.setValue(CONTACT_UPDATED, "false")
-                //the value will only be set to true when contact was updated offline.
-                for (contact in fireStoreToContact) {
-                    if (!results.contains(contact)) {
-                        if (doesFirebaseEntityMatch(contact, results)) {
-                            //do nothing, already taken care of by previous function
-                        } else {
-                            //if anything ends up here, it means contact was deleted offline. So must delete from firebase.
-                            contactCollectionRef
-                                .document(contact.contact_pk.toString())
-                                .delete()
-                                .addOnFailureListener {
-                                    cLog(it.message)
-                                }
-                                .await()
-                        }
-                    }
+        //Update room from firebase
+        for (contact in fireStoreContacts) {
+            val gifts = fireStore
+                .collection(USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(CONTACTS_COLLECTION)
+                .document(contact.contact_pk.toString())
+                .collection(GIFTS_COLLECTION)
+                .get()
+                .addOnFailureListener {
+                    cLog(it.message)
                 }
+                .await()
+                .toObjects(GiftEntity::class.java)
+
+            for(gift in gifts) {
+                giftDao.insert(gift)
             }
 
-            //first launch
-            if(appDataStore.readValue(CONTACT_FIRST_RUN) == null ||
-               appDataStore.readValue(CONTACT_FIRST_RUN) == "null") {
-                appDataStore.setValue(CONTACT_FIRST_RUN, "completed")
-
-//                Log.d(TAG, "FetchContacts: first launch")
-                //Take all contacts from firebase and add them to room.
-                val contacts = contactCollectionRef
-                    .get()
-                    .addOnFailureListener {
-                        cLog(it.message)
-                    }
-                    .await()
-                    .toObjects(ContactEntity::class.java)
-
-                for(contact in contacts) {
-                    contactDao.insert(contact)
+            val events = fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(contact.contact_pk.toString())
+                .collection(Constants.EVENTS_COLLECTION)
+                .get()
+                .addOnFailureListener {
+                    cLog(it.message)
                 }
+                .await()
+                .toObjects(ContactEventEntity::class.java)
 
-                val firstResults = contactDao.getAllContactOfUser(email).map { it.toContact() }.toMutableList()
-                finalList.addAll(firstResults)
-
-                //Take all gifts of all contacts from firebase and add them to room.
-                for (contact in contacts) {
-                    val gifts = fireStore
-                        .collection(USERS_COLLECTION)
-                        .document(firebaseAuth.currentUser!!.uid)
-                        .collection(CONTACTS_COLLECTION)
-                        .document(contact.contact_pk.toString())
-                        .collection(GIFTS_COLLECTION)
-                        .get()
-                        .addOnFailureListener {
-                            cLog(it.message)
-                        }
-                        .await()
-                        .toObjects(GiftEntity::class.java)
-
-                    for(gift in gifts) {
-                        giftDao.insert(gift)
-                    }
-                }
-
-                //Take all events of all contacts from firebase and add them to room.
-                for(contact in contacts){
-                    val events = fireStore
-                        .collection(Constants.USERS_COLLECTION)
-                        .document(firebaseAuth.currentUser!!.uid)
-                        .collection(Constants.CONTACTS_COLLECTION)
-                        .document(contact.contact_pk.toString())
-                        .collection(Constants.EVENTS_COLLECTION)
-                        .get()
-                        .addOnFailureListener {
-                            cLog(it.message)
-                        }
-                        .await()
-                        .toObjects(ContactEventEntity::class.java)
-
-                    for(event in events) {
-                        contactEventDao.insert(event)
-                        AlarmScheduler.scheduleInitialAlarmsForReminder(context, event.toContactEvent())
-                    }
-                }
+            for(event in events) {
+                contactEventDao.insert(event)
+                AlarmScheduler.scheduleInitialAlarmsForReminder(context, event.toContactEvent())
             }
-
-        } else {
-            val results = contactDao.getAllContactOfUser(email).map { it.toContact() }.toMutableList()
-            finalList.addAll(results)
         }
 
         emit(

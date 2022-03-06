@@ -34,84 +34,10 @@ class FetchEvents(
 
         emit(DataState.loading<EventState>())
 
-        val finalList: MutableList<ContactEvent> = mutableListOf()
-
-        if(isOnline()) {
-
-            val results = contactEventDao.getAllEventsOfContact(contact_pk).map { it.toContactEvent() }.toMutableList()
-
-            val collectionRef = fireStore
-                .collection(Constants.USERS_COLLECTION)
-                .document(firebaseAuth.currentUser!!.uid)
-                .collection(Constants.CONTACTS_COLLECTION)
-                .document(contact_pk.toString())
-                .collection(Constants.EVENTS_COLLECTION)
-
-            val fireStoreData =
-                collectionRef
-                .get()
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
-                .toObjects(ContactEventEntity::class.java)
-
-            val fireStoreEvent = fireStoreData.map { it.toContactEvent() }.toMutableList()
-
-            for(result in results) {
-                if (fireStoreEvent.contains(result)) {
-                    finalList.add(result)
-                } else {
-                    if(isRoomEntityNew(result, fireStoreEvent)) {
-                        finalList.add(result)
-                        collectionRef
-                            .add(result.toContactEventEntity())
-                            .addOnFailureListener {
-                                cLog(it.message)
-                            }
-                            .await()
-                    } else {
-                        finalList.add(result)
-                        collectionRef
-                            .document(result.event_pk.toString())
-                            .set(result.toContactEventEntity())
-                            .addOnFailureListener {
-                                cLog(it.message)
-                            }
-                            .await()
-                    }
-                }
-            }
-
-            val wasEventDeletedOffline = appDataStore.readValue(EVENT_UPDATED)
-
-            if(wasEventDeletedOffline == "true") {
-                appDataStore.setValue(EVENT_UPDATED, "false")
-                for (event in fireStoreEvent) {
-                    if (!results.contains(event)) {
-                        if (doesFirebaseEntityMatch(event, results)) {
-                            //do nothing, previous function took care of this
-                        } else {
-                            collectionRef
-                                .document(event.event_pk.toString())
-                                .delete()
-                                .addOnFailureListener {
-                                    cLog(it.message)
-                                }
-                                .await()
-                        }
-                    }
-                }
-            }
-
-        } else {
-            val results = contactEventDao.getAllEventsOfContact(contact_pk).map { it.toContactEvent() }.toMutableList()
-            finalList.addAll(results)
-        }
-
+        val results = contactEventDao.getAllEventsOfContact(contact_pk).map { it.toContactEvent() }.toMutableList()
 
         val events = EventState(
-            contact_events = finalList
+            contact_events = results
         )
 
         emit(DataState.data(

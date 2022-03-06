@@ -8,11 +8,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEventEntity
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
-import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.DataState
-import dev.zidali.giftapp.presentation.util.DataStoreKeys.Companion.EVENT_UPDATED
 import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.cLog
 import kotlinx.coroutines.flow.Flow
@@ -32,29 +30,21 @@ class DeleteEvents(
         contactEvents: List<ContactEvent>
     ): Flow<DataState<Contact>> = flow<DataState<Contact>> {
 
-        if(isOnline()) {
-            for (contactEvent in contactEvents) {
 
-                fireStore
-                    .collection(Constants.USERS_COLLECTION)
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection(Constants.CONTACTS_COLLECTION)
-                    .document(contactEvent.pk.toString())
-                    .collection(Constants.EVENTS_COLLECTION)
-                    .document(contactEvent.event_pk.toString())
-                    .delete()
-                    .addOnFailureListener {
-                        cLog(it.message)
-                    }
-                    .await()
-
-                contactEventDao.deleteEvent(contactEvent.toContactEventEntity())
-            }
-        } else {
-            appDataStore.setValue(EVENT_UPDATED, "true")
-            for(contactEvent in contactEvents) {
-                contactEventDao.deleteEvent(contactEvent.toContactEventEntity())
-            }
+        for (contactEvent in contactEvents) {
+            contactEventDao.deleteEvent(contactEvent.toContactEventEntity())
+            fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(contactEvent.contact_pk.toString())
+                .collection(Constants.EVENTS_COLLECTION)
+                .document(contactEvent.event_pk.toString())
+                .delete()
+                .addOnFailureListener {
+                    cLog(it.message)
+                }
+                .await()
         }
 
     }.catch { e->

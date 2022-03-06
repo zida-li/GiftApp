@@ -16,7 +16,6 @@ import dev.zidali.giftapp.business.interactors.main.shared.UpdateContactEventRem
 import dev.zidali.giftapp.util.Constants
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -148,7 +147,7 @@ constructor(
                     year = contactEvent.year,
                     month = contactEvent.month,
                     day = contactEvent.day,
-                    pk = contactEvent.pk,
+                    contact_pk = contactEvent.contact_pk,
                     ymd_format = contactEvent.ymd_format,
                     expired = contactEvent.expired,
                     event_pk = contactEvent.event_pk,

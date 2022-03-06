@@ -8,9 +8,9 @@ data class ContactEvent(
     var year: Int,
     var month: Int,
     var day: Int,
-    var pk: Int,
+    var contact_pk: Int,
     var ymd_format: String,
     var expired: Boolean,
     var event_pk: Int,
 
-)
+    )

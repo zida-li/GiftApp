@@ -244,10 +244,14 @@ object MainModule {
     @Singleton
     @Provides
     fun provideUpdateContactEventReminder(
-        contactEventDao: ContactEventDao
+        contactEventDao: ContactEventDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
     ): UpdateContactEventReminder {
         return UpdateContactEventReminder(
-            contactEventDao
+            contactEventDao,
+            firebaseAuth,
+            fireStore,
         )
     }
 

@@ -182,7 +182,7 @@ constructor(
                 gift = Gift(
                     contact_gift = state.contact_gift_holder,
                     contact_name = state.contact_name_holder,
-                    pk = state.contact_pk_holder,
+                    contact_pk = state.contact_pk_holder,
                     isChecked = false,
                     isMultiSelectionModeEnabled = false,
                     gift_pk = 0,

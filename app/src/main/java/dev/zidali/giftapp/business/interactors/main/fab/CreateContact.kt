@@ -32,21 +32,18 @@ class CreateContact(
 
         val pk = contactDao.insert(contact.toContactsEntity())
 
-        if(isOnline()) {
+        contact.contact_pk = pk.toInt()
 
-            contact.contact_pk = pk.toInt()
-
-            fireStore
-                .collection(USERS_COLLECTION)
-                .document(firebaseAuth.currentUser!!.uid)
-                .collection(CONTACTS_COLLECTION)
-                .document(contact.contact_pk.toString())
-                .set(contact.toContactsEntity())
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
-        }
+        fireStore
+            .collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser!!.uid)
+            .collection(CONTACTS_COLLECTION)
+            .document(contact.contact_pk.toString())
+            .set(contact.toContactsEntity())
+            .addOnFailureListener {
+                cLog(it.message)
+            }
+            .await()
 
         emit(
             DataState.data(

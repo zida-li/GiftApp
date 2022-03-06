@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEventEntity
-import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.DataState
 import dev.zidali.giftapp.business.domain.util.MessageType
@@ -41,8 +40,6 @@ class UpdateEvent(
 
         updatedEvent.expired = today > alarmDate
 
-        if(isOnline()) {
-
             contactEventDao.updateContactEvent(
                 updatedEvent.contact_event,
                 updatedEvent.contact_event_reminder,
@@ -58,7 +55,7 @@ class UpdateEvent(
                 .collection(Constants.USERS_COLLECTION)
                 .document(firebaseAuth.currentUser!!.uid)
                 .collection(Constants.CONTACTS_COLLECTION)
-                .document(updatedEvent.pk.toString())
+                .document(updatedEvent.contact_pk.toString())
                 .collection(Constants.EVENTS_COLLECTION)
                 .document(updatedEvent.event_pk.toString())
                 .set(updatedEvent.toContactEventEntity())
@@ -66,20 +63,6 @@ class UpdateEvent(
                     cLog(it.message)
                 }
                 .await()
-
-
-        } else {
-            contactEventDao.updateContactEvent(
-                updatedEvent.contact_event,
-                updatedEvent.contact_event_reminder,
-                updatedEvent.year,
-                updatedEvent.month,
-                updatedEvent.day,
-                updatedEvent.ymd_format,
-                updatedEvent.expired,
-                updatedEvent.event_pk,
-            )
-        }
 
         emit(DataState.data(
             response = Response(

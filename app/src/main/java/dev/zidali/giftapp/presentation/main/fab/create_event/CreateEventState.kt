@@ -17,7 +17,7 @@ data class CreateEventState(
         year = 0,
         month = 0,
         day = 0,
-        pk = 0,
+        contact_pk = 0,
         ymd_format = "",
         expired = false,
         event_pk = 0,

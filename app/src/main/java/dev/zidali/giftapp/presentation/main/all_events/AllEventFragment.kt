@@ -3,12 +3,9 @@ package dev.zidali.giftapp.presentation.main.all_events
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.ContactEvent
@@ -17,12 +14,9 @@ import dev.zidali.giftapp.databinding.FragmentAllEventsBinding
 import dev.zidali.giftapp.presentation.edit.EditEventActivity
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.MainActivity
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftEvents
 import dev.zidali.giftapp.presentation.main.fab.create_event.ReminderFragment
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.update.GlobalEvents
-import dev.zidali.giftapp.util.Constants.Companion.TAG
-import dev.zidali.giftapp.util.TopSpacingItemDecoration
 import dev.zidali.giftapp.util.processQueue
 
 class AllEventFragment : BaseMainFragment(),
@@ -182,7 +176,7 @@ AllEventListAdapter.Interaction {
                 val intent = Intent(requireContext(), EditEventActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("CONTACT_PK", item.pk)
+                intent.putExtra("CONTACT_PK", item.contact_pk)
                 intent.putExtra("EVENT_PK", item.event_pk)
                 startActivity(intent)
             }

@@ -178,7 +178,7 @@ EventListAdapter.Interaction {
                 val intent = Intent(requireContext(), EditEventActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("CONTACT_PK", item.pk)
+                intent.putExtra("CONTACT_PK", item.contact_pk)
                 intent.putExtra("EVENT_PK", item.event_pk)
                 startActivity(intent)
             }

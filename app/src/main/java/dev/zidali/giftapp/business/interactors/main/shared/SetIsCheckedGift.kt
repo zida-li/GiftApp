@@ -6,9 +6,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
-import dev.zidali.giftapp.business.datasource.cache.contacts.GiftEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.toGiftEntity
-import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.DataState
 import dev.zidali.giftapp.util.Constants
@@ -29,24 +27,20 @@ class SetIsCheckedGift(
         gift: Gift
     ): Flow<DataState<Gift>> = flow<DataState<Gift>> {
 
-        if(isOnline()) {
-            fireStore
-                .collection(Constants.USERS_COLLECTION)
-                .document(firebaseAuth.currentUser!!.uid)
-                .collection(Constants.CONTACTS_COLLECTION)
-                .document(gift.pk.toString())
-                .collection(Constants.GIFTS_COLLECTION)
-                .document(gift.gift_pk.toString())
-                .set(gift.toGiftEntity())
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
+        giftDao.updateIsChecked(gift.isChecked, gift.gift_pk)
 
-            giftDao.updateIsChecked(gift.isChecked, gift.gift_pk)
-        } else {
-            giftDao.updateIsChecked(gift.isChecked, gift.gift_pk)
-        }
+        fireStore
+            .collection(Constants.USERS_COLLECTION)
+            .document(firebaseAuth.currentUser!!.uid)
+            .collection(Constants.CONTACTS_COLLECTION)
+            .document(gift.contact_pk.toString())
+            .collection(Constants.GIFTS_COLLECTION)
+            .document(gift.gift_pk.toString())
+            .set(gift.toGiftEntity())
+            .addOnFailureListener {
+                cLog(it.message)
+            }
+            .await()
 
     }.catch { e->
         Log.d(Constants.TAG, e.toString())

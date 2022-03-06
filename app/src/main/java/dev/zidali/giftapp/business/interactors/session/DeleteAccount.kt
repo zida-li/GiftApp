@@ -29,78 +29,48 @@ class DeleteAccount(
 
     fun execute(): Flow<DataState<Response>> = flow<DataState<Response>>{
 
+        accountPropertiesDao.deleteUser(firebaseAuth.currentUser!!.email!!)
 
-        if(isOnline()) {
+        val contactCollectionRef = fireStore
+            .collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser!!.uid)
+            .collection(CONTACTS_COLLECTION)
 
-            accountPropertiesDao.deleteUser(firebaseAuth.currentUser!!.email!!)
+        val contacts = contactCollectionRef
+            .get()
+            .addOnFailureListener {
+                cLog(it.message)
+            }
+            .await()
+            .toObjects(ContactEntity::class.java)
 
-            val contactCollectionRef = fireStore
-                .collection(USERS_COLLECTION)
+        for(contact in contacts) {
+
+            val giftCollectionRef = fireStore
+                .collection(Constants.USERS_COLLECTION)
                 .document(firebaseAuth.currentUser!!.uid)
-                .collection(CONTACTS_COLLECTION)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(contact.contact_pk.toString())
+                .collection(GIFTS_COLLECTION)
 
-            val contacts = contactCollectionRef
+            val eventCollectionRef = fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(contact.contact_pk.toString())
+                .collection(Constants.EVENTS_COLLECTION)
+
+            val gifts = giftCollectionRef
                 .get()
                 .addOnFailureListener {
                     cLog(it.message)
                 }
                 .await()
-                .toObjects(ContactEntity::class.java)
+                .toObjects(GiftEntity::class.java)
 
-            for(contact in contacts) {
-
-                val giftCollectionRef = fireStore
-                    .collection(Constants.USERS_COLLECTION)
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection(Constants.CONTACTS_COLLECTION)
-                    .document(contact.contact_pk.toString())
-                    .collection(GIFTS_COLLECTION)
-
-                val eventCollectionRef = fireStore
-                    .collection(Constants.USERS_COLLECTION)
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection(Constants.CONTACTS_COLLECTION)
-                    .document(contact.contact_pk.toString())
-                    .collection(Constants.EVENTS_COLLECTION)
-
-                val gifts = giftCollectionRef
-                    .get()
-                    .addOnFailureListener {
-                        cLog(it.message)
-                    }
-                    .await()
-                    .toObjects(GiftEntity::class.java)
-
-                for(gift in gifts) {
-                    giftCollectionRef
-                        .document(gift.gift_pk.toString())
-                        .delete()
-                        .addOnFailureListener {
-                            cLog(it.message)
-                        }
-                        .await()
-                }
-
-                val events = eventCollectionRef
-                    .get()
-                    .addOnFailureListener {
-                        cLog(it.message)
-                    }
-                    .await()
-                    .toObjects(ContactEventEntity::class.java)
-
-                for(event in events) {
-                    eventCollectionRef
-                        .document(event.event_pk.toString())
-                        .delete()
-                        .addOnFailureListener {
-                            cLog(it.message)
-                        }
-                        .await()
-                }
-
-                contactCollectionRef
-                    .document(contact.contact_pk.toString())
+            for(gift in gifts) {
+                giftCollectionRef
+                    .document(gift.gift_pk.toString())
                     .delete()
                     .addOnFailureListener {
                         cLog(it.message)
@@ -108,37 +78,53 @@ class DeleteAccount(
                     .await()
             }
 
-            fireStore
-                .collection(USERS_COLLECTION)
-                .document(firebaseAuth.currentUser!!.uid)
+            val events = eventCollectionRef
+                .get()
+                .addOnFailureListener {
+                    cLog(it.message)
+                }
+                .await()
+                .toObjects(ContactEventEntity::class.java)
+
+            for(event in events) {
+                eventCollectionRef
+                    .document(event.event_pk.toString())
+                    .delete()
+                    .addOnFailureListener {
+                        cLog(it.message)
+                    }
+                    .await()
+            }
+
+            contactCollectionRef
+                .document(contact.contact_pk.toString())
                 .delete()
                 .addOnFailureListener {
                     cLog(it.message)
                 }
                 .await()
-
-            firebaseAuth.currentUser?.delete()
-
-            emit(DataState.data<Response>(
-                data = Response(
-                    message = SuccessHandling.SUCCESS_DELETE_ACCOUNT,
-                    uiComponentType = UIComponentType.Dialog,
-                    messageType = MessageType.Error,
-                ),
-                response = null,
-            ))
-        } else {
-            emit(
-                DataState.data(
-                    response = Response(
-                        message = "You need internet connection to delete your account",
-                        messageType = MessageType.Error,
-                        uiComponentType = UIComponentType.Dialog,
-                    ),
-                    data = null,
-                )
-            )
         }
+
+        fireStore
+            .collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser!!.uid)
+            .delete()
+            .addOnFailureListener {
+                cLog(it.message)
+            }
+            .await()
+
+        firebaseAuth.currentUser?.delete()
+
+        emit(DataState.data<Response>(
+            data = Response(
+                message = SuccessHandling.SUCCESS_DELETE_ACCOUNT,
+                uiComponentType = UIComponentType.Dialog,
+                messageType = MessageType.Error,
+            ),
+            response = null,
+        ))
+
 
     }.catch { e->
         emit(handleUseCaseException(e))

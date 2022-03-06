@@ -6,11 +6,9 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.*
-import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventState
-import dev.zidali.giftapp.util.Constants.*
 import dev.zidali.giftapp.util.Constants.Companion.CONTACTS_COLLECTION
 import dev.zidali.giftapp.util.Constants.Companion.EVENTS_COLLECTION
 import dev.zidali.giftapp.util.Constants.Companion.TAG
@@ -46,23 +44,21 @@ class CreateEvent(
 
         val pk = contactEventDao.insert(contactEvent.toContactEventEntity())
 
-        if(isOnline()) {
+        contactEvent.event_pk = pk.toInt()
 
-            contactEvent.event_pk = pk.toInt()
+        fireStore
+            .collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser!!.uid)
+            .collection(CONTACTS_COLLECTION)
+            .document(contactEvent.contact_pk.toString())
+            .collection(EVENTS_COLLECTION)
+            .document(contactEvent.event_pk.toString())
+            .set(contactEvent.toContactEventEntity())
+            .addOnFailureListener {
+                cLog(it.message)
+            }
+            .await()
 
-            fireStore
-                .collection(USERS_COLLECTION)
-                .document(firebaseAuth.currentUser!!.uid)
-                .collection(CONTACTS_COLLECTION)
-                .document(contactEvent.pk.toString())
-                .collection(EVENTS_COLLECTION)
-                .document(contactEvent.event_pk.toString())
-                .set(contactEvent.toContactEventEntity())
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
-        }
 
         emit(DataState.data(
             response = Response(

@@ -156,7 +156,7 @@ constructor(
                     }
 
                     appDataStore.setValue(DataStoreKeys.EVENT_PK, state.contact_event?.event_pk.toString())
-                    appDataStore.setValue(DataStoreKeys.CONTACT_PK, state.contact_event?.pk.toString())
+                    appDataStore.setValue(DataStoreKeys.CONTACT_PK, state.contact_event?.contact_pk.toString())
 
                     setUpdateEventSuccessful(true)
 
@@ -188,7 +188,7 @@ constructor(
                     year = state.calendarSelectionHolder.selectedYear,
                     month = state.calendarSelectionHolder.selectedMonth,
                     day = state.calendarSelectionHolder.selectedDay,
-                    pk = state.contact_event.pk,
+                    contact_pk = state.contact_event.contact_pk,
                     ymd_format = state.ymd_formatHolder,
                     expired = state.contact_event.expired,
                     event_pk = state.contact_event.event_pk,

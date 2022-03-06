@@ -167,7 +167,7 @@ constructor(
                     year = contactEvent.year,
                     month = contactEvent.month,
                     day = contactEvent.day,
-                    pk = contactEvent.pk,
+                    contact_pk = contactEvent.contact_pk,
                     ymd_format = contactEvent.ymd_format,
                     expired = contactEvent.expired,
                     event_pk = contactEvent.event_pk,

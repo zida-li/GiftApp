@@ -31,28 +31,18 @@ class DeleteContacts(
         contacts: List<Contact>
     ): Flow<DataState<Contact>> = flow<DataState<Contact>> {
 
-        if(isOnline()) {
-            for (contact in contacts) {
-
-                fireStore
-                    .collection(Constants.USERS_COLLECTION)
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection(Constants.CONTACTS_COLLECTION)
-                    .document(contact.contact_pk.toString())
-                    .delete()
-                    .addOnFailureListener {
-                        cLog(it.message)
-                    }
-                    .await()
-
-                contactDao.deleteContacts(contact.toContactsEntity())
-
-            }
-        } else {
-            appDataStore.setValue(CONTACT_UPDATED, "true")
-            for (contact in contacts) {
-                contactDao.deleteContacts(contact.toContactsEntity())
-            }
+        for (contact in contacts) {
+            contactDao.deleteContacts(contact.toContactsEntity())
+            fireStore
+                .collection(Constants.USERS_COLLECTION)
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection(Constants.CONTACTS_COLLECTION)
+                .document(contact.contact_pk.toString())
+                .delete()
+                .addOnFailureListener {
+                    cLog(it.message)
+                }
+                .await()
         }
 
     }.catch { e->

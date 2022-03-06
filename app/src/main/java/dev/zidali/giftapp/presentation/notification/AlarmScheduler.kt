@@ -140,7 +140,7 @@ object AlarmScheduler {
             action = context.getString(R.string.action_notify_gift_event)
             type = "${reminder}-${reminderData.event_pk}"
             val intentBundle = Bundle()
-            intentBundle.putInt("CONTACT_PK", reminderData.pk)
+            intentBundle.putInt("CONTACT_PK", reminderData.contact_pk)
             intentBundle.putInt("EVENT_PK", reminderData.event_pk)
             putExtras(intentBundle)
         }

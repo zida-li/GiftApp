@@ -47,7 +47,7 @@ class EventDetailFragment : BaseEditFragment() {
 
         binding.fabEditEvent.setOnClickListener {
             val bundle = bundleOf()
-            bundle.putInt("CONTACT_PK", viewModel.state.value?.contact_event?.pk!!)
+            bundle.putInt("CONTACT_PK", viewModel.state.value?.contact_event?.contact_pk!!)
             bundle.putInt("EVENT_PK", viewModel.state.value?.contact_event?.event_pk!!)
             findNavController().navigate(R.id.action_eventDetailFragment_to_editEventFragment, bundle)
         }

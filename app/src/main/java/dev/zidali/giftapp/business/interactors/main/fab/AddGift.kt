@@ -2,16 +2,15 @@ package dev.zidali.giftapp.business.interactors.main.fab
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
-import dev.zidali.giftapp.business.datasource.cache.contacts.toContact
 import dev.zidali.giftapp.business.datasource.cache.contacts.toGiftEntity
-import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
 import dev.zidali.giftapp.business.domain.models.Gift
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.presentation.main.fab.add_gift.AddGiftState
+import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.Constants.Companion.CONTACTS_COLLECTION
 import dev.zidali.giftapp.util.Constants.Companion.GIFTS_COLLECTION
 import dev.zidali.giftapp.util.Constants.Companion.USERS_COLLECTION
@@ -34,22 +33,20 @@ class AddGift(
 
         val pk = giftDao.insert(gift.toGiftEntity())
 
-        if(isOnline()) {
-            gift.gift_pk = pk.toInt()
+        gift.gift_pk = pk.toInt()
 
-            fireStore
-                .collection(USERS_COLLECTION)
-                .document(firebaseAuth.currentUser!!.uid)
-                .collection(CONTACTS_COLLECTION)
-                .document(gift.pk.toString())
-                .collection(GIFTS_COLLECTION)
-                .document(gift.gift_pk.toString())
-                .set(gift.toGiftEntity())
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
-        }
+        fireStore
+            .collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser!!.uid)
+            .collection(CONTACTS_COLLECTION)
+            .document(gift.contact_pk.toString())
+            .collection(GIFTS_COLLECTION)
+            .document(gift.gift_pk.toString())
+            .set(gift.toGiftEntity())
+            .addOnFailureListener {
+                cLog(it.message)
+            }
+            .await()
 
         emit(DataState.data(
             response = Response(
@@ -60,7 +57,7 @@ class AddGift(
         ))
 
     }.catch { e->
-        emit(handleUseCaseException(e))
+        Log.d(Constants.TAG, e.toString())
     }
 
     private fun isOnline(): Boolean {

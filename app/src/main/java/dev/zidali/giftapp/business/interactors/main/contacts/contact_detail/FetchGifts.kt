@@ -38,83 +38,10 @@ class FetchGifts(
 
         emit(DataState.loading<GiftState>())
 
-        val finalList: MutableList<Gift> = mutableListOf()
-
-        val collectionRef = fireStore
-            .collection(Constants.USERS_COLLECTION)
-            .document(firebaseAuth.currentUser!!.uid)
-            .collection(Constants.CONTACTS_COLLECTION)
-            .document(contact_pk.toString())
-            .collection(GIFTS_COLLECTION)
-
-        if(isOnline()) {
-
-            val results = giftDao.getAllGiftByContact(contact_pk).map { it.toGift() }.toMutableList()
-
-            val fireStoreData =
-                collectionRef
-                .get()
-                .addOnFailureListener {
-                    cLog(it.message)
-                }
-                .await()
-                .toObjects(GiftEntity::class.java)
-
-            val fireStoreGift = fireStoreData.map { it.toGift() }.toMutableList()
-
-            for(result in results) {
-                if(fireStoreGift.contains(result)) {
-                    finalList.add(result)
-                } else {
-                    if(isRoomEntityNew(result, fireStoreGift)) {
-                        finalList.add(result)
-                        collectionRef
-                            .add(result)
-                            .addOnFailureListener {
-                                cLog(it.message)
-                            }
-                            .await()
-                    } else {
-                        finalList.add(result)
-                        collectionRef
-                            .document(result.gift_pk.toString())
-                            .set(result.toGiftEntity())
-                            .addOnFailureListener {
-                                cLog(it.message)
-                            }
-                            .await()
-                    }
-                }
-            }
-
-            val wasGiftDeletedOffline = appDataStore.readValue(GIFT_UPDATED)
-
-            if(wasGiftDeletedOffline == "true") {
-                appDataStore.setValue(GIFT_UPDATED, "false")
-                for (gift in fireStoreGift) {
-                    if (!results.contains(gift)) {
-                        if (doesFirebaseEntityMatch(gift, results)) {
-                            //do nothing, previous function took care of this
-                        } else {
-                            collectionRef
-                                .document(gift.gift_pk.toString())
-                                .delete()
-                                .addOnFailureListener {
-                                    cLog(it.message)
-                                }
-                                .await()
-                        }
-                    }
-                }
-            }
-
-        } else {
-            val results = giftDao.getAllGiftByContact(contact_pk).map { it.toGift() }.toMutableList()
-            finalList.addAll(results)
-        }
+        val results = giftDao.getAllGiftByContact(contact_pk).map { it.toGift() }.toMutableList()
 
         val gifts = GiftState(
-            contact_gifts = finalList
+            contact_gifts = results
         )
 
         emit(DataState.data(
