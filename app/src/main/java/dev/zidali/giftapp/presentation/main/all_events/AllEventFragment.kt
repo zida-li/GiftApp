@@ -233,6 +233,7 @@ AllEventListAdapter.Interaction {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        recyclerAdapter = null
         _binding = null
     }
 }

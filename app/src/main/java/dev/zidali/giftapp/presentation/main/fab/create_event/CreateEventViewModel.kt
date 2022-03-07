@@ -80,6 +80,8 @@ constructor(
 
                 val contactNames: MutableList<String> = mutableListOf()
 
+                this.state.value = state.copy(isLoading = dataState.isLoading)
+
                 dataState.data?.let { contacts->
                     for (contact in contacts) {
                         contactNames.add(contact.contact_name!!)

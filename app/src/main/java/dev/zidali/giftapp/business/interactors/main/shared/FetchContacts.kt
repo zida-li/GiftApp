@@ -42,9 +42,9 @@ class FetchContacts(
         context: Context,
     ): Flow<DataState<MutableList<Contact>>> = flow {
 
-        val finalList: MutableList<Contact> = mutableListOf()
-
         emit(DataState.loading<MutableList<Contact>>())
+
+        val finalList: MutableList<Contact> = mutableListOf()
 
             val contactCollectionRef = fireStore
                 .collection(USERS_COLLECTION)

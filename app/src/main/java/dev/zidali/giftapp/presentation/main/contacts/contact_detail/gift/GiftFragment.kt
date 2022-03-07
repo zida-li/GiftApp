@@ -207,6 +207,7 @@ GiftListAdapter.Interaction
 
     override fun onDestroyView() {
         super.onDestroyView()
+        recyclerAdapter = null
         _binding = null
         globalManager.onTriggerEvent(GlobalEvents.SetGiftFragmentInView(false))
 //        Log.d(Constants.TAG, "GiftFragment onDestroyView()")

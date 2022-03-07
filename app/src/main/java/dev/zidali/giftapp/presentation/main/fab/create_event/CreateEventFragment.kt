@@ -2,6 +2,8 @@ package dev.zidali.giftapp.presentation.main.fab.create_event
 
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +20,7 @@ import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.session.SessionManager
 import dev.zidali.giftapp.presentation.update.GlobalEvents
 import dev.zidali.giftapp.presentation.update.GlobalManager
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 import javax.inject.Inject
 
@@ -66,6 +69,18 @@ class CreateEventFragment: DialogFragment() {
     private fun subscribeObservers() {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
+
+            if(state.isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+                enableInputFields(false)
+            }
+
+            if(!state.isLoading) {
+                binding.progressBar.visibility = View.GONE
+                enableInputFields(true)
+            }
+
+            Log.d(TAG, "CreateEventFragment: ${state.contact_display_list}")
 
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contact_display_list)
@@ -199,6 +214,13 @@ class CreateEventFragment: DialogFragment() {
 
         reminderPickerFragment.isCancelable = false
         reminderPickerFragment.show(supportFragmentManager, "ReminderPickerFragment")
+    }
+
+    private fun enableInputFields(boolean: Boolean) {
+        binding.contactLayout.isEnabled = boolean
+        binding.inputNameContainer.isEnabled = boolean
+        binding.datePickerContainer.isEnabled = boolean
+        binding.reminderPickerContainer.isEnabled = boolean
     }
 
     override fun onDestroy() {

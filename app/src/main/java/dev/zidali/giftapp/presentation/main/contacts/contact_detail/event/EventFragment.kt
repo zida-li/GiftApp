@@ -240,6 +240,7 @@ EventListAdapter.Interaction {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        recyclerAdapter = null
         _binding = null
         globalManager.onTriggerEvent(GlobalEvents.SetEventFragmentInView(false))
 //        Log.d(TAG, "EventFragment onDestroyView()")

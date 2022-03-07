@@ -75,6 +75,16 @@ class AddGiftFragment: DialogFragment() {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
 
+            if(state.isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+                enableInputFields(false)
+            }
+
+            if(!state.isLoading) {
+                binding.progressBar.visibility = View.GONE
+                enableInputFields(true)
+            }
+
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contact_display_list)
             binding.contactDropDownMenu.setAdapter(arrayAdapter)
@@ -115,6 +125,11 @@ class AddGiftFragment: DialogFragment() {
     private fun resetState(){
         binding.contactDropDownMenu.setText(R.string.select_contact)
         binding.inputGift.setText("")
+    }
+
+    private fun enableInputFields(boolean: Boolean) {
+        binding.contactLayout.isEnabled = boolean
+        binding.inputGiftContainer.isEnabled = boolean
     }
 
     override fun onDestroy() {
