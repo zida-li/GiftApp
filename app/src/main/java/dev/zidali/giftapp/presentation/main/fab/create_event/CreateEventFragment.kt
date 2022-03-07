@@ -80,7 +80,7 @@ class CreateEventFragment: DialogFragment() {
                 enableInputFields(true)
             }
 
-            Log.d(TAG, "CreateEventFragment: ${state.contact_display_list}")
+//            Log.d(TAG, "CreateEventFragment: ${state.contact_display_list}")
 
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.contact_drop_down_item, state.contact_display_list)
