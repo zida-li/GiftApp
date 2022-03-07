@@ -65,7 +65,7 @@ class EditEventFragment : BaseEditFragment() {
 //            (activity as EditEventActivity).supportActionBar?.title = state.contact_event?.contact_name
 
             if(state.editEventSuccessful) {
-                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateAllEventFragment(true))
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateEventFragment(true))
                 if(state.update_contact_event?.contact_event_reminder == "None") {
                     AlarmScheduler.cancelScheduledAlarmForReminder(requireContext(), state.update_contact_event, "day")

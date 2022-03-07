@@ -129,6 +129,7 @@ class ContactDetailFragment : BaseMainFragment() {
             val searchQuery = searchPlate.text.toString()
             cacheState(searchQuery)
             globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateContact(true))
+            globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateAllEventFragment(true))
         }
     }
 

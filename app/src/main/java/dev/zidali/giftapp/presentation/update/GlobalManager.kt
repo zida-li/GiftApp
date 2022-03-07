@@ -26,6 +26,9 @@ constructor(
             is GlobalEvents.SetNeedToUpdateEventFragment -> {
                 setNeedToUpdateEventFragment(event.boolean)
             }
+            is GlobalEvents.SetNeedToUpdateAllEventFragment ->{
+                setNeedToUpdateAllEventFragment(event.boolean)
+            }
             is GlobalEvents.SetGiftFragmentInView -> {
                 setGiftFragmentView(event.boolean)
             }
@@ -57,6 +60,14 @@ constructor(
         state.value?.let { state->
             this.state.value = state.copy(
                 needToUpdateEventFragment = boolean
+            )
+        }
+    }
+
+    private fun setNeedToUpdateAllEventFragment(boolean: Boolean) {
+        state.value?.let { state->
+            this.state.value = state.copy(
+                needToUpdateAllEventFragment = boolean
             )
         }
     }

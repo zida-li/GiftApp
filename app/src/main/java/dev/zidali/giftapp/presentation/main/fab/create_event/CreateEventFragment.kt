@@ -102,7 +102,7 @@ class CreateEventFragment: DialogFragment() {
 
             if (state.addEventSuccessful) {
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateEventFragment(true))
-                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateAllEventFragment(true))
                 AlarmScheduler.scheduleInitialAlarmsForReminder(requireContext(), state.createEvent)
                 dismiss()
             }

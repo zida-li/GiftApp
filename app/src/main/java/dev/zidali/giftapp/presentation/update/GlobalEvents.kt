@@ -14,6 +14,10 @@ sealed class GlobalEvents {
         val boolean: Boolean
     ): GlobalEvents()
 
+    data class SetNeedToUpdateAllEventFragment(
+        val boolean: Boolean
+    ): GlobalEvents()
+
     data class SetGiftFragmentInView(
         val boolean: Boolean
     ): GlobalEvents()

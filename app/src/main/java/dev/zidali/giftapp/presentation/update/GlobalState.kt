@@ -8,6 +8,7 @@ data class GlobalState(
     val needToUpdate: Boolean = false,
     val needToUpdateContact: Boolean = false,
     val needToUpdateEventFragment: Boolean = false,
+    val needToUpdateAllEventFragment: Boolean = false,
     val giftFragmentInView: Boolean = false,
     val eventFragmentInView: Boolean = false,
     val editFragmentInView: Boolean = false,

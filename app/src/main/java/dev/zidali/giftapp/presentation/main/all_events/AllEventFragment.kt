@@ -56,9 +56,9 @@ AllEventListAdapter.Interaction {
 
         globalManager.state.observe(viewLifecycleOwner) { state ->
 
-            if (state.needToUpdate) {
+            if (state.needToUpdateAllEventFragment) {
                 viewModel.onTriggerEvent(AllEventEvents.FetchEvents)
-                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(false))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateAllEventFragment(false))
             }
         }
 
@@ -66,7 +66,7 @@ AllEventListAdapter.Interaction {
 
             if (state.firstLoad) {
                 viewModel.onTriggerEvent(AllEventEvents.SetFirstLoad(false))
-                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdate(true))
+                globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateAllEventFragment(true))
             }
 
             recyclerAdapter?.apply {
