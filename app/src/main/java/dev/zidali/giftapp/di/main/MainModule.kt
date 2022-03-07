@@ -1,16 +1,13 @@
 package dev.zidali.giftapp.di.main
 
 import android.net.ConnectivityManager
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import dev.zidali.giftapp.business.datasource.cache.AppDatabase
-import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
@@ -23,19 +20,16 @@ import dev.zidali.giftapp.business.interactors.main.contacts.contact_detail.Fetc
 import dev.zidali.giftapp.business.interactors.main.fab.AddGift
 import dev.zidali.giftapp.business.interactors.main.fab.CreateEvent
 import dev.zidali.giftapp.business.interactors.main.shared.*
-import dev.zidali.giftapp.business.interactors.session.DeleteAccount
-import dev.zidali.giftapp.business.interactors.session.Logout
-import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 object MainModule {
 
     /**
      * INTERACTORS
      */
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideCreateContact(
         contactDao: ContactDao,
@@ -51,7 +45,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideFetchContacts(
         contactDao: ContactDao,
@@ -73,7 +67,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideFetchGifts(
         giftDao: GiftDao,
@@ -91,7 +85,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideFetchEvents(
         contactEventDao: ContactEventDao,
@@ -109,7 +103,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideFetchAllEvents(
         contactEventDao: ContactEventDao,
@@ -123,7 +117,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideAddGift(
         giftDao: GiftDao,
@@ -139,7 +133,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideCreateEvent(
         contactEventDao: ContactEventDao,
@@ -155,7 +149,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideUpdateContact(
         contactDao: ContactDao,
@@ -175,19 +169,7 @@ object MainModule {
         )
     }
 
-    @Singleton
-    @Provides
-    fun provideLogout(
-        firebaseAuth: FirebaseAuth,
-        googleSignInClient: GoogleSignInClient,
-    ): Logout {
-        return Logout(
-            firebaseAuth,
-            googleSignInClient,
-        )
-    }
-
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideDeleteContacts(
         contactDao: ContactDao,
@@ -205,7 +187,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideDeleteEvents(
         contactEventDao: ContactEventDao,
@@ -223,7 +205,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideDeleteGifts(
         giftDao: GiftDao,
@@ -241,7 +223,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideUpdateContactEventReminder(
         contactEventDao: ContactEventDao,
@@ -255,7 +237,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideFetchEvent(
         contactEventDao: ContactEventDao
@@ -265,7 +247,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideUpdateEvent(
         contactEventDao: ContactEventDao,
@@ -282,7 +264,7 @@ object MainModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideUpdateGift(
         giftDao: GiftDao,
@@ -298,42 +280,5 @@ object MainModule {
         )
     }
 
-    @Singleton
-    @Provides
-    fun provideDeleteAccount(
-        accountPropertiesDao: AccountPropertiesDao,
-        firebaseAuth: FirebaseAuth,
-        fireStore: FirebaseFirestore,
-        connectivityManager: ConnectivityManager,
-    ): DeleteAccount {
-        return DeleteAccount(
-            accountPropertiesDao,
-            firebaseAuth,
-            fireStore,
-            connectivityManager
-        )
-    }
-
-    /**
-     * DATABASE
-     */
-
-    @Singleton
-    @Provides
-    fun provideContactsDao(app: AppDatabase): ContactDao {
-        return app.getContactDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideContactEventDao(app: AppDatabase): ContactEventDao {
-        return app.getContactEventDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideGiftDao(app: AppDatabase): GiftDao{
-        return app.getGiftDao()
-    }
 
 }

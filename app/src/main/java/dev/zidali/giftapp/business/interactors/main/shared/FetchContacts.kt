@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dev.zidali.giftapp.business.datasource.cache.contacts.*
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.domain.models.Contact
+import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.DataState
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.util.DataStoreKeys.Companion.CONTACT_FIRST_RUN
@@ -43,6 +44,8 @@ class FetchContacts(
     ): Flow<DataState<MutableList<Contact>>> = flow {
 
         emit(DataState.loading<MutableList<Contact>>())
+
+        val roomEvents = contactEventDao.getAllOwnerEvents(firebaseAuth.currentUser!!.email!!).map { it.toContactEvent() }.toMutableList()
 
         val finalList: MutableList<Contact> = mutableListOf()
 
@@ -97,8 +100,10 @@ class FetchContacts(
                 .toObjects(ContactEventEntity::class.java)
 
             for(event in events) {
+                if(!doesAlarmMatch(event.toContactEvent(), roomEvents)) {
+                    AlarmScheduler.scheduleInitialAlarmsForReminder(context, event.toContactEvent())
+                }
                 contactEventDao.insert(event)
-                AlarmScheduler.scheduleInitialAlarmsForReminder(context, event.toContactEvent())
             }
         }
 
@@ -139,6 +144,15 @@ class FetchContacts(
     private fun doesFirebaseEntityMatch(event: Contact, roomList: MutableList<Contact>): Boolean {
         for (room in roomList) {
             if(room.contact_pk == event.contact_pk) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun doesAlarmMatch(fireStoreResult: ContactEvent, roomResult: MutableList<ContactEvent>): Boolean {
+        for(room in roomResult) {
+            if (room.month == fireStoreResult.month && room.day == fireStoreResult.day && room.year == fireStoreResult.year) {
                 return true
             }
         }

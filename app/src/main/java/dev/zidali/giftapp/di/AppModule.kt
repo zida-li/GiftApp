@@ -17,13 +17,18 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase.Companion.DATABASE_NAME
 import dev.zidali.giftapp.business.datasource.cache.AppDatabase.Companion.MIGRATION_1_2
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
+import dev.zidali.giftapp.business.datasource.cache.contacts.ContactDao
+import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
+import dev.zidali.giftapp.business.datasource.cache.contacts.GiftDao
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStoreManager
+import dev.zidali.giftapp.business.interactors.session.CheckPreviousAuthUser
+import dev.zidali.giftapp.business.interactors.session.DeleteAccount
+import dev.zidali.giftapp.business.interactors.session.Logout
 import dev.zidali.giftapp.util.Constants.Companion.default_web_client_id
 import javax.inject.Singleton
 
@@ -108,6 +113,68 @@ object AppModule {
     @Provides
     fun provideAccountPropertiesDao(app: AppDatabase): AccountPropertiesDao {
         return app.getAccountPropertiesDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideContactsDao(app: AppDatabase): ContactDao {
+        return app.getContactDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideContactEventDao(app: AppDatabase): ContactEventDao {
+        return app.getContactEventDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideGiftDao(app: AppDatabase): GiftDao {
+        return app.getGiftDao()
+    }
+
+    /**
+     * INTERACTORS
+     */
+
+    @Singleton
+    @Provides
+    fun provideDeleteAccount(
+        accountPropertiesDao: AccountPropertiesDao,
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore,
+        connectivityManager: ConnectivityManager,
+    ): DeleteAccount {
+        return DeleteAccount(
+            accountPropertiesDao,
+            firebaseAuth,
+            fireStore,
+            connectivityManager
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideLogout(
+        firebaseAuth: FirebaseAuth,
+        googleSignInClient: GoogleSignInClient,
+    ): Logout {
+        return Logout(
+            firebaseAuth,
+            googleSignInClient,
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideCheckPreviousAuthUser(
+        firebaseAuth: FirebaseAuth,
+        accountPropertiesDao: AccountPropertiesDao,
+    ): CheckPreviousAuthUser {
+        return CheckPreviousAuthUser(
+            firebaseAuth,
+            accountPropertiesDao,
+        )
     }
 
 }

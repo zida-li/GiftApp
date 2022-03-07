@@ -5,37 +5,24 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
 import dev.zidali.giftapp.business.datasource.datastore.AppDataStore
 import dev.zidali.giftapp.business.interactors.auth.LoginWithEmailAndPassword
 import dev.zidali.giftapp.business.interactors.auth.LoginWithGoogle
 import dev.zidali.giftapp.business.interactors.auth.RegisterWithEmailAndPassword
 import dev.zidali.giftapp.business.interactors.auth.shared.GetEmail
-import dev.zidali.giftapp.business.interactors.session.CheckPreviousAuthUser
-import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 object AuthModule {
 
     /**
      *INTERACTORS
      */
 
-    @Singleton
-    @Provides
-    fun provideCheckPreviousAuthUser(
-        firebaseAuth: FirebaseAuth,
-        accountPropertiesDao: AccountPropertiesDao,
-    ): CheckPreviousAuthUser {
-        return CheckPreviousAuthUser(
-            firebaseAuth,
-            accountPropertiesDao,
-        )
-    }
-
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideLoginWithGoogle(
         firebaseAuth: FirebaseAuth,
@@ -51,7 +38,7 @@ object AuthModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideRegisterWithEmailAndPassword(
         firebaseAuth: FirebaseAuth,
@@ -67,7 +54,7 @@ object AuthModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideLoginWithEmailAndPassword(
         firebaseAuth: FirebaseAuth,
@@ -83,7 +70,7 @@ object AuthModule {
         )
     }
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideGetEmail(
         appDataStore: AppDataStore
