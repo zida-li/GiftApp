@@ -9,6 +9,7 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.GiftEntity
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
+import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.Constants.Companion.CONTACTS_COLLECTION
@@ -28,6 +29,8 @@ class DeleteAccount(
 ) {
 
     fun execute(): Flow<DataState<Response>> = flow<DataState<Response>>{
+
+        emit(DataState.loading<Response>())
 
         accountPropertiesDao.deleteUser(firebaseAuth.currentUser!!.email!!)
 

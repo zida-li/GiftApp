@@ -8,8 +8,10 @@ import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.toContactEvent
 import dev.zidali.giftapp.business.datasource.network.handleUseCaseException
+import dev.zidali.giftapp.business.domain.models.Contact
 import dev.zidali.giftapp.business.domain.models.ContactEvent
 import dev.zidali.giftapp.business.domain.util.DataState
+import dev.zidali.giftapp.business.domain.util.Response
 import dev.zidali.giftapp.presentation.main.all_events.AllEventState
 import dev.zidali.giftapp.util.Constants
 import dev.zidali.giftapp.util.cLog
@@ -25,7 +27,9 @@ class FetchAllEvents(
     private val fireStore: FirebaseFirestore,
 ) {
 
-    fun execute(): Flow<DataState<AllEventState>> = flow {
+    fun execute(): Flow<DataState<AllEventState>> = flow<DataState<AllEventState>> {
+
+        emit(DataState.loading<AllEventState>())
 
         val owner = firebaseAuth.currentUser!!.email!!
 

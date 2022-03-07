@@ -69,4 +69,9 @@ class AuthActivity : BaseActivity() {
             binding.progressBar.visibility = View.GONE
         }
     }
+
+    override fun displayProgressBarForSessionManager(isLoading: Boolean) {
+        //do nothing, this function prevents isLoading of SessionManager from
+        //preventing progressBar from showing in ContactFragment on app launch
+    }
 }

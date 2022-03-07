@@ -64,6 +64,8 @@ AllEventListAdapter.Interaction {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
 
+            uiCommunicationListener.displayProgressBar(state.isLoading)
+
             if (state.firstLoad) {
                 viewModel.onTriggerEvent(AllEventEvents.SetFirstLoad(false))
                 globalManager.onTriggerEvent(GlobalEvents.SetNeedToUpdateAllEventFragment(true))

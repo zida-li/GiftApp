@@ -1,14 +1,10 @@
 package dev.zidali.giftapp.presentation.main
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.RequiresApi
-import androidx.core.view.isInvisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -25,14 +21,11 @@ import dev.zidali.giftapp.business.domain.util.*
 import dev.zidali.giftapp.databinding.ActivityMainBinding
 import dev.zidali.giftapp.presentation.BaseActivity
 import dev.zidali.giftapp.presentation.auth.AuthActivity
-import dev.zidali.giftapp.presentation.main.contacts.contact_detail.gift.GiftEvents
 import dev.zidali.giftapp.presentation.main.fab.add_gift.AddGiftFragment
 import dev.zidali.giftapp.presentation.main.fab.create_contact.CreateContactFragment
 import dev.zidali.giftapp.presentation.main.fab.create_event.CreateEventFragment
 import dev.zidali.giftapp.presentation.session.SessionEvents
 import dev.zidali.giftapp.util.processQueue
-import java.time.LocalDate
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -90,12 +83,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initNavDrawer() {
-        drawerLayout = binding.mainActivity
+        drawerLayout = binding.mainActivityNavDrawer
         navigationView = binding.navView
         binding.toolbar.setNavigationOnClickListener {
             if((navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/contactFragment" ||
                         navController.currentDestination?.displayName!! == "dev.zidali.giftapp:id/eventsFragment")) {
-                binding.mainActivity.open()
+                binding.mainActivityNavDrawer.open()
             } else {
                 navController.popBackStack()
             }
@@ -107,6 +100,7 @@ class MainActivity : BaseActivity() {
 
                 R.id.log_out -> {
                     sessionManager.onTriggerEvent(SessionEvents.Logout)
+                    binding.mainActivityNavDrawer.close()
                 }
                 R.id.delete_account -> {
                     confirmDeleteRequest()
@@ -123,6 +117,8 @@ class MainActivity : BaseActivity() {
         val header = navigationView.getHeaderView(0)
 
         sessionManager.state.observe(this) { state ->
+
+            displayProgressBarForSessionManager(state.isLoading)
 
             processQueue(
                 context = this,
@@ -152,11 +148,21 @@ class MainActivity : BaseActivity() {
 
     override fun displayProgressBar(isLoading: Boolean) {
         if(isLoading){
-//            Log.d(TAG, "mainActivity: ${isLoading.toString()}")
+//            Log.d(TAG, "mainActivity displayProgressBar: ${isLoading.toString()}")
             binding.progressBar.visibility = View.VISIBLE
         } else {
-//            Log.d(TAG, "mainActivity: ${isLoading.toString()}")
+//            Log.d(TAG, "mainActivity displayProgressBar: ${isLoading.toString()}")
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun displayProgressBarForSessionManager(isLoading: Boolean) {
+        if(isLoading){
+//            Log.d(TAG, "mainActivity displayProgressBarForSessionManager: ${isLoading.toString()}")
+            binding.progressBarForSessionManager.visibility = View.VISIBLE
+        } else {
+//            Log.d(TAG, "mainActivity displayProgressBarForSessionManager: ${isLoading.toString()}")
+            binding.progressBarForSessionManager.visibility = View.GONE
         }
     }
 
@@ -187,7 +193,7 @@ class MainActivity : BaseActivity() {
                 ) {resultKey, bundle ->
                     if(resultKey == "ADD_CONTACT_RESULT") {
                         val contact = bundle.getString("ADDED_CONTACT")
-                        Snackbar.make(binding.mainActivity, contact!! + " Added to Contacts", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.mainActivityNavDrawer, contact!! + " Added to Contacts", Snackbar.LENGTH_SHORT).show()
                     }
                 }
                 createContactFragment.isCancelable = false
@@ -228,6 +234,7 @@ class MainActivity : BaseActivity() {
         val callback: AreYouSureCallback = object: AreYouSureCallback {
 
             override fun proceed() {
+                binding.mainActivityNavDrawer.close()
                 sessionManager.onTriggerEvent(SessionEvents.DeleteAccount)
             }
 

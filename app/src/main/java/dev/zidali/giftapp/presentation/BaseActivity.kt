@@ -23,6 +23,8 @@ abstract class BaseActivity: AppCompatActivity(),
 
     abstract override fun displayProgressBar(isLoading: Boolean)
 
+    abstract override fun displayProgressBarForSessionManager(isLoading: Boolean)
+
     override fun hideSoftKeyboard() {
         if (currentFocus != null) {
             val inputMethodManager = getSystemService(

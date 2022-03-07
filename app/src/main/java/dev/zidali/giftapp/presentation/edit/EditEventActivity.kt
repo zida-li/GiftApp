@@ -70,7 +70,11 @@ class EditEventActivity: BaseActivity() {
     }
 
     override fun displayProgressBar(isLoading: Boolean) {
-        TODO("Not yet implemented")
+        //do nothing, not required here
+    }
+
+    override fun displayProgressBarForSessionManager(isLoading: Boolean) {
+        //do nothing, not required here
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -78,6 +78,8 @@ constructor(
         state.value?.let { state->
             fetchAllEvents.execute().onEach { dataState ->
 
+                this.state.value = state.copy(isLoading = dataState.isLoading)
+
                 dataState.data?.let { event->
                     this.state.value = state.copy(contact_events = event.contact_events)
                 }
