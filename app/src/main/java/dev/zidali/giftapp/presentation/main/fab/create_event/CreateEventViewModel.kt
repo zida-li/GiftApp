@@ -243,6 +243,7 @@ constructor(
                     ymd_format = state.ymd_formatHolder,
                     expired = false,
                     event_pk = 0,
+                    event_owner = state.createEvent.event_owner,
                 )
             )
         }
@@ -262,6 +263,7 @@ constructor(
                     ymd_format = state.ymd_formatHolder,
                     expired = false,
                     event_pk = state.new_event_pk_holder,
+                    event_owner = state.createEvent.event_owner,
                 )
             )
         }

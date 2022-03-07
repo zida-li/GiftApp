@@ -39,6 +39,9 @@ data class GiftEntity (
     @ColumnInfo(name = "isMultiSelectionModeEnabled")
     var isMultiSelectionModeEnabled: Boolean,
 
+    @ColumnInfo(name = "gift_owner")
+    var gift_owner: String,
+
     ) {
 
     constructor(): this(
@@ -48,6 +51,7 @@ data class GiftEntity (
         0,
         false,
         false,
+        "",
     )
 
 }
@@ -60,6 +64,7 @@ fun Gift.toGiftEntity(): GiftEntity{
         isChecked = isChecked,
         isMultiSelectionModeEnabled = isMultiSelectionModeEnabled,
         gift_pk = gift_pk,
+        gift_owner = gift_owner,
     )
 }
 
@@ -71,5 +76,6 @@ fun GiftEntity.toGift(): Gift{
         isChecked = isChecked,
         isMultiSelectionModeEnabled = isMultiSelectionModeEnabled,
         gift_pk = gift_pk,
+        gift_owner = gift_owner,
     )
 }

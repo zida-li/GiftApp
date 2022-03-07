@@ -42,6 +42,8 @@ class CreateEvent(
             contactEvent.expired = true
         }
 
+        contactEvent.event_owner = firebaseAuth.currentUser!!.email!!
+
         val pk = contactEventDao.insert(contactEvent.toContactEventEntity())
 
         contactEvent.event_pk = pk.toInt()

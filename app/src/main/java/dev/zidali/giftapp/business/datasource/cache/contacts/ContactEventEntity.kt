@@ -51,6 +51,9 @@ data class ContactEventEntity (
     @ColumnInfo(name = "expired")
     var expired: Boolean,
 
+    @ColumnInfo(name = "event_owner")
+    var event_owner: String,
+
     ) {
 
     constructor(): this(
@@ -64,6 +67,7 @@ data class ContactEventEntity (
         0,
         "",
         false,
+        "",
     )
 
 }
@@ -80,6 +84,7 @@ fun ContactEvent.toContactEventEntity(): ContactEventEntity {
         ymd_format = ymd_format,
         expired = expired,
         event_pk = event_pk,
+        event_owner = event_owner,
     )
 }
 
@@ -95,5 +100,6 @@ fun ContactEventEntity.toContactEvent(): ContactEvent {
         ymd_format = ymd_format,
         expired = expired,
         event_pk = event_pk,
+        event_owner = event_owner,
     )
 }

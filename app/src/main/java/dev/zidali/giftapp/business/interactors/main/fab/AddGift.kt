@@ -31,6 +31,8 @@ class AddGift(
         gift: Gift
     ): Flow<DataState<AddGiftState>> = flow <DataState<AddGiftState>>{
 
+        gift.gift_owner = firebaseAuth.currentUser!!.email!!
+
         val pk = giftDao.insert(gift.toGiftEntity())
 
         gift.gift_pk = pk.toInt()

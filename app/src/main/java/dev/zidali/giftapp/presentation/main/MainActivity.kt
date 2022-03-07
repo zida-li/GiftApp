@@ -123,7 +123,7 @@ class MainActivity : BaseActivity() {
         val header = navigationView.getHeaderView(0)
 
         sessionManager.state.observe(this) { state ->
-            
+
             processQueue(
                 context = this,
                 queue = state.queue,

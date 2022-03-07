@@ -151,6 +151,7 @@ constructor(
                     ymd_format = contactEvent.ymd_format,
                     expired = contactEvent.expired,
                     event_pk = contactEvent.event_pk,
+                    event_owner = contactEvent.event_owner,
                 )
             )
         }

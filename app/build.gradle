@@ -97,4 +97,6 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5"
     testImplementation "org.junit.jupiter:junit-jupiter:$junit5"
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }

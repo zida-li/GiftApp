@@ -20,8 +20,8 @@ interface ContactEventDao {
     @Query("SELECT * FROM contact_events WHERE primary_key =:primary_key ORDER BY expired ASC, ymd_format ASC")
     suspend fun getAllEventsOfContact (primary_key: Int): MutableList<ContactEventEntity>
 
-    @Query("SELECT * FROM contact_events ORDER BY expired ASC, ymd_format ASC")
-    suspend fun getAllContactEvents(): MutableList<ContactEventEntity>
+    @Query("SELECT * FROM contact_events WHERE event_owner = :event_owner ORDER BY expired ASC, ymd_format ASC")
+    suspend fun getAllOwnerEvents(event_owner: String): MutableList<ContactEventEntity>
 
     @Query("UPDATE contact_events SET contact_name = :new_contact_name WHERE primary_key = :primary_key")
     suspend fun updateContactNameEvent(new_contact_name: String, primary_key: Int)

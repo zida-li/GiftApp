@@ -152,6 +152,7 @@ ContactListAdapter.Interaction
             override fun proceed() {
                 viewModel.onTriggerEvent(ContactEvents.DeleteSelectedContacts)
                 recyclerAdapter?.notifyDataSetChanged()
+                viewModel.onTriggerEvent(ContactEvents.SetToolBarState(ContactToolbarState.RegularState))
             }
 
             override fun cancel() {

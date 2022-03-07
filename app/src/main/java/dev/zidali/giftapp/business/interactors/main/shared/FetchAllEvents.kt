@@ -2,6 +2,7 @@ package dev.zidali.giftapp.business.interactors.main.shared
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import dev.zidali.giftapp.business.datasource.cache.account.AccountPropertiesDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEntity
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventDao
 import dev.zidali.giftapp.business.datasource.cache.contacts.ContactEventEntity
@@ -26,7 +27,11 @@ class FetchAllEvents(
 
     fun execute(): Flow<DataState<AllEventState>> = flow {
 
-        val results = contactEventDao.getAllContactEvents().map { it.toContactEvent() }.toMutableList()
+        val owner = firebaseAuth.currentUser!!.email!!
+
+        val results = contactEventDao.getAllOwnerEvents(
+            owner
+        ).map { it.toContactEvent() }.toMutableList()
 
         val events = AllEventState(
             contact_events = results

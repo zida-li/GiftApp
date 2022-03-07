@@ -192,6 +192,7 @@ constructor(
                     ymd_format = state.ymd_formatHolder,
                     expired = state.contact_event.expired,
                     event_pk = state.contact_event.event_pk,
+                    event_owner = state.contact_event.event_owner,
                 )
             )
         }

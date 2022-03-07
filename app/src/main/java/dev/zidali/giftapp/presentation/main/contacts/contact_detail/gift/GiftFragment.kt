@@ -114,7 +114,6 @@ GiftListAdapter.Interaction
             }
             R.id.action_exit_multiSelection -> {
                 viewModel.onTriggerEvent(GiftEvents.SetToolBarState(GiftToolbarState.RegularState))
-                viewModel.onTriggerEvent(GiftEvents.SetMultiSelectionMode(false))
             }
         }
         return super.onOptionsItemSelected(item)
@@ -149,6 +148,7 @@ GiftListAdapter.Interaction
             override fun proceed() {
                 viewModel.onTriggerEvent(GiftEvents.DeleteSelectedGifts)
                 recyclerAdapter?.notifyDataSetChanged()
+                viewModel.onTriggerEvent(GiftEvents.SetToolBarState(GiftToolbarState.RegularState))
             }
 
             override fun cancel() {

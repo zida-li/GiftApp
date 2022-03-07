@@ -186,6 +186,7 @@ constructor(
                     isChecked = false,
                     isMultiSelectionModeEnabled = false,
                     gift_pk = 0,
+                    gift_owner = state.gift.gift_owner,
                 )
             )
         }

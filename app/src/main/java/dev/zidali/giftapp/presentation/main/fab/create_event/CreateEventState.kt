@@ -21,6 +21,7 @@ data class CreateEventState(
         ymd_format = "",
         expired = false,
         event_pk = 0,
+        event_owner = "",
     ),
     var calendarSelectionHolder: CalendarSelection = CalendarSelection(
         selectedYear = 0,
