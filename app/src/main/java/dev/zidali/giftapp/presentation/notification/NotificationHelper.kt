@@ -75,8 +75,8 @@ object NotificationHelper {
 
         return NotificationCompat.Builder(context, channelId).apply {
             setSmallIcon(R.drawable.ic_gift)
-            setContentTitle(reminderData.contact_name)
-            setContentText(reminderData.contact_event)
+            setContentTitle("Upcoming Event For: ${reminderData.contact_name} On ${reminderData.month}/${reminderData.day}/${reminderData.day}")
+            setContentText("Event: ${reminderData.contact_event}")
             setAutoCancel(true)
             setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_gift))
 

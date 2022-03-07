@@ -84,4 +84,9 @@ class CreateContactFragment : DialogFragment() {
     private fun cacheState() {
         viewModel.onTriggerEvent(CreateContactEvents.OnUpdateName(binding.inputName.text.toString()))
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
