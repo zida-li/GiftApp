@@ -94,7 +94,9 @@ constructor(
     private fun checkPreviousAuthUser(){
         state.value?.let { state ->
             checkPreviousAuthUser.execute().onEach { dataState ->
+
                 this.state.value = state.copy(isLoading = dataState.isLoading)
+
                 dataState.data?.let { accountProperties ->
                     this.state.value = state.copy(accountProperties = accountProperties)
                     onTriggerEvent(SessionEvents.Login(accountProperties))

@@ -123,9 +123,7 @@ class MainActivity : BaseActivity() {
         val header = navigationView.getHeaderView(0)
 
         sessionManager.state.observe(this) { state ->
-
-            displayProgressBar(state.isLoading)
-
+            
             processQueue(
                 context = this,
                 queue = state.queue,
@@ -154,8 +152,10 @@ class MainActivity : BaseActivity() {
 
     override fun displayProgressBar(isLoading: Boolean) {
         if(isLoading){
+//            Log.d(TAG, "mainActivity: ${isLoading.toString()}")
             binding.progressBar.visibility = View.VISIBLE
         } else {
+//            Log.d(TAG, "mainActivity: ${isLoading.toString()}")
             binding.progressBar.visibility = View.GONE
         }
     }

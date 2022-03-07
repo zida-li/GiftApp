@@ -37,7 +37,6 @@ class CheckPreviousAuthUser(
                 current_authUser_email = firebaseAuth.currentUser?.email!!,
             )
 
-
             emit(
                 DataState.data(
                     response = null,

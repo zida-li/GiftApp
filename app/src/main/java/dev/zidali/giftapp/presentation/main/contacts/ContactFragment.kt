@@ -1,6 +1,7 @@
 package dev.zidali.giftapp.presentation.main.contacts
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import dev.zidali.giftapp.databinding.FragmentContactsBinding
 import dev.zidali.giftapp.presentation.main.BaseMainFragment
 import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 
 class ContactFragment : BaseMainFragment(),
@@ -60,6 +62,8 @@ ContactListAdapter.Interaction
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
+
+//            Log.d(TAG, "contactFragment: ${state.isLoading.toString()}")
 
             uiCommunicationListener.displayProgressBar(state.isLoading)
 

@@ -57,7 +57,7 @@ object AlarmScheduler {
         // Schedule the alarm based on user preference
 
         if(reminderData.contact_event_reminder.contains("day", ignoreCase = true)){
-            Log.d(Constants.TAG, "schedule 1 day out")
+//            Log.d(Constants.TAG, "schedule 1 day out")
 
             val alarmIntent = createPendingIntent(context, reminderData, "day")
 
@@ -70,10 +70,10 @@ object AlarmScheduler {
             alarmMgr.set(AlarmManager.RTC_WAKEUP,
                 datetimeToAlarm.timeInMillis, alarmIntent)
 
-            Log.d(Constants.TAG, "schedule 1 day out: $datetimeToAlarm")
+//            Log.d(Constants.TAG, "schedule 1 day out: $datetimeToAlarm")
         }
         if(reminderData.contact_event_reminder.contains("week", ignoreCase = true)){
-            Log.d(Constants.TAG, "schedule 1 week out")
+//            Log.d(Constants.TAG, "schedule 1 week out")
 
             val alarmIntent = createPendingIntent(context, reminderData, "week")
 
@@ -86,10 +86,10 @@ object AlarmScheduler {
             alarmMgr.set(AlarmManager.RTC_WAKEUP,
                 datetimeToAlarm.timeInMillis, alarmIntent)
 
-            Log.d(Constants.TAG, "schedule 1 week out: $datetimeToAlarm")
+//            Log.d(Constants.TAG, "schedule 1 week out: $datetimeToAlarm")
         }
         if(reminderData.contact_event_reminder.contains("month", ignoreCase = true)){
-            Log.d(Constants.TAG, "schedule 1 month out")
+//            Log.d(Constants.TAG, "schedule 1 month out")
 
             val alarmIntent = createPendingIntent(context, reminderData, "month")
 
@@ -102,10 +102,10 @@ object AlarmScheduler {
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
                 datetimeToAlarm.timeInMillis, (1000 * 60 * 60 * 24 * 7).toLong(), alarmIntent)
 
-            Log.d(Constants.TAG, "schedule 1 month out: $datetimeToAlarm")
+//            Log.d(Constants.TAG, "schedule 1 month out: $datetimeToAlarm")
         }
 
-        Log.d(Constants.TAG, "scheduleAlarmForReminder: ${reminderData.contact_name}")
+//        Log.d(Constants.TAG, "scheduleAlarmForReminder: ${reminderData.contact_name}")
 
         }
 
@@ -121,7 +121,7 @@ object AlarmScheduler {
 
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
-        Log.d(Constants.TAG, "cancelScheduledAlarmForReminder: ${reminderData.contact_name} + $reminder")
+//        Log.d(Constants.TAG, "cancelScheduledAlarmForReminder: ${reminderData.contact_name} + $reminder")
 
         if (pendingIntent != null) {
             alarmMgr.cancel(pendingIntent)
