@@ -3,6 +3,7 @@ package dev.zidali.giftapp.presentation.main.all_events
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
@@ -17,6 +18,7 @@ import dev.zidali.giftapp.presentation.main.MainActivity
 import dev.zidali.giftapp.presentation.main.fab.create_event.ReminderFragment
 import dev.zidali.giftapp.presentation.notification.AlarmScheduler
 import dev.zidali.giftapp.presentation.update.GlobalEvents
+import dev.zidali.giftapp.util.Constants.Companion.TAG
 import dev.zidali.giftapp.util.processQueue
 
 class AllEventFragment : BaseMainFragment(),
@@ -217,6 +219,7 @@ AllEventListAdapter.Interaction {
 
                 viewModel.onTriggerEvent(AllEventEvents.TurnOnNotifications(item, joinToString!!))
                 viewModel.onTriggerEvent(AllEventEvents.SetContactHolder(item, joinToString))
+//                Log.d(TAG, "AllEventFragment: Setting Alarm for: ${viewModel.state.value?.contact_event_holder}")
                 AlarmScheduler.scheduleInitialAlarmsForReminder(requireContext(), viewModel.state.value?.contact_event_holder!!)
                 recyclerAdapter?.notifyItemChanged(position)
             }

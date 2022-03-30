@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dev.zidali.giftapp.R
 import dev.zidali.giftapp.business.domain.models.ContactEvent
+import dev.zidali.giftapp.business.domain.util.Converters
 import dev.zidali.giftapp.presentation.main.MainActivity
 
 object NotificationHelper {
@@ -75,18 +76,18 @@ object NotificationHelper {
 
         return NotificationCompat.Builder(context, channelId).apply {
             setSmallIcon(R.drawable.ic_gift)
-            setContentTitle("Upcoming Event For: ${reminderData.contact_name} On ${reminderData.month}/${reminderData.day}/${reminderData.day}")
+            setContentTitle("Upcoming Event For: ${reminderData.contact_name} On ${Converters.convertCalendarIntMonthToIntMonth(reminderData.month)}/${reminderData.day}/${reminderData.year}")
             setContentText("Event: ${reminderData.contact_event}")
             setAutoCancel(true)
             setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_gift))
 
             // Launches the app to open the reminder edit screen when tapping the whole notification
-            val intent = Intent(context, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            setContentIntent(pendingIntent)
+//            val intent = Intent(context, MainActivity::class.java).apply {
+//                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            }
+//
+//            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+//            setContentIntent(pendingIntent)
         }
     }
 
